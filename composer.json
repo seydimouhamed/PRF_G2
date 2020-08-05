@@ -10,7 +10,6 @@
         "doctrine/doctrine-bundle": "^1.6 || ^2.0",
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.4.5",
-        "fzaninotto/faker": "^1.9",
         "lexik/jwt-authentication-bundle": "^2.8",
         "nelmio/cors-bundle": "^1.5 || ^2.0",
         "phpdocumentor/reflection-docblock": "^3.0 || ^4.0 || ^5.0",
@@ -30,6 +29,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.3",
+        "fzaninotto/faker": "^1.9",
         "symfony/maker-bundle": "^1.20"
     },
     "config": {

@@ -37,6 +37,7 @@ class AppFixtures extends Fixture
     {
         $pro_sortie=new ProfilSortie();
         $pro_sortie->setLibele($ps);
+        $pro_sortie->setArchivage(false);
         $tab_ps_entity[]=$pro_sortie;
         $manager->persist($pro_sortie);
     }

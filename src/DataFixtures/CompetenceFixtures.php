@@ -47,6 +47,7 @@ class CompetenceFixtures extends Fixture
         {
             $competence=new Competence();
             $competence->setLibelle('libelle_'.$i);
+            $competence->setDescriptif('descriptif_'.$i);
             $competence->setNiveau($fake->randomElement($tab_niveau));
 
             $tab_competence[]=$competence;
