@@ -3,7 +3,6 @@
 namespace App\Security\Voter;
 
 use App\Entity\GroupeCompetence;
-use App\Repository\GroupeCompetenceRepository;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -13,12 +12,10 @@ class GroupeCompetenceVoter extends Voter
 {
 
     private $request;
-    private $gc_repo;
 
-    public function __construct(RequestStack $request,GroupeCompetenceRepository $gc_repo)
+    public function __construct(RequestStack $request)
     {
         $this->request = $request;
-        $this->gc_repo = $gc_repo;
     }
 
     protected function supports($attribute, $subject)
@@ -32,8 +29,7 @@ class GroupeCompetenceVoter extends Voter
     protected function voteOnAttribute($attribute, $subject, TokenInterface $token)
     {
         $user = $token->getUser();
-       // $req=$this->request->getCurrentRequest()->getContent();
-       $req=$user->getID();
+        $req=$this->request->getContent();
         // if the user is anonymous, do not grant access
         if (!$user instanceof UserInterface) {
             return false;
@@ -42,8 +38,7 @@ class GroupeCompetenceVoter extends Voter
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
             case 'GC_EDIT':
-                   dd($req);
-                    return false;
+                    return true;
                 break;
             case 'GC_VIEW':
                 // logic to determine if the user can VIEW

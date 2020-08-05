@@ -15,7 +15,7 @@ class GroupeCompetenceVoter extends Voter
     private $request;
     private $gc_repo;
 
-    public function __construct(RequestStack $request,GroupeCompetenceRepository $gc_repo)
+    public function __construct(RequestStack $request,GroupeCompetenceRepository $gp_repo)
     {
         $this->request = $request;
         $this->gc_repo = $gc_repo;
