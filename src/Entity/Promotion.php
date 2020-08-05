@@ -2,15 +2,48 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\PromotionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\PromotionRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
  * @ORM\Entity(repositoryClass=PromotionRepository::class)
+ * @ApiResource(
+ *      collectionOperations={
+ *           "get_promos"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promos",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *            "add_promos"={ 
+ *               "method"="POST", 
+ *               "path"="/admin/promos",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          }
+ *      },
+ *      itemOperations={
+ *           "get_promo_id"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promos/{id}",
+ *                "defaults"={"id"=null},
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *
+ *            "update_promo_id"={ 
+ *               "method"="PUT", 
+ *               "path"="/admin/promos/{id}",
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *      },
+ *       normalizationContext={"groups"={"promo:read"}},
+ *       denormalizationContext={"groups"={"promo:write"}},
+ *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=10}
+ * )
  */
 class Promotion
 {
@@ -18,68 +51,73 @@ class Promotion
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"promo:read","promo:write"})
      */
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"promo:read","promo:write"})
      */
     private $titre;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"promo:read","promo:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"promo:read","promo:write"})
      */
     private $lieu;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date")
+     * @Groups({"promo:read","promo:write"})
      */
     private $dateDebut;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date")
+     * @Groups({"promo:read","promo:write"})
      */
-    private $dateFinPrvisoire;
+    private $dateFinProvisoire;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"promo:read","promo:write"})
      */
     private $fabrique;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="date")
+     * @Groups({"promo:read","promo:write"})
      */
     private $dateFinReelle;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"promo:read","promo:write"})
      */
-    private $status;
+    private $statut;
 
     /**
-     * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion")
+     * @ORM\ManyToOne(targetEntity=Groupe::class, inversedBy="promotions")
      */
     private $groupes;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="promotions")
+     * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="promotion")
      */
     private $referentiel;
-
-    public function __construct()
-    {
-        $this->groupes = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -139,21 +177,21 @@ class Promotion
         return $this->dateDebut;
     }
 
-    public function setDateDebut(?\DateTimeInterface $dateDebut): self
+    public function setDateDebut(\DateTimeInterface $dateDebut): self
     {
         $this->dateDebut = $dateDebut;
 
         return $this;
     }
 
-    public function getDateFinPrvisoire(): ?\DateTimeInterface
+    public function getDateFinProvisoire(): ?\DateTimeInterface
     {
-        return $this->dateFinPrvisoire;
+        return $this->dateFinProvisoire;
     }
 
-    public function setDateFinPrvisoire(?\DateTimeInterface $dateFinPrvisoire): self
+    public function setDateFinProvisoire(\DateTimeInterface $dateFinProvisoire): self
     {
-        $this->dateFinPrvisoire = $dateFinPrvisoire;
+        $this->dateFinProvisoire = $dateFinProvisoire;
 
         return $this;
     }
@@ -163,7 +201,7 @@ class Promotion
         return $this->fabrique;
     }
 
-    public function setFabrique(string $fabrique): self
+    public function setFabrique(?string $fabrique): self
     {
         $this->fabrique = $fabrique;
 
@@ -175,52 +213,33 @@ class Promotion
         return $this->dateFinReelle;
     }
 
-    public function setDateFinReelle(?\DateTimeInterface $dateFinReelle): self
+    public function setDateFinReelle(\DateTimeInterface $dateFinReelle): self
     {
         $this->dateFinReelle = $dateFinReelle;
 
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatut(): ?string
     {
-        return $this->status;
+        return $this->statut;
     }
 
-    public function setStatus(?string $status): self
+    public function setStatut(?string $statut): self
     {
-        $this->status = $status;
+        $this->statut = $statut;
 
         return $this;
     }
 
-    /**
-     * @return Collection|Groupes[]
-     */
-    public function getGroupes(): Collection
+    public function getGroupes(): ?Groupe
     {
         return $this->groupes;
     }
 
-    public function addGroupe(Groupes $groupe): self
+    public function setGroupes(?Groupe $groupes): self
     {
-        if (!$this->groupes->contains($groupe)) {
-            $this->groupes[] = $groupe;
-            $groupe->setPromotion($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGroupe(Groupes $groupe): self
-    {
-        if ($this->groupes->contains($groupe)) {
-            $this->groupes->removeElement($groupe);
-            // set the owning side to null (unless already changed)
-            if ($groupe->getPromotion() === $this) {
-                $groupe->setPromotion(null);
-            }
-        }
+        $this->groupes = $groupes;
 
         return $this;
     }

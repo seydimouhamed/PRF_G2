@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Apprenant;
+use App\Entity\Apprenants;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Apprenant|null find($id, $lockMode = null, $lockVersion = null)
- * @method Apprenant|null findOneBy(array $criteria, array $orderBy = null)
- * @method Apprenant[]    findAll()
- * @method Apprenant[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Apprenants|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Apprenants|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Apprenants[]    findAll()
+ * @method Apprenants[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ApprenantRepository extends ServiceEntityRepository
+class ApprenantsRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Apprenant::class);
+        parent::__construct($registry, Apprenants::class);
     }
 
     // /**
-    //  * @return Apprenant[] Returns an array of Apprenant objects
+    //  * @return Apprenants[] Returns an array of Apprenants objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class ApprenantRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Apprenant
+    public function findOneBySomeField($value): ?Apprenants
     {
         return $this->createQueryBuilder('a')
             ->andWhere('a.exampleField = :val')

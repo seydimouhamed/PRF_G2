@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Entity\Utilisateurs;
 use Doctrine\ORM\EntityManager;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UtilisateursRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -53,7 +53,7 @@ class UserController extends AbstractController
         //recupération de l'image
         $photo = $request->files->get("photo");
         
-        $user = $this->serializer->denormalize($user,"App\Entity\User",true);
+        $user = $this->serializer->denormalize($user,"App\Entity\Utilisateurs",true);
         if(!$photo)
         {
             
@@ -99,7 +99,7 @@ class UserController extends AbstractController
      *     }
      * )
      */
-    public function getUsers(UserRepository $repo)
+    public function getUsers(UtilisateursRepository $repo)
     {
         $user= $repo->findByArchivage(0);
         // $user=$this->serializer->serialize($user,"json");
@@ -117,7 +117,7 @@ class UserController extends AbstractController
      *     }
      * )
      */
-    public function archiveUser(UserRepository $repo,$id)
+    public function archiveUser(UtilisateursRepository $repo,$id)
     {
         $user=$repo->find($id)
                   ->setArchivage(1);

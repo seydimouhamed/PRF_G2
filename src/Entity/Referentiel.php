@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ORM\Entity(repositoryClass=ReferentielRepository::class)
  * @ApiResource(
  *      collectionOperations={
  *           "get_referentiels"={ 
@@ -19,9 +20,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *               "security_message"="Acces non autorisé",
  *          },
- *           "get_referentiels_grpCompetence"={ 
+ *           "get_referentiels_groupeCompetence"={ 
  *               "method"="GET", 
- *               "path"="/admin/referentiels/grpecompetences",
+ *               "path"="/admin/referentiels/groupecompetences",
  *               "security"="is_granted('ROLE_ADMIN')",
  *               "security_message"="Acces non autorisé",
  *          },
@@ -41,9 +42,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  "security_message"="Acces non autorisé",
  *          },
  *
- *            "get_referentiel_id_grpcompetence"={ 
+ *            "get_referentiel_id_groupecompetence"={ 
  *               "method"="GET", 
- *               "path"="/admin/referentiels/{id1}/gprecompetences/{id2}",
+ *               "path"="/admin/referentiels/{id1}/groupecompetences/{id2}",
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *                  "security_message"="Acces non autorisé",
  *          },
@@ -59,7 +60,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       denormalizationContext={"groups"={"referentiel:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=5}
  * )
- * @ORM\Entity(repositoryClass=ReferentielRepository::class)
  */
 class Referentiel
 {
@@ -75,10 +75,10 @@ class Referentiel
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
      */
-    private $libelle;
+    private $libele;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      * @Groups({"referentiel:read", "referentiel:write"})
      */
     private $presentation;
@@ -96,27 +96,27 @@ class Referentiel
     private $critereAdmission;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
      */
-    private $critereEvaluation;
+    private $critereevaluation;
 
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
      */
-    private $promotions;
+    private $promotion;
 
     /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiels")
      * @ApiSubresource
      * @Groups({"referentiel:read", "referentiel:write"})
      */
-    private $grpCompetences;
+    private $groupeCompetence;
 
     public function __construct()
     {
-        $this->promotions = new ArrayCollection();
-         $this->grpCompetences = new ArrayCollection();
+        $this->promotion = new ArrayCollection();
+        $this->groupeCompetence = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,14 +124,14 @@ class Referentiel
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getLibele(): ?string
     {
-        return $this->libelle;
+        return $this->libele;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibele(string $libele): self
     {
-        $this->libelle = $libelle;
+        $this->libele = $libele;
 
         return $this;
     }
@@ -141,7 +141,7 @@ class Referentiel
         return $this->presentation;
     }
 
-    public function setPresentation(string $presentation): self
+    public function setPresentation(?string $presentation): self
     {
         $this->presentation = $presentation;
 
@@ -172,14 +172,14 @@ class Referentiel
         return $this;
     }
 
-    public function getCritereEvaluation(): ?string
+    public function getCritereevaluation(): ?string
     {
-        return $this->critereEvaluation;
+        return $this->critereevaluation;
     }
 
-    public function setCritereEvaluation(string $critereEvaluation): self
+    public function setCritereevaluation(string $critereevaluation): self
     {
-        $this->critereEvaluation = $critereEvaluation;
+        $this->critereevaluation = $critereevaluation;
 
         return $this;
     }
@@ -187,15 +187,15 @@ class Referentiel
     /**
      * @return Collection|Promotion[]
      */
-    public function getPromotions(): Collection
+    public function getPromotion(): Collection
     {
-        return $this->promotions;
+        return $this->promotion;
     }
 
     public function addPromotion(Promotion $promotion): self
     {
-        if (!$this->promotions->contains($promotion)) {
-            $this->promotions[] = $promotion;
+        if (!$this->promotion->contains($promotion)) {
+            $this->promotion[] = $promotion;
             $promotion->setReferentiel($this);
         }
 
@@ -204,8 +204,8 @@ class Referentiel
 
     public function removePromotion(Promotion $promotion): self
     {
-        if ($this->promotions->contains($promotion)) {
-            $this->promotions->removeElement($promotion);
+        if ($this->promotion->contains($promotion)) {
+            $this->promotion->removeElement($promotion);
             // set the owning side to null (unless already changed)
             if ($promotion->getReferentiel() === $this) {
                 $promotion->setReferentiel(null);
@@ -218,24 +218,24 @@ class Referentiel
     /**
      * @return Collection|GroupeCompetence[]
      */
-    public function getGrpCompetences(): Collection
+    public function getGroupeCompetence(): Collection
     {
-        return $this->grpCompetences;
+        return $this->groupeCompetence;
     }
 
-    public function addGrpCompetence(GroupeCompetence $grpCompetence): self
+    public function addGroupeCompetence(GroupeCompetence $groupeCompetence): self
     {
-        if (!$this->grpCompetences->contains($grpCompetence)) {
-            $this->grpCompetences[] = $grpCompetence;
+        if (!$this->groupeCompetence->contains($groupeCompetence)) {
+            $this->groupeCompetence[] = $groupeCompetence;
         }
 
         return $this;
     }
 
-    public function removeGrpCompetence(GroupeCompetence $grpCompetence): self
+    public function removeGroupeCompetence(GroupeCompetence $groupeCompetence): self
     {
-        if ($this->grpCompetences->contains($grpCompetence)) {
-            $this->grpCompetences->removeElement($grpCompetence);
+        if ($this->groupeCompetence->contains($groupeCompetence)) {
+            $this->groupeCompetence->removeElement($groupeCompetence);
         }
 
         return $this;

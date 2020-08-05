@@ -12,7 +12,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilRepository::class)
- * 
  * @ApiResource(
  *      collectionOperations={
  *           "get_admin_profils"={ 
@@ -70,32 +69,26 @@ class Profil
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"profil:read", "user:read"})
+     * @Groups({"user:read", "profil:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"profil:read", "user:read"})
+     * @Groups({"user:read", "profil:read"})
      */
     private $libelle;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"profil:read", "user:read"})
-     */
-    private $abbr;
-
-    /**
-     * @ORM\OneToMany(targetEntity=User::class, mappedBy="profil")
+     * @ORM\OneToMany(targetEntity=Utilisateurs::class, mappedBy="profil")
      * @ApiSubresource
      * @Groups({"profil:read"})
      */
-    private $users;
+    private $utilisateur;
 
     public function __construct()
     {
-        $this->users = new ArrayCollection();
+        $this->utilisateur = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -115,43 +108,31 @@ class Profil
         return $this;
     }
 
-    public function getAbbr(): ?string
-    {
-        return $this->abbr;
-    }
-
-    public function setAbbr(string $abbr): self
-    {
-        $this->abbr = $abbr;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|User[]
+     * @return Collection|Utilisateurs[]
      */
-    public function getUsers(): Collection
+    public function getUtilisateur(): Collection
     {
-        return $this->users;
+        return $this->utilisateur;
     }
 
-    public function addUser(User $user): self
+    public function addUtilisateur(Utilisateurs $utilisateur): self
     {
-        if (!$this->users->contains($user)) {
-            $this->users[] = $user;
-            $user->setProfil($this);
+        if (!$this->utilisateur->contains($utilisateur)) {
+            $this->utilisateur[] = $utilisateur;
+            $utilisateur->setProfil($this);
         }
 
         return $this;
     }
 
-    public function removeUser(User $user): self
+    public function removeUtilisateur(Utilisateurs $utilisateur): self
     {
-        if ($this->users->contains($user)) {
-            $this->users->removeElement($user);
+        if ($this->utilisateur->contains($utilisateur)) {
+            $this->utilisateur->removeElement($utilisateur);
             // set the owning side to null (unless already changed)
-            if ($user->getProfil() === $this) {
-                $user->setProfil(null);
+            if ($utilisateur->getProfil() === $this) {
+                $utilisateur->setProfil(null);
             }
         }
 

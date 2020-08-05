@@ -3,20 +3,21 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\InheritanceType;
+use App\Repository\UtilisateursRepository;
+use Doctrine\ORM\Mapping\DiscriminatorMap;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
+ * @ORM\Entity(repositoryClass=UtilisateursRepository::class)
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\InheritanceType("JOINED")
-* @ORM\DiscriminatorColumn(name="discr", type="string")
-* @ORM\DiscriminatorMap({"user"="User","apprenant" = "Apprenant","formateur"="Formateur"})
+ * @ORM\DiscriminatorColumn(name="discr", type="string")
+ * @ORM\DiscriminatorMap({"user"="Utilisateurs","apprenant" = "Apprenants","formateur"="Formateurs"})
  * @ApiResource(
  *      collectionOperations={
  *           "get_admin_users"={ 
@@ -52,70 +53,66 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )
  */
-class User implements UserInterface
+class Utilisateurs implements UserInterface
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"user:read","profil:read"})
-     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * 
      * @Groups({"user:read", "user:write","profil:read"})
      */
-    private $username;
+    private $email;
 
-
+    /**
+     * ORM\Column(type="json")
+     *  
+     * 
+     */
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     *
      */
     private $password;
 
-    /**
-     * @Groups("user:write")
+     /**
+     *@Groups({"user:write"})
      */
     private $plainPassword;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * 
-     * @Groups({"user:read", "user:write", "profil:read"})
+     * @ORM\Column(type="string", length=255)
+     *@Groups({"user:read", "user:write","profil:read"})
+     *
      */
-    private $fisrtName;
+    private $prenom;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     * 
-     *  @Groups({"user:read", "user:write", "profil:read"})
+     * @ORM\Column(type="string", length=255)
+     *@Groups({"user:read", "user:write","profil:read"})
      */
-    private $lastName;
+    private $nom;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="blob")
+     *@Groups({"user:read", "user:write","profil:read"})
      * 
-     *  @Groups({"user:read", "user:write", "profil:read"})
      */
-    private $email;
+    private $avatar;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
-     * 
-     *  @Groups({"user:read", "user:write", "profil:read"})
-     */
-    private $photo;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="utilisateur")
      * @ApiSubresource
-     * Groups({"user:read", "user:write"})
+     * @Groups({"user:read"})
+     * 
      */
     private $profil;
 
@@ -129,6 +126,18 @@ class User implements UserInterface
         return $this->id;
     }
 
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
     /**
      * A visual identifier that represents this user.
      *
@@ -136,14 +145,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->username;
-    }
-
-    public function setUsername(string $username): self
-    {
-        $this->username = $username;
-
-        return $this;
+        return (string) $this->email;
     }
 
     /**
@@ -153,7 +155,7 @@ class User implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_'.$this->profil->getAbbr();
+        $roles[] = 'ROLE_'.$this->profil->getLibelle();
 
         return array_unique($roles);
     }
@@ -193,59 +195,45 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-
         // If you store any temporary, sensitive data on the user, clear it here
-         $this->plainPassword = null;
+        // $this->plainPassword = null;
     }
 
-    public function getFisrtName(): ?string
+    public function getPrenom(): ?string
     {
-        return $this->fisrtName;
+        return $this->prenom;
     }
 
-    public function setFisrtName(string $fisrtName): self
+    public function setPrenom(string $prenom): self
     {
-        $this->fisrtName = $fisrtName;
+        $this->prenom = $prenom;
 
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function getNom(): ?string
     {
-        return $this->lastName;
+        return $this->nom;
     }
 
-    public function setLastName(string $lastName): self
+    public function setNom(string $nom): self
     {
-        $this->lastName = $lastName;
+        $this->nom = $nom;
 
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getAvatar()
     {
-        return $this->email;
+        $data = stream_get_contents($this->avatar);
+        fclose($this->avatar);
+
+       return base64_encode($data);
     }
 
-    public function setEmail(string $email): self
+    public function setAvatar($avatar): self
     {
-        $this->email = $email;
-
-        return $this;
-    }
-
-
-    public function getPhoto()
-    {
-         $data = stream_get_contents($this->photo);
-         fclose($this->photo);
-
-        return base64_encode($data);
-    }
-
-    public function setPhoto($photo): self
-    {
-        $this->photo = $photo;
+        $this->avatar = $avatar;
 
         return $this;
     }

@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
-use App\Entity\ProfilSortie;
+use App\Entity\ProfilSorti;
+use App\Entity\Utilisateurs;
 use Doctrine\ORM\EntityManager;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\ProfilSortieRepository;
+use App\Repository\ProfilSortiRepository;
+use App\Repository\UtilisateursRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,7 +49,7 @@ class ProfilSortieController extends AbstractController
      *     }
      * )
      */
-    public function getProfilSortie(ProfilSortieRepository $repo)
+    public function getProfilSortie(ProfilSortiRepository $repo)
     {
         $user= $repo->findByArchivage(0);
         // $user=$this->serializer->serialize($user,"json");
@@ -69,7 +69,7 @@ class ProfilSortieController extends AbstractController
      *     }
      * )
      */
-    public function archiveProfil(ProfilSortieRepository $repo,$id)
+    public function archiveProfil(ProfilSortiRepository $repo,$id)
     {
         $profil=$repo->find($id)
                   ->setArchivage(1);
@@ -91,7 +91,7 @@ class ProfilSortieController extends AbstractController
      *     }
      * )
      */
-    public function getOneProfilSortie(ProfilSortieRepository $repo,$id)
+    public function getOneProfilSortie(ProfilSortiRepository $repo,$id)
     {
         $profil=$repo->find($id);
         if($profil && !$profil->getArchivage())
@@ -114,7 +114,7 @@ class ProfilSortieController extends AbstractController
      *     }
      * )
      */
-    public function putOneProfilSortie(Request $request, ProfilSortieRepository $repo,$id)
+    public function putOneProfilSortie(Request $request, ProfilSortiRepository $repo,$id)
     {
         $profil=$repo->find($id);
         if($profil && !$profil->getArchivage())

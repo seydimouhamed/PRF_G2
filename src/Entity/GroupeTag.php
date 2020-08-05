@@ -11,42 +11,42 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ORM\Entity(repositoryClass=GroupeTagRepository::class)
  * @ApiResource(
  *      collectionOperations={
- *           "get_grptags"={ 
+ *           "get_groupeTags"={ 
  *               "method"="GET", 
- *               "path"="/admin/grptags",
+ *               "path"="/admin/groupeTags",
  *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          },
- *            "add_grptags"={ 
+ *            "add_groupeTags"={ 
  *               "method"="POST", 
- *               "path"="/admin/grptags",
+ *               "path"="/admin/groupeTags",
  *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          }
  *      },
  *      itemOperations={
- *           "get_grptag_id"={ 
+ *           "get_groupeTag_id"={ 
  *               "method"="GET", 
- *               "path"="/admin/grptags/{id}",
+ *               "path"="/admin/groupeTags/{id}",
  *                "defaults"={"id"=null},
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
  *                  "security_message"="Acces non autorisé",
  *          },
  *
- *            "update_grptag_id"={ 
+ *            "update_groupeTag_id"={ 
  *               "method"="PUT", 
- *               "path"="/admin/grptags/{id}",
+ *               "path"="/admin/groupeTags/{id}",
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
- *       normalizationContext={"groups"={"grptag:read"}},
- *       denormalizationContext={"groups"={"grptag:write"}},
+ *       normalizationContext={"groups"={"groupeTag:read"}},
+ *       denormalizationContext={"groups"={"groupeTag:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=10}
  * )
- * @ORM\Entity(repositoryClass=GroupeTagRepository::class)
  */
 class GroupeTag
 {
@@ -54,26 +54,26 @@ class GroupeTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"grptag:read"})
+     * @Groups({"groupeTag:read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Groups({"grptag:read","grptag:write"})
+     * @ORM\Column(type="string", length=255)
+     * @Groups({"groupeTag:read","groupeTag:write"})
      */
-    private $libelle;
+    private $libele;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="groupeTags")
-     * @Groups({"grptag:read"})
      * @ApiSubresource
+     * @Groups({"groupeTag:read"})
      */
-    private $tags;
+    private $tag;
 
     public function __construct()
     {
-        $this->tags = new ArrayCollection();
+        $this->tag = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -81,14 +81,14 @@ class GroupeTag
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getLibele(): ?string
     {
-        return $this->libelle;
+        return $this->libele;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibele(string $libele): self
     {
-        $this->libelle = $libelle;
+        $this->libele = $libele;
 
         return $this;
     }
@@ -96,15 +96,15 @@ class GroupeTag
     /**
      * @return Collection|Tag[]
      */
-    public function getTags(): Collection
+    public function getTag(): Collection
     {
-        return $this->tags;
+        return $this->tag;
     }
 
     public function addTag(Tag $tag): self
     {
-        if (!$this->tags->contains($tag)) {
-            $this->tags[] = $tag;
+        if (!$this->tag->contains($tag)) {
+            $this->tag[] = $tag;
         }
 
         return $this;
@@ -112,8 +112,8 @@ class GroupeTag
 
     public function removeTag(Tag $tag): self
     {
-        if ($this->tags->contains($tag)) {
-            $this->tags->removeElement($tag);
+        if ($this->tag->contains($tag)) {
+            $this->tag->removeElement($tag);
         }
 
         return $this;

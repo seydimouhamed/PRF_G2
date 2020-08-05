@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- *
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ApiResource(
  *      collectionOperations={
@@ -54,45 +53,45 @@ class Tag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"tag:read","grptag:read"})
+     * @Groups({"tag:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:write", "grptag:read"})
+     * @Groups({"tag:read","grptag:read"})
      */
-    private $libelle;
+    private $libele;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:write", "grptag:read"})
+     * @Groups({"tag:read","grptag:read"})
      */
     private $description;
 
-    // /**
-    //  * @ORM\ManyToMany(targetEntity=GroupeTag::class, mappedBy="tags")
-    //  */
-    // private $groupeTags;
+    /**
+     * @ORM\ManyToMany(targetEntity=GroupeTag::class, mappedBy="tag")
+     */
+    private $groupeTags;
 
-    // public function __construct()
-    // {
-    //     $this->groupeTags = new ArrayCollection();
-    // }
+    public function __construct()
+    {
+        $this->groupeTags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getLibele(): ?string
     {
-        return $this->libelle;
+        return $this->libele;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibele(string $libele): self
     {
-        $this->libelle = $libelle;
+        $this->libele = $libele;
 
         return $this;
     }
@@ -109,31 +108,31 @@ class Tag
         return $this;
     }
 
-    // /**
-    //  * @return Collection|GroupeTag[]
-    //  */
-    // public function getGroupeTags(): Collection
-    // {
-    //     return $this->groupeTags;
-    // }
+    /**
+     * @return Collection|GroupeTag[]
+     */
+    public function getGroupeTags(): Collection
+    {
+        return $this->groupeTags;
+    }
 
-    // public function addGroupeTag(GroupeTag $groupeTag): self
-    // {
-    //     if (!$this->groupeTags->contains($groupeTag)) {
-    //         $this->groupeTags[] = $groupeTag;
-    //         $groupeTag->addTag($this);
-    //     }
+    public function addGroupeTag(GroupeTag $groupeTag): self
+    {
+        if (!$this->groupeTags->contains($groupeTag)) {
+            $this->groupeTags[] = $groupeTag;
+            $groupeTag->addTag($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
-    // public function removeGroupeTag(GroupeTag $groupeTag): self
-    // {
-    //     if ($this->groupeTags->contains($groupeTag)) {
-    //         $this->groupeTags->removeElement($groupeTag);
-    //         $groupeTag->removeTag($this);
-    //     }
+    public function removeGroupeTag(GroupeTag $groupeTag): self
+    {
+        if ($this->groupeTags->contains($groupeTag)) {
+            $this->groupeTags->removeElement($groupeTag);
+            $groupeTag->removeTag($this);
+        }
 
-    //     return $this;
-    // }
+        return $this;
+    }
 }

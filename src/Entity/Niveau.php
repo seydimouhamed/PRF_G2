@@ -6,15 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\NiveauRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- *       normalizationContext={"groups"={"niveau:read"}},
- * )
  * @ORM\Entity(repositoryClass=NiveauRepository::class)
+ * @ApiResource(
+ *       normalizationContext={"groups"={"niveau:read","competence:read"}},
+ * )
  */
 class Niveau
 {
@@ -22,15 +21,15 @@ class Niveau
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"niveau:read","competence:read"})
+     * Groups({"niveau:read","competence:read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=100)
-     * @Groups({"niveau:read","competence:read"})
+     * @ORM\Column(type="string", length=255)
+     * Groups({"niveau:read","competence:read"})
      */
-    private $libelle;
+    private $libele;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -47,11 +46,11 @@ class Niveau
     /**
      * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
      */
-    private $competences;
+    private $competence;
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
+        $this->competence = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -59,14 +58,14 @@ class Niveau
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getLibele(): ?string
     {
-        return $this->libelle;
+        return $this->libele;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLibele(string $libele): self
     {
-        $this->libelle = $libelle;
+        $this->libele = $libele;
 
         return $this;
     }
@@ -98,15 +97,15 @@ class Niveau
     /**
      * @return Collection|Competence[]
      */
-    public function getCompetences(): Collection
+    public function getCompetence(): Collection
     {
-        return $this->competences;
+        return $this->competence;
     }
 
     public function addCompetence(Competence $competence): self
     {
-        if (!$this->competences->contains($competence)) {
-            $this->competences[] = $competence;
+        if (!$this->competence->contains($competence)) {
+            $this->competence[] = $competence;
             $competence->setNiveau($this);
         }
 
@@ -115,8 +114,8 @@ class Niveau
 
     public function removeCompetence(Competence $competence): self
     {
-        if ($this->competences->contains($competence)) {
-            $this->competences->removeElement($competence);
+        if ($this->competence->contains($competence)) {
+            $this->competence->removeElement($competence);
             // set the owning side to null (unless already changed)
             if ($competence->getNiveau() === $this) {
                 $competence->setNiveau(null);

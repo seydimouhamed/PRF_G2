@@ -1,10 +1,9 @@
 api_platform:
-    title: 'Suivi Etudiant DEMO'
-    description: 'Demo pour s entrainer avec api platform'
-    version: '1.0.0'
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
     patch_formats:
         json: ['application/merge-patch+json']
+        multipart: ['multipart/form-data']
     swagger:
         versions: [3]
+    
