@@ -16,13 +16,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_tags"={ 
  *               "method"="GET", 
  *               "path"="/admin/tags",
- *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security"="is_granted('ROLE_ADMIN')",
  *               "security_message"="Acces non autorisé",
  *          },
  *            "add_tags"={ 
  *               "method"="POST", 
  *               "path"="/admin/tags",
- *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security"="is_granted('ROLE_ADMIN')",
  *               "security_message"="Acces non autorisé",
  *          }
  *      },
@@ -31,14 +31,14 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *               "method"="GET", 
  *               "path"="/admin/tags/{id}",
  *                "defaults"={"id"=null},
- *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
+ *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
  *
  *            "update_tag_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/tags/{id}",
- *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
@@ -59,7 +59,7 @@ class Tag
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","grptag:read"})
+     * @Groups({"tag:read","tag:write"})
      */
     private $libele;
 

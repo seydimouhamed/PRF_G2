@@ -17,7 +17,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_groupe"={ 
  *               "method"="GET", 
  *               "path"="/admin/groupes",
- *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *               "security"="is_granted('ROLE_ADMIN')",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *          "get_groupe_apprenants"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/groupes/apprenants",
+ *               "security"="is_granted('ROLE_ADMIN')",
  *               "security_message"="Acces non autorisé",
  *          },
  *            "add_groupe"={ 
@@ -32,13 +38,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *               "method"="GET", 
  *               "path"="/admin/groupes/{id}",
  *                "defaults"={"id"=null},
- *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
  *            "update_groupe_id"={
  *              "method"="PUT", 
  *               "path"="/admin/groupes/{id}",
- *                "security"="is_granted('GC_EDIT',object) or is_granted('ROLE_ADMIN')",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *            "delete_groupe_apprenant"={
+ *              "method"="DELETE", 
+ *               "path"="/admin/groupes/{id}/apprenants",
+ *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
@@ -90,15 +102,11 @@ class Groupe
 
     /**
      * @ORM\ManyToMany(targetEntity=Formateurs::class, inversedBy="groupes")
-     * @ApiSubresource
-     * @Groups({"groupe:read"})
      */
     private $formateur;
 
     /**
      * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="groupes")
-     * @ApiSubresource
-     * @Groups({"groupe:read"})
      */
     private $promotions;
 

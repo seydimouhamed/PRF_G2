@@ -31,11 +31,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_groupeTag_id"={ 
  *               "method"="GET", 
  *               "path"="/admin/groupeTags/{id}",
- *                "defaults"={"id"=null},
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
  *                  "security_message"="Acces non autorisé",
  *          },
- *
+ *          "get_groupeTag_id_tags"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/groupeTags/{id}/tags",
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
+ *                  "security_message"="Acces non autorisé",
+ *          },
  *            "update_groupeTag_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/groupeTags/{id}",
