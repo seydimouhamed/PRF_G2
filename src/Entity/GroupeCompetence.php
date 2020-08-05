@@ -48,10 +48,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *                  "security_message"="Acces non autorisé",
  *          },
- *
- *            "PUT"={ 
+ *           "put_grpcompetence_id_competence" 
+ *               "method"="PUT",
  *               "path"="/admin/grpecompetences/{id}",
- *                "security"="is_granted('GC_EDIT',object) or is_granted('ROLE_ADMIN')",
+ *                "security"="((is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *          "delete_grpcompetence_id_competence"
+ *                "method"="DELETE",
+ *               "path"="/admin/grpecompetences/{id}",
+ *                "security"="((is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
