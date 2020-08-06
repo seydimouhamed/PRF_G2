@@ -13,13 +13,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      collectionOperations={
  *           "get_promos"={ 
  *               "method"="GET", 
- *               "path"="/admin/promos",
+ *               "path"="/admin/promo",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *      "get_promo_principale"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promo/principal",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *      "get_promo_apprenant_attente"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promo/aprenants/attente",
  *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          },
  *            "add_promos"={ 
  *               "method"="POST", 
- *               "path"="/admin/promos",
+ *               "path"="/admin/promo",
  *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          }
@@ -28,14 +40,60 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_promo_id"={ 
  *               "method"="GET", 
  *               "path"="/admin/promos/{id}",
- *                "defaults"={"id"=null},
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
  *                  "security_message"="Acces non autorisé",
  *          },
- *
+ *          "get_promo_id_principale"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promo/{id}/principal",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *          "get_promo_id_referentiel"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promo/{id}/referentiels",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *      "get_promo_id_apprenant_attente"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promo/{id}/aprenants/attente",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *      "get_promo_id_groupe_id_apprenants"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promo/{id}/groupes/{id}/apprenants",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
+ *      "get_promo_id_formateurs"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/promo/{id}/formateurs",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security_message"="Acces non autorisé",
+ *          },
  *            "update_promo_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/promos/{id}",
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *            "update_promo_id_apprenants"={ 
+ *               "method"="PUT", 
+ *               "path"="/admin/promos/{id}/apprenants",
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *            "update_promo_id_formateurs"={ 
+ *               "method"="PUT", 
+ *               "path"="/admin/promos/{id}/formateurs",
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *            "update_promo_id_groupe"={ 
+ *               "method"="PUT", 
+ *               "path"="/admin/promos/{id}/groupe/{id}",
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *                  "security_message"="Acces non autorisé",
  *          },

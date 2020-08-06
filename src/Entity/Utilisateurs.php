@@ -40,12 +40,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
- * 
  *            "modifier_admin_users_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/users/{id}",
  *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
+ *          },
+ *            "supprimer_admin_users_id"={ 
+ *               "method"="DELETE", 
+ *               "path"="/admin/users/{id}",
+ *                "controller"="App\Controller\UtilisateursController",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                "security_message"="Acces non autorisé",
+ *                "route_name"="archive_user",
  *          },
  *      },
  *       normalizationContext={"groups"={"user:read"}},

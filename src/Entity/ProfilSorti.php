@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProfilSortiRepository;
+use App\Controller\ProfilSortieController;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
@@ -12,7 +13,51 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProfilSortiRepository::class)
- * @ApiResource(
+ * @ApiResource(collectionOperations={
+ *           "get_admin_profilSorti"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/profilSorti",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                  "security_message"="Acces non autorisé"
+ *          },
+ * 
+ *            "get_admin_profilSorti_apprenants"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/profilSorti/{id}/apprenants",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                  "security_message"="Acces non autorisé"
+ *          },
+ *            "create_profilSorti"={ 
+ *               "method"="POST", 
+ *               "path"="/admin/profilSorti",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                  "security_message"="Acces non autorisé"
+ *          }
+ *      },
+ *      itemOperations={
+ *           "get_admin_profilSorti_id"={ 
+ *               "method"="GET", 
+ *               "path"="/admin/profilSorti/{id}",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                  "security_message"="Acces non autorisé"
+ *          },
+ * 
+ *            "put_admin_profilSorti_id"={ 
+ *               "method"="PUT", 
+ *               "path"="/admin/profilSorti/{id}",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                  "security_message"="Acces non autorisé",
+ *          },
+ *            "delete_profil"={ 
+ *               "method"="DELETE", 
+ *               "path"="/admin/profilSorti/{id}",
+ *                "controller"="App\Controller\profilSortiortieController",
+ *                "security"="is_granted('ROLE_ADMIN')",
+ *                "security_message"="Acces non autorisé",
+ *                "route_name"="delete_profilSorti",
+ *          },
+ *      },
+ *
  *       normalizationContext={"groups"={"profilSorti:read","apprenants:read"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )

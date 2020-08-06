@@ -30,13 +30,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_tag_id"={ 
  *               "method"="GET", 
  *               "path"="/admin/tags/{id}",
- *                "defaults"={"id"=null},
  *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
  *
  *            "update_tag_id"={ 
- *               "method"="PUT", 
+ *               "method"="PUT",
  *               "path"="/admin/tags/{id}",
  *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
@@ -65,7 +64,7 @@ class Tag
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","grptag:read"})
+     * @Groups({"tag:read","tag:read"})
      */
     private $description;
 

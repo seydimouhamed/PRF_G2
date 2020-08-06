@@ -17,19 +17,19 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_referentiels"={ 
  *               "method"="GET", 
  *               "path"="/admin/referentiels",
- *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *               "security_message"="Acces non autorisé",
  *          },
  *           "get_referentiels_groupeCompetence"={ 
  *               "method"="GET", 
  *               "path"="/admin/referentiels/groupecompetences",
- *               "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR')",
+ *               "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR') or is_granted('ROLE_CM')",
  *               "security_message"="Acces non autorisé",
  *          },
  *            "add_referentiel"={ 
  *               "method"="POST", 
  *               "path"="/admin/referentiels",
- *               "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR')",
+ *               "security"="is_granted('ROLE_ADMIN') or is_granted('ROLE_FORMATEUR') or is_granted('ROLE_CM')",
  *               "security_message"="Acces non autorisé",
  *          }
  *      },

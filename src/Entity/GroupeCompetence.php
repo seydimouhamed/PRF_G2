@@ -37,11 +37,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_grpecompetence_id"={ 
  *               "method"="GET", 
  *               "path"="/admin/grpecompetences/{id}",
- *                "defaults"={"id"=null},
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *                  "security_message"="Acces non autorisé",
  *          },
- *
  *            "get_grpcompetence_id_competence"={ 
  *               "method"="GET", 
  *               "path"="/admin/grpecompetences/{id}/competences",
@@ -51,13 +49,13 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "put_grpcompetence_id_competence" 
  *               "method"="PUT",
  *               "path"="/admin/grpecompetences/{id}",
- *                "security"="((is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *                  "security_message"="Acces non autorisé",
  *          },
  *          "delete_grpcompetence_id_competence"
  *                "method"="DELETE",
  *               "path"="/admin/grpecompetences/{id}",
- *                "security"="((is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *                "security"="(is_granted('ROLE_FORMATEUR' or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
