@@ -10,19 +10,20 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ *
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ApiResource(
  *      collectionOperations={
  *           "get_tags"={ 
  *               "method"="GET", 
  *               "path"="/admin/tags",
- *               "security"="is_granted('ROLE_ADMIN')",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          },
  *            "add_tags"={ 
  *               "method"="POST", 
  *               "path"="/admin/tags",
- *               "security"="is_granted('ROLE_ADMIN')",
+ *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          }
  *      },
@@ -30,14 +31,15 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_tag_id"={ 
  *               "method"="GET", 
  *               "path"="/admin/tags/{id}",
- *                "security"="is_granted('ROLE_ADMIN')",
+ *                "defaults"={"id"=null},
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
  *                  "security_message"="Acces non autorisé",
  *          },
  *
  *            "update_tag_id"={ 
- *               "method"="PUT",
+ *               "method"="PUT", 
  *               "path"="/admin/tags/{id}",
- *                "security"="is_granted('ROLE_ADMIN')",
+ *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
@@ -52,45 +54,51 @@ class Tag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"tag:read"})
+     * @Groups({"tag:read","grptag:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:write"})
+     * @Groups({"tag:read","tag:write", "grptag:read"})
      */
-    private $libele;
+    private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:read"})
+     * @Groups({"tag:read","tag:write", "grptag:read"})
      */
     private $description;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=GroupeTag::class, mappedBy="tag")
-     */
-    private $groupeTags;
+     /**
+      * @ORM\ManyToMany(targetEntity=GroupeTag::class, mappedBy="tags")
+      */
+     private $groupeTags;
 
-    public function __construct()
-    {
-        $this->groupeTags = new ArrayCollection();
-    }
+     /**
+      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="tag")
+      */
+     private $groupecompetences;
+
+     public function __construct()
+     {
+         $this->groupeTags = new ArrayCollection();
+         $this->groupecompetences = new ArrayCollection();
+     }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLibele(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(string $libele): self
+    public function setLibelle(string $libelle): self
     {
-        $this->libele = $libele;
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -107,29 +115,55 @@ class Tag
         return $this;
     }
 
+     /**
+      * @return Collection|GroupeTag[]
+      */
+     public function getGroupeTags(): Collection
+     {
+         return $this->groupeTags;
+     }
+
+     public function addGroupeTag(GroupeTag $groupeTag): self
+     {
+         if (!$this->groupeTags->contains($groupeTag)) {
+             $this->groupeTags[] = $groupeTag;
+             $groupeTag->addTag($this);
+         }
+
+         return $this;
+     }
+
+     public function removeGroupeTag(GroupeTag $groupeTag): self
+     {
+         if ($this->groupeTags->contains($groupeTag)) {
+             $this->groupeTags->removeElement($groupeTag);
+             $groupeTag->removeTag($this);
+         }
+
+        return $this;
+     }
+
     /**
-     * @return Collection|GroupeTag[]
+     * @return Collection|GroupeCompetence[]
      */
-    public function getGroupeTags(): Collection
+    public function getGroupecompetences(): Collection
     {
-        return $this->groupeTags;
+        return $this->groupecompetences;
     }
 
-    public function addGroupeTag(GroupeTag $groupeTag): self
+    public function addGroupecompetence(GroupeCompetence $groupecompetence): self
     {
-        if (!$this->groupeTags->contains($groupeTag)) {
-            $this->groupeTags[] = $groupeTag;
-            $groupeTag->addTag($this);
+        if (!$this->groupecompetences->contains($groupecompetence)) {
+            $this->groupecompetences[] = $groupecompetence;
         }
 
         return $this;
     }
 
-    public function removeGroupeTag(GroupeTag $groupeTag): self
+    public function removeGroupecompetence(GroupeCompetence $groupecompetence): self
     {
-        if ($this->groupeTags->contains($groupeTag)) {
-            $this->groupeTags->removeElement($groupeTag);
-            $groupeTag->removeTag($this);
+        if ($this->groupecompetences->contains($groupecompetence)) {
+            $this->groupecompetences->removeElement($groupecompetence);
         }
 
         return $this;

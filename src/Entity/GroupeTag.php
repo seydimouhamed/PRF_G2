@@ -11,46 +11,42 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=GroupeTagRepository::class)
  * @ApiResource(
  *      collectionOperations={
- *           "get_groupeTags"={ 
+ *           "get_grptags"={ 
  *               "method"="GET", 
- *               "path"="/admin/groupeTags",
+ *               "path"="/admin/grptags",
  *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          },
- *            "add_groupeTags"={ 
+ *            "add_grptags"={ 
  *               "method"="POST", 
- *               "path"="/admin/groupeTags",
+ *               "path"="/admin/grptags",
  *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          }
  *      },
  *      itemOperations={
- *           "get_groupeTag_id"={ 
+ *           "get_grptag_id"={ 
  *               "method"="GET", 
- *               "path"="/admin/groupeTags/{id}",
+ *               "path"="/admin/grptags/{id}",
+ *                "defaults"={"id"=null},
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
  *                  "security_message"="Acces non autorisé",
  *          },
- *          "get_groupeTag_id_tags"={ 
- *               "method"="GET", 
- *               "path"="/admin/groupeTags/{id}/tags",
- *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
- *                  "security_message"="Acces non autorisé",
- *          },
- *            "update_groupeTag_id"={ 
+ *
+ *            "update_grptag_id"={ 
  *               "method"="PUT", 
- *               "path"="/admin/groupeTags/{id}",
+ *               "path"="/admin/grptags/{id}",
  *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
- *       normalizationContext={"groups"={"groupeTag:read"}},
- *       denormalizationContext={"groups"={"groupeTag:write"}},
+ *       normalizationContext={"groups"={"grptag:read"}},
+ *       denormalizationContext={"groups"={"grptag:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=10}
  * )
+ * @ORM\Entity(repositoryClass=GroupeTagRepository::class)
  */
 class GroupeTag
 {
@@ -58,26 +54,26 @@ class GroupeTag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"groupeTag:read"})
+     * @Groups({"grptag:read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"groupeTag:read","groupeTag:write"})
+     * @ORM\Column(type="string", length=100)
+     * @Groups({"grptag:read","grptag:write"})
      */
-    private $libele;
+    private $libelle;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="groupeTags")
+     * @Groups({"grptag:read"})
      * @ApiSubresource
-     * @Groups({"groupeTag:read"})
      */
-    private $tag;
+    private $tags;
 
     public function __construct()
     {
-        $this->tag = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,14 +81,14 @@ class GroupeTag
         return $this->id;
     }
 
-    public function getLibele(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(string $libele): self
+    public function setLibelle(string $libelle): self
     {
-        $this->libele = $libele;
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -100,15 +96,15 @@ class GroupeTag
     /**
      * @return Collection|Tag[]
      */
-    public function getTag(): Collection
+    public function getTags(): Collection
     {
-        return $this->tag;
+        return $this->tags;
     }
 
     public function addTag(Tag $tag): self
     {
-        if (!$this->tag->contains($tag)) {
-            $this->tag[] = $tag;
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
         }
 
         return $this;
@@ -116,8 +112,8 @@ class GroupeTag
 
     public function removeTag(Tag $tag): self
     {
-        if ($this->tag->contains($tag)) {
-            $this->tag->removeElement($tag);
+        if ($this->tags->contains($tag)) {
+            $this->tags->removeElement($tag);
         }
 
         return $this;

@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use App\Entity\Utilisateurs;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\ApprenantsRepository;
+use App\Repository\ApprenantRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
-  * @ApiResource(
+ * @ApiResource(
  *      collectionOperations={
  *           "get_apprenants"={ 
  *               "method"="GET", 
@@ -50,12 +50,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
- *       normalizationContext={"groups"={"apprenants:read","user:read"}},
- *       denormalizationContext={"groups"={"apprenants:write","user:write"}}
+ *       normalizationContext={"groups"={"apprenant:read","user:read"}},
+ *       denormalizationContext={"groups"={"apprenant:write","user:write"}}
  * )
- * @ORM\Entity(repositoryClass=ApprenantsRepository::class)
+ * @ORM\Entity(repositoryClass=ApprenantRepository::class)
  */
-class Apprenants extends Utilisateurs
+class Apprenant extends User
 {
     /**
      * @ORM\Id()
@@ -65,32 +65,32 @@ class Apprenants extends Utilisateurs
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     * @Groups({"apprenants:read", "apprenants:write"})
+     * @ORM\Column(type="string", length=30)
+     * @Groups({"apprenant:read", "apprenant:write"})
      */
     private $genre;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"apprenants:read", "apprenants:write"})
+     * @ORM\Column(type="text")
+     * @Groups({"apprenant:read", "apprenant:write"})
      */
     private $adresse;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"apprenants:read", "apprenants:write"})
+     * @ORM\Column(type="string", length=50)
+     * @Groups({"apprenant:read", "apprenant:write"})
      */
     private $telephone;
 
     /**
-     * @ORM\ManyToOne(targetEntity=ProfilSorti::class, inversedBy="apprenant")
-     * @Groups({"apprenants:read"})
+     * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
+     * @Groups({"apprenant:read"})
      *  @ApiSubresource
      */
-    private $profilSorti;
+    private $profilSortie;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="apprenant")
+     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="apprenants")
      */
     private $groupes;
 
@@ -140,41 +140,39 @@ class Apprenants extends Utilisateurs
         return $this;
     }
 
-    public function getProfilSorti(): ?ProfilSorti
+    public function getProfilSortie(): ?ProfilSortie
     {
-        return $this->profilSorti;
+        return $this->profilSortie;
     }
 
-    public function setProfilSorti(?ProfilSorti $profilSorti): self
+    public function setProfilSortie(?ProfilSortie $profilSortie): self
     {
-        $this->profilSorti = $profilSorti;
+        $this->profilSortie = $profilSortie;
 
         return $this;
     }
 
     /**
-     * @return Collection|Groupe[]
+     * @return Collection|Groupes[]
      */
     public function getGroupes(): Collection
     {
         return $this->groupes;
     }
 
-    public function addGroupe(Groupe $groupe): self
+    public function addGroupe(Groupes $groupe): self
     {
         if (!$this->groupes->contains($groupe)) {
             $this->groupes[] = $groupe;
-            $groupe->addApprenant($this);
         }
 
         return $this;
     }
 
-    public function removeGroupe(Groupe $groupe): self
+    public function removeGroupe(Groupes $groupe): self
     {
         if ($this->groupes->contains($groupe)) {
             $this->groupes->removeElement($groupe);
-            $groupe->removeApprenant($this);
         }
 
         return $this;

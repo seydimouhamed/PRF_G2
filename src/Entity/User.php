@@ -3,21 +3,20 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\InheritanceType;
-use App\Repository\UtilisateursRepository;
-use Doctrine\ORM\Mapping\DiscriminatorMap;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping\DiscriminatorColumn;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
- * @ORM\Entity(repositoryClass=UtilisateursRepository::class)
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\InheritanceType("JOINED")
- * @ORM\DiscriminatorColumn(name="discr", type="string")
- * @ORM\DiscriminatorMap({"user"="Utilisateurs","apprenant" = "Apprenants","formateur"="Formateurs"})
+* @ORM\DiscriminatorColumn(name="discr", type="string")
+* @ORM\DiscriminatorMap({"user"="User","apprenant" = "Apprenant","formateur"="Formateur"})
  * @ApiResource(
  *      collectionOperations={
  *           "get_admin_users"={ 
@@ -40,19 +39,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
+ * 
  *            "modifier_admin_users_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/users/{id}",
  *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
- *          },
- *            "supprimer_admin_users_id"={ 
- *               "method"="DELETE", 
- *               "path"="/admin/users/{id}",
- *                "controller"="App\Controller\UtilisateursController",
- *                "security"="is_granted('ROLE_ADMIN')",
- *                "security_message"="Acces non autorisé",
- *                "route_name"="archive_user",
  *          },
  *      },
  *       normalizationContext={"groups"={"user:read"}},
@@ -60,66 +52,70 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )
  */
-class Utilisateurs implements UserInterface
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"user:read","profil:read"})
+     * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+     * 
      * @Groups({"user:read", "user:write","profil:read"})
      */
-    private $email;
+    private $username;
 
-    /**
-     * ORM\Column(type="json")
-     *  
-     * 
-     */
+
     private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     *
      */
     private $password;
 
-     /**
-     *@Groups({"user:write"})
+    /**
+     * @Groups("user:write")
      */
     private $plainPassword;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     *@Groups({"user:read", "user:write","profil:read"})
-     *
-     */
-    private $prenom;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     *@Groups({"user:read", "user:write","profil:read"})
-     */
-    private $nom;
-
-    /**
-     * @ORM\Column(type="blob")
-     *@Groups({"user:read", "user:write","profil:read"})
+     * @ORM\Column(type="string", length=255, nullable=true)
      * 
+     * @Groups({"user:read", "user:write", "profil:read"})
      */
-    private $avatar;
+    private $fisrtName;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="utilisateur")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * 
+     *  @Groups({"user:read", "user:write", "profil:read"})
+     */
+    private $lastName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * 
+     *  @Groups({"user:read", "user:write", "profil:read"})
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="blob", nullable=true)
+     * 
+     *  @Groups({"user:read", "user:write", "profil:read"})
+     */
+    private $photo;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
      * @ApiSubresource
-     * @Groups({"user:read"})
-     * 
+     * Groups({"user:read", "user:write"})
      */
     private $profil;
 
@@ -133,18 +129,6 @@ class Utilisateurs implements UserInterface
         return $this->id;
     }
 
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
     /**
      * A visual identifier that represents this user.
      *
@@ -152,7 +136,14 @@ class Utilisateurs implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string) $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     /**
@@ -162,7 +153,7 @@ class Utilisateurs implements UserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_'.$this->profil->getLibelle();
+        $roles[] = 'ROLE_'.$this->profil->getAbbr();
 
         return array_unique($roles);
     }
@@ -202,45 +193,59 @@ class Utilisateurs implements UserInterface
      */
     public function eraseCredentials()
     {
+
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+         $this->plainPassword = null;
     }
 
-    public function getPrenom(): ?string
+    public function getFisrtName(): ?string
     {
-        return $this->prenom;
+        return $this->fisrtName;
     }
 
-    public function setPrenom(string $prenom): self
+    public function setFisrtName(string $fisrtName): self
     {
-        $this->prenom = $prenom;
+        $this->fisrtName = $fisrtName;
 
         return $this;
     }
 
-    public function getNom(): ?string
+    public function getLastName(): ?string
     {
-        return $this->nom;
+        return $this->lastName;
     }
 
-    public function setNom(string $nom): self
+    public function setLastName(string $lastName): self
     {
-        $this->nom = $nom;
+        $this->lastName = $lastName;
 
         return $this;
     }
 
-    public function getAvatar()
+    public function getEmail(): ?string
     {
-        $data = stream_get_contents($this->avatar);
-        fclose($this->avatar);
-
-       return base64_encode($data);
+        return $this->email;
     }
 
-    public function setAvatar($avatar): self
+    public function setEmail(string $email): self
     {
-        $this->avatar = $avatar;
+        $this->email = $email;
+
+        return $this;
+    }
+
+
+    public function getPhoto()
+    {
+         $data = stream_get_contents($this->photo);
+         fclose($this->photo);
+
+        return base64_encode($data);
+    }
+
+    public function setPhoto($photo): self
+    {
+        $this->photo = $photo;
 
         return $this;
     }

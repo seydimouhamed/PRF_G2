@@ -2,16 +2,15 @@
 
 namespace App\Entity;
 
-use App\Entity\Utilisateurs;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\FormateursRepository;
-use Doctrine\Common\Collections\Collection;
+use App\Repository\FormateurRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=FormateursRepository::class)
  * @ApiResource(
  *      collectionOperations={
  *           "get_formateurs"={ 
@@ -47,8 +46,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       denormalizationContext={"groups"={"user:write","formateur:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )
+ * @ORM\Entity(repositoryClass=FormateurRepository::class)
  */
-class Formateurs extends Utilisateurs
+class Formateur extends User
 {
     /**
      * @ORM\Id()
@@ -59,7 +59,7 @@ class Formateurs extends Utilisateurs
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Groupe::class, mappedBy="formateur")
+     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="formateurs")
      */
     private $groupes;
 
@@ -74,28 +74,38 @@ class Formateurs extends Utilisateurs
     }
 
     /**
-     * @return Collection|Groupe[]
+     * Set the value of id
+     *
+     * @return  self
+     */ 
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Groupes[]
      */
     public function getGroupes(): Collection
     {
         return $this->groupes;
     }
 
-    public function addGroupe(Groupe $groupe): self
+    public function addGroupe(Groupes $groupe): self
     {
         if (!$this->groupes->contains($groupe)) {
             $this->groupes[] = $groupe;
-            $groupe->addFormateur($this);
         }
 
         return $this;
     }
 
-    public function removeGroupe(Groupe $groupe): self
+    public function removeGroupe(Groupes $groupe): self
     {
         if ($this->groupes->contains($groupe)) {
             $this->groupes->removeElement($groupe);
-            $groupe->removeFormateur($this);
         }
 
         return $this;

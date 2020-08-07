@@ -6,14 +6,15 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Repository\NiveauRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=NiveauRepository::class)
  * @ApiResource(
- *       normalizationContext={"groups"={"niveau:read","competence:read"}},
+ *       normalizationContext={"groups"={"niveau:read"}},
  * )
+ * @ORM\Entity(repositoryClass=NiveauRepository::class)
  */
 class Niveau
 {
@@ -21,15 +22,15 @@ class Niveau
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * Groups({"niveau:read","competence:read"})
+     * @Groups({"niveau:read","competence:read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * Groups({"niveau:read","competence:read"})
+     * @ORM\Column(type="string", length=100)
+     * @Groups({"niveau:read","competence:read"})
      */
-    private $libele;
+    private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -44,28 +45,23 @@ class Niveau
     private $groupeAction;
 
     /**
-     * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
+     * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="niveaux")
      */
     private $competence;
-
-    public function __construct()
-    {
-        $this->competence = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLibele(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(string $libele): self
+    public function setLibelle(string $libelle): self
     {
-        $this->libele = $libele;
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -94,34 +90,16 @@ class Niveau
         return $this;
     }
 
-    /**
-     * @return Collection|Competence[]
-     */
-    public function getCompetence(): Collection
+    public function getCompetence(): ?Competence
     {
         return $this->competence;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function setCompetence(?Competence $competence): self
     {
-        if (!$this->competence->contains($competence)) {
-            $this->competence[] = $competence;
-            $competence->setNiveau($this);
-        }
+        $this->competence = $competence;
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
-    {
-        if ($this->competence->contains($competence)) {
-            $this->competence->removeElement($competence);
-            // set the owning side to null (unless already changed)
-            if ($competence->getNiveau() === $this) {
-                $competence->setNiveau(null);
-            }
-        }
-
-        return $this;
-    }
 }

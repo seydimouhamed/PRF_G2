@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ORM\Entity(repositoryClass=CompetenceRepository::class)
  * @ApiResource(
  *      collectionOperations={
  *           "get_Competences"={ 
@@ -47,6 +46,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *       denormalizationContext={"groups"={"competence:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=5}
  * )
+ * @ORM\Entity(repositoryClass=CompetenceRepository::class)
  */
 class Competence
 {
@@ -54,37 +54,35 @@ class Competence
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * Groups({"competence:read"})
+     * @Groups({"competence:read"})
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=100)
      * @Groups({"competence:read", "competence:write"})
      */
-    private $libele;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"competence:read", "competence:write"})
-     */
-    private $descriptif;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="competence")
-     * @ApiSubresource
-     * @Groups({"competence:read"})
-     */
-    private $niveau;
+    private $libelle;
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, mappedBy="competences")
      */
     private $groupeCompetences;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $descriptif;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Niveau::class, mappedBy="competence")
+     */
+    private $niveaux;
+
     public function __construct()
     {
         $this->groupeCompetences = new ArrayCollection();
+        $this->niveaux = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,38 +90,14 @@ class Competence
         return $this->id;
     }
 
-    public function getLibele(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->libele;
+        return $this->libelle;
     }
 
-    public function setLibele(string $libele): self
+    public function setLibelle(string $libelle): self
     {
-        $this->libele = $libele;
-
-        return $this;
-    }
-
-    public function getDescriptif(): ?string
-    {
-        return $this->descriptif;
-    }
-
-    public function setDescriptif(string $descriptif): self
-    {
-        $this->descriptif = $descriptif;
-
-        return $this;
-    }
-
-    public function getNiveau(): ?Niveau
-    {
-        return $this->niveau;
-    }
-
-    public function setNiveau(?Niveau $niveau): self
-    {
-        $this->niveau = $niveau;
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -155,4 +129,48 @@ class Competence
 
         return $this;
     }
+
+    public function getDescriptif(): ?string
+    {
+        return $this->descriptif;
+    }
+
+    public function setDescriptif(string $descriptif): self
+    {
+        $this->descriptif = $descriptif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Niveau[]
+     */
+    public function getNiveaux(): Collection
+    {
+        return $this->niveaux;
+    }
+
+    public function addNiveau(Niveau $niveau): self
+    {
+        if (!$this->niveaux->contains($niveau)) {
+            $this->niveaux[] = $niveau;
+            $niveau->setCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): self
+    {
+        if ($this->niveaux->contains($niveau)) {
+            $this->niveaux->removeElement($niveau);
+            // set the owning side to null (unless already changed)
+            if ($niveau->getCompetence() === $this) {
+                $niveau->setCompetence(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

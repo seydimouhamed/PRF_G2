@@ -3,11 +3,11 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\User;
 use App\Entity\Profil;
-use App\Entity\Apprenants;
-use App\Entity\Formateurs;
-use App\Entity\ProfilSorti;
-use App\Entity\Utilisateurs;
+use App\Entity\Apprenant;
+use App\Entity\Formateur;
+use App\Entity\ProfilSortie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
   $ProfilSortis = ["Développeur front", "back", "fullstack", "CMS", "intégrateur", "designer", "CM", "Data"];
     foreach($ProfilSortis as $ps) 
     {
-        $pro_sortie=new ProfilSorti();
+        $pro_sortie=new ProfilSortie();
         $pro_sortie->setLibele($ps);
         $pro_sortie->setArchivage(false);
         $tab_ps_entity[]=$pro_sortie;
@@ -49,11 +49,12 @@ class AppFixtures extends Fixture
 
     $profil =new Profil() ;
     $profil ->setLibelle ($libelle[$key]);
+    $profil ->setAbbr($abbr);
     $manager ->persist($profil);
 
     $manager ->flush();
         for ($i=1; $i <=3 ; $i++) {
-           $user = new Utilisateurs();
+           $user = new User();
            if($abbr=="APPRENANT")
            {
 
@@ -61,23 +62,24 @@ class AppFixtures extends Fixture
             // $pro_sortie->setLibele($fake->unique()->randomElement($ProfilSortis));
             // $manager->persist($pro_sortie);
                //apprenant!
-               $user=new Apprenants();
+               $user=new Apprenant();
                $user->setGenre($fake->randomElement(['homme','femme']));
                $user->setTelephone($fake->phoneNumber());
                $user->setAdresse($fake->address());
-               $user->setProfilSorti($fake->randomElement($tab_ps_entity));
+               $user->setProfilSortie($fake->randomElement($tab_ps_entity));
            }
            if($abbr=="FORMATEUR")
            {
-               $user=new Formateurs();
+               $user=new Formateur();
            }
            $user ->setProfil ($profil);
-           $user ->setNom($fake->firstName);
+           $user ->setUsername(strtolower ($abbr ).$i);
+           $user ->setFisrtName($fake->firstName);
             // gestion de la photo
                  $photo = fopen($fake->imageUrl($width = 640, $height = 480),"rb");
-                 $user->setAvatar($photo);
+                 $user->setPhoto($photo);
             // fin 
-           $user ->setPrenom($fake->lastName);
+           $user ->setLastName($fake->lastName);
            $user ->setEmail($fake->email);
            $user->setArchivage(false);
 
