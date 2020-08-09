@@ -21,13 +21,13 @@ class AppFixtures extends Fixture
        $this->encoder=$encoder; 
 
      }
-    
 
+    public const APPRENANTS= 'apprenants';
+    public const FORMATEURS= 'formateurs';
 
     public function load(ObjectManager $manager)
     {
         $fake = Factory::create('fr-FR');
-
 
         $abbrs=["ADMIN","FORMATEUR"  ,"CM","APPRENANT"];
         $libelle=['Administrateur',"Formateur","Community Manager","Aprenant"];
@@ -88,7 +88,8 @@ class AppFixtures extends Fixture
           $user ->setPassword ($password );
             
             $manager ->persist($user);
-
+            $this->setReference(self::APPRENANTS, $user);
+            $this->setReference(self::FORMATEURS, $user);
          }
           $manager ->flush();
   }

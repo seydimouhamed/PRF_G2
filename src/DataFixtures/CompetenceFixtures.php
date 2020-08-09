@@ -3,6 +3,10 @@
 namespace App\DataFixtures;
 
 use App\Entity\Competence;
+use App\Entity\Groupes;
+use App\Entity\GroupeTag;
+use App\Entity\Promotion;
+use App\Entity\Referentiel;
 use Faker\Factory;
 use App\Entity\GroupeCompetence;
 use App\Entity\Niveau;
@@ -10,6 +14,7 @@ use App\Entity\Tag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use phpDocumentor\Reflection\DocBlock\Description;
+use PhpParser\Builder\Class_;
 
 
 class CompetenceFixtures extends Fixture
@@ -52,12 +57,11 @@ class CompetenceFixtures extends Fixture
         $niveau=['Niveau_1','Niveau_2','Niveau_3'];
 //groupe
 
-
+        $tab_grpCompetence=[];
+        $tab_referentiel=[];
         foreach($competences as $value){
             $groupeC=new GroupeCompetence();
             $comp=new Competence();
-            $tag=new Tag();
-
             foreach ($niveau as $key => $niv){
                 $niveau=new Niveau();
                 $niveau->setLibelle($niv)
@@ -69,6 +73,7 @@ class CompetenceFixtures extends Fixture
             $groupeC->setLidelle($fake->unique()->randomElement($groupeCompentences))
                     ->setDescription('Description'.$key)
                     ->addCompetence($comp);
+            $tab_grpCompetence[]=$groupeC;
             $manager->persist($groupeC);
 
             $comp->setLibelle($fake->unique()->randomElement($competences))
@@ -76,14 +81,73 @@ class CompetenceFixtures extends Fixture
                 ->addGroupeCompetence($groupeC);
             $manager->persist($comp);
 
-            $tag->setLibelle($fake->unique()->randomElement($tags))
+        }
+        $manager ->flush();
+        foreach ($tags as $key => $val){
+            $t=new Tag();
+            $groupetag= new GroupeTag();
+            $t->setLibelle($val)
                 ->setDescription('Description'.$key)
-                ->addGroupeCompetence($groupeC);
-            $manager->persist($tag);
+                ->addGroupeCompetence($groupeC)
+                ->addGroupeTag($groupetag);
+            $manager->persist($t);
+            $groupetag->setLibelle($fake->unique()->randomElement($tags))
+                ->addTag($t);
+            $manager->persist($groupetag);
+        }
+        $manager ->flush();
+        for($i=1;$i<=2;$i++)
+        {
+            $referenciel = new Referentiel();
 
+            $referenciel->setCritereAdmission('critere d\'admission '.$i)
+                ->setCritereEvaluation('critere evaluation '.$i)
+                ->setLibelle('referentiel no'.$i)
+                ->setPresentation($fake->text)
+                ->setProgramme('programme '.$i);
+            for($j=0;$j<2;$j++)
+            {
+                $referenciel->addGrpCompetence($fake->randomElement($tab_grpCompetence));
+            }
+            $tab_competence[]=$referenciel;
+            $manager->persist($referenciel);
+        }
+        $manager ->flush();
+
+        $tab_promo=[];
+        for($i=1 ; $i<=2 ; $i++)
+        {
+            $promo=new Promotion();
+            $promo->setDescription($fake->text)
+                ->setFabrique("fabrique 1")
+                ->setLangue('français')
+                ->setLieu('lieu1')
+                ->setStatus("encours")
+                ->setReferentiel($fake->randomElement($tab_referentiel))
+                ->setTitre('promo '.$i);
+
+            $tab_promo[]=$promo;
+            $manager->persist($promo);
         }
 
+        //insertion de grpupes!
+        for($i=1; $i<=2 ; $i++)
+        {
+            $group=new Groupes();
+            $group->setNom("group principale ".$i);
+            $group->setStatut($fake->randomElement(['encours','ferme']));
+            $group->setType($fake->randomElement(['binome','filerouge','general']));
+            $group->setPromotions($fake->randomElement($tab_promo));
 
-        $manager ->flush();
+            for($j=1;$j<=2;$j++)
+            {
+                $group->addApprenant($this->getReference(AppFixtures::APPRENANTS));
+            }
+            $manager->persist($group);
+
+        }
+        $manager->flush();
+
     }
+
 }

@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -90,13 +91,14 @@ class Apprenant extends User
     private $profilSortie;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="apprenants")
+     * @ORM\ManyToMany(targetEntity=Groupes::class, mappedBy="apprenants")
      */
-    private $groupes;
+    private $groupe;
 
     public function __construct()
     {
-        $this->groupes = new ArrayCollection();
+        parent::__construct();
+        $this->groupe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -155,15 +157,16 @@ class Apprenant extends User
     /**
      * @return Collection|Groupes[]
      */
-    public function getGroupes(): Collection
+    public function getGroupe(): Collection
     {
-        return $this->groupes;
+        return $this->groupe;
     }
 
     public function addGroupe(Groupes $groupe): self
     {
-        if (!$this->groupes->contains($groupe)) {
-            $this->groupes[] = $groupe;
+        if (!$this->groupe->contains($groupe)) {
+            $this->groupe[] = $groupe;
+            $groupe->addApprenant($this);
         }
 
         return $this;
@@ -171,10 +174,12 @@ class Apprenant extends User
 
     public function removeGroupe(Groupes $groupe): self
     {
-        if ($this->groupes->contains($groupe)) {
-            $this->groupes->removeElement($groupe);
+        if ($this->groupe->contains($groupe)) {
+            $this->groupe->removeElement($groupe);
+            $groupe->removeApprenant($this);
         }
 
         return $this;
     }
+
 }

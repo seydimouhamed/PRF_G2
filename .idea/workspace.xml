@@ -20,32 +20,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="616230c9-1139-4e5d-948f-37ed1360cdad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/PRF_G2.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200807224950.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200807230140.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ProfilSortieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ProfilSortieController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/UtilisateursController.php" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200808234921.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200808235331.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200809121603.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200809122029.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200809124402.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200809130411.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200809132436.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200809134108.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataPersister/UserDataPersister.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataPersister/UserDataPersister.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Apprenants.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Competence.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Competence.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Formateurs.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Groupe.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/GroupeCompetence.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeCompetence.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/GroupeTag.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeTag.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Niveau.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Niveau.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Profil.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Profil.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/ProfilSorti.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataPersister/ProfilArchiveController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Apprenant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Apprenant.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Formateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Formateur.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Groupes.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Groupes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Promotion.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Promotion.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Referentiel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Referentiel.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Tag.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Tag.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Utilisateurs.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -180,7 +172,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -188,7 +180,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -208,7 +200,10 @@
       <option name="presentableId" value="Default" />
       <updated>1596827066857</updated>
       <workItem from="1596827068319" duration="6548000" />
-      <workItem from="1596840524927" duration="2327000" />
+      <workItem from="1596840524927" duration="4051000" />
+      <workItem from="1596880584124" duration="3516000" />
+      <workItem from="1596927687821" duration="12637000" />
+      <workItem from="1596975063246" duration="7189000" />
     </task>
     <servers />
   </component>
@@ -235,17 +230,25 @@
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state x="555" y="215" width="800" height="673" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596827272502" />
-    <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl" timestamp="1596835016243">
+    <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl" timestamp="1597001555042">
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
-    <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl/0.28.1920.1052@0.28.1920.1052" timestamp="1596835016243" />
+    <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl/0.28.1920.1052@0.28.1920.1052" timestamp="1597001555042" />
     <state width="263" height="500" key="HiddenNamespacesPopup" timestamp="1596827400069">
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state width="263" height="500" key="HiddenNamespacesPopup/0.28.1920.1052@0.28.1920.1052" timestamp="1596827400069" />
+    <state x="449" y="189" key="SettingsEditor" timestamp="1596935205824">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="449" y="189" key="SettingsEditor/0.28.1920.1052@0.28.1920.1052" timestamp="1596935205824" />
     <state x="624" y="255" key="run.anything.popup" timestamp="1596836267606">
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state x="624" y="255" key="run.anything.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1596836267606" />
+    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup" timestamp="1596934182840">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1596934182840" />
   </component>
 </project>

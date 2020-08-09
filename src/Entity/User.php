@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\InheritanceType;
@@ -19,7 +21,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 * @ORM\DiscriminatorMap({"user"="User","apprenant" = "Apprenant","formateur"="Formateur"})
  * @ApiResource(
  *      collectionOperations={
- *           "get_admin_users"={ 
+ *           "get_admin_users"={
  *               "method"="GET", 
  *               "path"="/admin/users",
  *                "security"="is_granted('ROLE_ADMIN')",
@@ -39,7 +41,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
- * 
  *            "modifier_admin_users_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/users/{id}",
@@ -123,6 +124,16 @@ class User implements UserInterface
      * @ORM\Column(type="boolean",options={"default" : false})
      */
     private $archivage;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="users")
+     */
+    private $promotions;
+
+    public function __construct()
+    {
+        $this->promotions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -290,6 +301,37 @@ class User implements UserInterface
     public function setArchivage(bool $archivage): self
     {
         $this->archivage = $archivage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Promotion[]
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
+    }
+
+    public function addPromotion(Promotion $promotion): self
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions[] = $promotion;
+            $promotion->setUsers($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): self
+    {
+        if ($this->promotions->contains($promotion)) {
+            $this->promotions->removeElement($promotion);
+            // set the owning side to null (unless already changed)
+            if ($promotion->getUsers() === $this) {
+                $promotion->setUsers(null);
+            }
+        }
 
         return $this;
     }

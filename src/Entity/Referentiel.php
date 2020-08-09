@@ -103,20 +103,24 @@ class Referentiel
 
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
+     * @ApiSubresource
+     * @Groups({"referentiel:read"})
      */
     private $promotions;
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
      * @ApiSubresource
-     * @Groups({"referentiel:read", "referentiel:write"})
+     * @Groups({"referentiel:read"})
      */
     private $grpCompetences;
+
 
     public function __construct()
     {
         $this->promotions = new ArrayCollection();
          $this->grpCompetences = new ArrayCollection();
+         $this->promoref = new ArrayCollection();
     }
 
     public function getId(): ?int

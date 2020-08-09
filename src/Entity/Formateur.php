@@ -8,6 +8,7 @@ use App\Repository\FormateurRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -59,13 +60,19 @@ class Formateur extends User
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="formateurs")
+     * @ORM\ManyToMany(targetEntity=Promotion::class, mappedBy="formateurs")
      */
-    private $groupes;
+    private $promotions;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Groupes::class, mappedBy="formateurs")
+     */
+    private $groupe;
 
     public function __construct()
     {
-        $this->groupes = new ArrayCollection();
+        $this->promotions = new ArrayCollection();
+        $this->groupe = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -86,17 +93,46 @@ class Formateur extends User
     }
 
     /**
+     * @return Collection|Promotion[]
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
+    }
+
+    public function addPromotion(Promotion $promotion): self
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions[] = $promotion;
+            $promotion->addFormateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): self
+    {
+        if ($this->promotions->contains($promotion)) {
+            $this->promotions->removeElement($promotion);
+            $promotion->removeFormateur($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection|Groupes[]
      */
-    public function getGroupes(): Collection
+    public function getGroupe(): Collection
     {
-        return $this->groupes;
+        return $this->groupe;
     }
 
     public function addGroupe(Groupes $groupe): self
     {
-        if (!$this->groupes->contains($groupe)) {
-            $this->groupes[] = $groupe;
+        if (!$this->groupe->contains($groupe)) {
+            $this->groupe[] = $groupe;
+            $groupe->addFormateur($this);
         }
 
         return $this;
@@ -104,8 +140,9 @@ class Formateur extends User
 
     public function removeGroupe(Groupes $groupe): self
     {
-        if ($this->groupes->contains($groupe)) {
-            $this->groupes->removeElement($groupe);
+        if ($this->groupe->contains($groupe)) {
+            $this->groupe->removeElement($groupe);
+            $groupe->removeFormateur($this);
         }
 
         return $this;
