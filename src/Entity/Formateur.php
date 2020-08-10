@@ -55,6 +55,9 @@ class Formateur extends User
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups("formateur:read")
+     * @Groups({"promo:read"})
+     * @Groups("formateurPromo:collection:put")
+     *
      */
     private $id;
 
@@ -63,9 +66,15 @@ class Formateur extends User
      */
     private $groupes;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Promotion::class, mappedBy="formateurs")
+     */
+    private $promotions;
+
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
+        $this->promotions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,6 +115,34 @@ class Formateur extends User
     {
         if ($this->groupes->contains($groupe)) {
             $this->groupes->removeElement($groupe);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Promotion[]
+     */
+    public function getPromotions(): Collection
+    {
+        return $this->promotions;
+    }
+
+    public function addPromotion(Promotion $promotion): self
+    {
+        if (!$this->promotions->contains($promotion)) {
+            $this->promotions[] = $promotion;
+            $promotion->addFormateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromotion(Promotion $promotion): self
+    {
+        if ($this->promotions->contains($promotion)) {
+            $this->promotions->removeElement($promotion);
+            $promotion->removeFormateur($this);
         }
 
         return $this;

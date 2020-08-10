@@ -1,0 +1,12 @@
+
+F	php:S1481")Remove this unused "$tab" local variable.(ËûòÓ8‘²‹‡½.
+:php:S125B"Remove this commented out code.(Ú°à¬8õæÙ…½.
+v	php:S3776Å"TRefactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed.(ìşß˜üÿÿÿÿ8ÙŞ–­½.
+?php:S125>"Remove this commented out code.(«óËûÿÿÿÿ8õæÙ…½.
+:php:S125t"Remove this commented out code.(«¡¢°8õæÙ…½.
+@php:S125°"Remove this commented out code.(˜‘ÆÄşÿÿÿÿ8µÂå«½.
+…	php:S4144ƒ"cUpdate this method so that its implementation is not identical to "getPromoPrincipale" on line 113.(¿û‰üÿÿÿÿ8õæÙ…½.
+;php:S125†"Remove this commented out code.(«¡¢°8õæÙ…½.
+g	php:S1117R"FRename "$em" which has the same name as the field declared at line 30.(¨ƒïŸÿÿÿÿÿ8õæÙ…½.
+:php:S125P"Remove this commented out code.(¹˜¿†8õæÙ…½.
+?php:S125X"Remove this commented out code.(†Üğ³ûÿÿÿÿ8õæÙ…½.

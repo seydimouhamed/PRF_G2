@@ -35,12 +35,14 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *               "method"="GET", 
  *               "path"="/admin/users/{id}",
  *                  "security_message"="Acces non autorisé",
+ *                  "defaults"={"id"=null},
  *          },
  * 
  *            "modifier_admin_users_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/users/{id}",
  *                  "security_message"="Acces non autorisé",
+ *                  "defaults"={"id"=null},
  *          },
  *      },
  *       normalizationContext={"groups"={"user:read"}},
@@ -63,6 +65,9 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * 
      * @Groups({"user:read", "user:write","profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups("formateurPromo:collection:put")
      */
     private $username;
 
@@ -72,6 +77,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     *
      */
     private $password;
 
@@ -84,6 +90,9 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
      * @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups("formateurPromo:collection:put")
      */
     private $fisrtName;
 
@@ -91,6 +100,9 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups("formateurPromo:collection:put")
      */
     private $lastName;
 
@@ -98,6 +110,8 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     *
      */
     private $email;
 
@@ -105,6 +119,9 @@ class User implements UserInterface
      * @ORM\Column(type="blob", nullable=true)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     *
      */
     private $photo;
 
@@ -112,11 +129,15 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
      * @ApiSubresource
      * Groups({"user:read", "user:write"})
+     * @Groups({"promo:read"})
      */
     private $profil;
 
     /**
      * @ORM\Column(type="boolean",options={"default" : false})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     *
      */
     private $archivage;
 

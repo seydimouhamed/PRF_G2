@@ -22,8 +22,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_referentiels_grpCompetence"={ 
  *               "method"="GET", 
  *               "path"="/admin/referentiels/grpecompetences",
+ *                "route_name"="get_grpcompetence_competence",
  *               "security"="is_granted('ROLE_ADMIN')",
- *               "security_message"="Acces non autorisé",
+ *               "get_grpcompetence_discontinuation",
  *          },
  *            "add_referentiel"={ 
  *               "method"="POST", 
@@ -68,41 +69,49 @@ class Referentiel
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"referentiel:read"})
+     * @Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
+     * @Groups({"promo:read", "promo:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
+     * @Groups({"promo:read", "promo:write"})
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
+     * @Groups({"promo:read", "promo:write"})
      */
     private $programme;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
+     * @Groups({"promo:read", "promo:write"})
      */
     private $critereAdmission;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
+     * @Groups({"promo:read", "promo:write"})
      */
     private $critereEvaluation;
 
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
+     * @ApiSubresource()
+     * @Groups({"referentiel:read"})
      */
     private $promotions;
 

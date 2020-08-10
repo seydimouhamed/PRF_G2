@@ -14,7 +14,56 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @ApiResource(
- *     routePrefix="/admin",
+ *
+ *      itemOperations={
+ *                                  "get",
+ *                                  "Statut_Groupe"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/groupes/{id2}" ,
+ *                                      "route_name"="modifie_Statut_Groupe",
+ *                                         "defaults"={"id"=null},
+ *                                      "modifie_Statut_discontinuation",},
+ *
+ *
+ *                                    "add_Apprenant"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/apprenants" ,
+ *                                      "route_name"="add_promo_apprenant",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                                  "modifier_Promo"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}" ,
+ *                                      "route_name"="modifier_promo_id",
+ *                                       "defaults"={"id"=null},
+ *                                      "modifier_promo_discontinuation",},
+ *
+ *                                      "delete_Apprenant"={
+ *                                      "method"="DELETE",
+ *                                        "path"="/admin/promo/{id}/apprenants" ,
+ *                                      "route_name"="delete_promo_apprenant",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                           "delete_Formateur"={
+ *                                      "method"="DELETE",
+ *                                        "path"="/admin/promo/{id}/formateur" ,
+ *                                      "route_name"="delete_promo_formateur",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                                  "add_Formateur"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/Formateur" ,
+ *                                      "route_name"="add_promo_formateur",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *
+ *
+ *
+ *                      },
  *      normalizationContext={"groups"={"promo:read"}},
  *      denormalizationContext={"groups"={"promo:write"}}
  * )
@@ -27,6 +76,7 @@ class Promotion
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"promo:read"})
+     * @Groups({"groupe:read"})
      */
     protected $id;
 
@@ -96,6 +146,7 @@ class Promotion
      * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion")
      * @ApiSubresource()
      * @Groups({"promo:read"})
+     *
      */
     private $groupes;
 
@@ -112,9 +163,15 @@ class Promotion
      */
     private $avatar;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions")
+     */
+    private $formateurs;
+
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
+        $this->formateurs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -284,6 +341,32 @@ class Promotion
     public function setAvatar($avatar): self
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Formateur[]
+     */
+    public function getFormateurs(): Collection
+    {
+        return $this->formateurs;
+    }
+
+    public function addFormateur(Formateur $formateur): self
+    {
+        if (!$this->formateurs->contains($formateur)) {
+            $this->formateurs[] = $formateur;
+        }
+
+        return $this;
+    }
+
+    public function removeFormateur(Formateur $formateur): self
+    {
+        if ($this->formateurs->contains($formateur)) {
+            $this->formateurs->removeElement($formateur);
+        }
 
         return $this;
     }

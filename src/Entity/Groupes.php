@@ -25,12 +25,14 @@ class Groupes
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups({"groupe:read", "groupe:write"})
+     * @Groups({"promo:read"})
      */
     private $nom;
 
@@ -43,6 +45,7 @@ class Groupes
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"groupe:read", "groupe:write"})
+     * @Groups({"promo:read"})
      */
     private $statut;
 
@@ -63,6 +66,8 @@ class Groupes
      * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="groupes")
      * @ApiSubresource()
      * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     *
      */
     private $apprenants;
 
@@ -70,6 +75,8 @@ class Groupes
      * @ORM\ManyToMany(targetEntity=Formateur::class, mappedBy="groupes")
      * @ApiSubresource()
      * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     *
      */
     private $formateurs;
 

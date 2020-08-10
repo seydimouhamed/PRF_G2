@@ -66,19 +66,25 @@ class Apprenant extends User
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Groups({"apprenant:read", "apprenant:write"})
+     * @Groups({"apprenant:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
      */
     private $genre;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"apprenant:read", "apprenant:write"})
+     * @Groups({"apprenant:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"apprenant:read", "apprenant:write"})
+     * @Groups({"apprenant:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
      */
     private $telephone;
 
@@ -86,6 +92,8 @@ class Apprenant extends User
      * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
      * @Groups({"apprenant:read"})
      *  @ApiSubresource
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
      */
     private $profilSortie;
 
