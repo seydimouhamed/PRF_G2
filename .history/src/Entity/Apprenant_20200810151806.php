@@ -75,10 +75,13 @@ class Apprenant extends User
 
     /**
      * @ORM\Column(type="text")
+<<<<<<< HEAD
      * @Groups({"apprenant:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+=======
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $adresse;
 

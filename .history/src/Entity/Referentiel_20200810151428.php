@@ -122,6 +122,10 @@ class Referentiel
      */
     private $grpCompetences;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
+     */
+    private $promotions;
 
 
     public function __construct()

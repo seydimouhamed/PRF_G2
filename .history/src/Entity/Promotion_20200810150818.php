@@ -173,6 +173,10 @@ class Promotion
      */
     private $referentiel;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions")
+     */
+    private $formateurs;
 
     public function __construct()
     {
@@ -379,6 +383,32 @@ return $this->avatar;
         return $this;
     }
 
-    
+<<<<<<< HEAD
+    /**
+     * @return Collection|Formateur[]
+     */
+    public function getFormateurs(): Collection
+    {
+        return $this->formateurs;
+    }
 
-}
+    public function addFormateur(Formateur $formateur): self
+    {
+        if (!$this->formateurs->contains($formateur)) {
+            $this->formateurs[] = $formateur;
+        }
+
+        return $this;
+    }
+
+    public function removeFormateur(Formateur $formateur): self
+    {
+        if ($this->formateurs->contains($formateur)) {
+            $this->formateurs->removeElement($formateur);
+        }
+
+        return $this;
+    }
+=======
+    
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3

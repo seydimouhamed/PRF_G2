@@ -22,9 +22,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_referentiels_grpCompetence"={ 
  *               "method"="GET", 
  *               "path"="/admin/referentiels/grpecompetences",
- *                "route_name"="get_grpcompetence_competence",
  *               "security"="is_granted('ROLE_ADMIN')",
- *               "get_grpcompetence_discontinuation",
+ *               "security_message"="Acces non autorisé",
  *          },
  *            "add_referentiel"={ 
  *               "method"="POST", 
@@ -69,65 +68,54 @@ class Referentiel
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"referentiel:read"})
-     * @Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $programme;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $critereAdmission;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $critereEvaluation;
 
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
-     * @ApiSubresource()
-     * @Groups({"referentiel:read"})
      */
     private $promotions;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
-     * @ApiSubresource
-     * @Groups({"referentiel:read", "referentiel:write"})
-     */
+7ace275443b2cc68d73fc3
+*/
     private $grpCompetences;
 
-
-
+    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referenti    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referent
     public function __construct()
     {
+        $this->promotions = new ArrayCollection();
          $this->grpCompetences = new ArrayCollection();
-         $this->promotions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,33 +183,6 @@ class Referentiel
         return $this;
     }
 
-
-    /**
-     * @return Collection|GroupeCompetence[]
-     */
-    public function getGrpCompetences(): Collection
-    {
-        return $this->grpCompetences;
-    }
-
-    public function addGrpCompetence(GroupeCompetence $grpCompetence): self
-    {
-        if (!$this->grpCompetences->contains($grpCompetence)) {
-            $this->grpCompetences[] = $grpCompetence;
-        }
-
-        return $this;
-    }
-
-    public function removeGrpCompetence(GroupeCompetence $grpCompetence): self
-    {
-        if ($this->grpCompetences->contains($grpCompetence)) {
-            $this->grpCompetences->removeElement($grpCompetence);
-        }
-
-        return $this;
-    }
-
     /**
      * @return Collection|Promotion[]
      */
@@ -253,4 +214,24 @@ class Referentiel
         return $this;
     }
 
-}
+    /**
+     * @return Collection|GroupeCompetence[]
+     */
+    public function getGrpCompetences(): Collection
+    {
+        return $this->grpCompetences;
+    }
+
+    public function addGrpCompetence(GroupeCompetence $grpCompetence): self
+    {
+        if (!$this->grpCompetences->contains($grpCompetence)) {
+            $this->grpCompetences[] = $grpCompetence;
+        }
+
+        return $this;
+    }
+
+    public function removeGrpCompetence(GroupeCompetence $grpCompetence): self
+    {
+        if ($this->grpCompetences->contains($grpCompetence)) {
+            $this->grpCompetences->removeElement($grpCompetence);

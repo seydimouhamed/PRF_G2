@@ -22,9 +22,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_referentiels_grpCompetence"={ 
  *               "method"="GET", 
  *               "path"="/admin/referentiels/grpecompetences",
- *                "route_name"="get_grpcompetence_competence",
  *               "security"="is_granted('ROLE_ADMIN')",
- *               "get_grpcompetence_discontinuation",
+ *               "security_message"="Acces non autorisé",
  *          },
  *            "add_referentiel"={ 
  *               "method"="POST", 
@@ -69,60 +68,50 @@ class Referentiel
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"referentiel:read"})
-     * @Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $presentation;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $programme;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $critereAdmission;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
-     * @Groups({"promo:read", "promo:write"})
      */
     private $critereEvaluation;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
-     * @ApiSubresource()
-     * @Groups({"referentiel:read"})
-     */
-    private $promotions;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
-     * @ApiSubresource
-     * @Groups({"referentiel:read", "referentiel:write"})
-     */
+7ace275443b2cc68d73fc3
+*/
     private $grpCompetences;
 
-
+    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referenti    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referent
+    /**
+     * @ORM\ManyToMany(targetEntity=Promotion::class, mappedBy="referentiels")
+     */
+    private $promotions;
 
     public function __construct()
     {
@@ -221,36 +210,4 @@ class Referentiel
 
         return $this;
     }
-
-    /**
-     * @return Collection|Promotion[]
-     */
-    public function getPromotions(): Collection
-    {
-        return $this->promotions;
-    }
-
-    public function addPromotion(Promotion $promotion): self
-    {
-        if (!$this->promotions->contains($promotion)) {
-            $this->promotions[] = $promotion;
-            $promotion->setReferentiel($this);
-        }
-
-        return $this;
-    }
-
-    public function removePromotion(Promotion $promotion): self
-    {
-        if ($this->promotions->contains($promotion)) {
-            $this->promotions->removeElement($promotion);
-            // set the owning side to null (unless already changed)
-            if ($promotion->getReferentiel() === $this) {
-                $promotion->setReferentiel(null);
-            }
-        }
-
-        return $this;
-    }
-
 }

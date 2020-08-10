@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_referentiels_grpCompetence"={ 
  *               "method"="GET", 
  *               "path"="/admin/referentiels/grpecompetences",
- *                "route_name"="get_grpcompetence_competence",
+ *               "securi *                "route_name"="get_grpcompetence_competence",
  *               "security"="is_granted('ROLE_ADMIN')",
  *               "get_grpcompetence_discontinuation",
  *          },
@@ -108,20 +108,25 @@ class Referentiel
      */
     private $critereEvaluation;
 
+<<<<<<< HEAD
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
      * @ApiSubresource()
      * @Groups({"referentiel:read"})
      */
     private $promotions;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
-     * @ApiSubresource
+=======
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
+/**
+ *@ApiSubresource
      * @Groups({"referentiel:read", "referentiel:write"})
      */
     private $grpCompetences;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
+     */
+    private $promotions;
 
 
     public function __construct()
