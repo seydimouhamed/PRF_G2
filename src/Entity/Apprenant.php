@@ -66,31 +66,43 @@ class Apprenant extends User
 
     /**
      * @ORM\Column(type="string", length=30)
+<<<<<<< HEAD
      * @Groups({"apprenant:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+=======
+     * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $genre;
 
     /**
      * @ORM\Column(type="text")
+<<<<<<< HEAD
      * @Groups({"apprenant:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+=======
+     * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=50)
+<<<<<<< HEAD
      * @Groups({"apprenant:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+=======
+     * @Groups({"apprenant:read", "apprenant:write", "promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $telephone;
 
     /**
      * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
-     * @Groups({"apprenant:read"})
+     * @Groups({"apprenant:read", "groupe:read"})
      *  @ApiSubresource
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
@@ -101,6 +113,12 @@ class Apprenant extends User
      * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="apprenants")
      */
     private $groupes;
+
+    /**
+     * @ORM\Column(type="string", length=50,options={"default" : "attente"})
+     * @Groups({"apprenant:read", "apprenant:write", "groupe:read"})
+     */
+    private $statut;
 
     public function __construct()
     {
@@ -182,6 +200,18 @@ class Apprenant extends User
         if ($this->groupes->contains($groupe)) {
             $this->groupes->removeElement($groupe);
         }
+
+        return $this;
+    }
+
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
 
         return $this;
     }

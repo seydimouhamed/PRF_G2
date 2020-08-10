@@ -150,18 +150,28 @@ class Promotion
      */
     private $groupes;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="promotions")
-     * @ApiSubresource()
-     * @Groups({"promo:read"})
-     */
-    private $referentiel;
+   
 
     /**
      * @ORM\Column(type="blob", nullable=true)
      * @Groups({"promo:read"})
      */
     private $avatar;
+
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions")
+     * @ApiSubresource()
+     * @Groups({"promo:read"})
+     */
+    private $formateurs;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="promotions")
+     * @ApiSubresource()
+     * @Groups({"promo:read"})
+     */
+    private $referentiel;
 
     /**
      * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions")
@@ -239,14 +249,14 @@ class Promotion
         return $this;
     }
 
-    public function getDateFinPrvisoire(): ?\DateTimeInterface
+    public function getDateFinProvisoire(): ?\DateTimeInterface
     {
-        return $this->dateFinPrvisoire;
+        return $this->dateFinProvisoire;
     }
 
-    public function setDateFinPrvisoire(?\DateTimeInterface $dateFinPrvisoire): self
+    public function setDateFinProvisoire(?\DateTimeInterface $dateFinPrvisoire): self
     {
-        $this->dateFinPrvisoire = $dateFinPrvisoire;
+        $this->dateFinProvisoire = $dateFinPorvisoire;
 
         return $this;
     }
@@ -318,24 +328,13 @@ class Promotion
         return $this;
     }
 
-    public function getReferentiel(): ?Referentiel
-    {
-        return $this->referentiel;
-    }
-
-    public function setReferentiel(?Referentiel $referentiel): self
-    {
-        $this->referentiel = $referentiel;
-
-        return $this;
-    }
 
     public function getAvatar()
     {
-        $data = stream_get_contents($this->avatar);
-        fclose($this->avatar);
-
-       return base64_encode($data);
+        // $data = stream_get_contents($this->avatar);
+        // fclose($this->avatar);
+return $this->avatar;
+      // return base64_encode($data);
     }
 
     public function setAvatar($avatar): self
@@ -344,6 +343,7 @@ class Promotion
 
         return $this;
     }
+
 
     /**
      * @return Collection|Formateur[]
@@ -370,4 +370,46 @@ class Promotion
 
         return $this;
     }
+
+    public function getReferentiel(): ?Referentiel
+    {
+        return $this->referentiel;
+    }
+
+    public function setReferentiel(?Referentiel $referentiel): self
+    {
+        $this->referentiel = $referentiel;
+
+        return $this;
+    }
+
+<<<<<<< HEAD
+    /**
+     * @return Collection|Formateur[]
+     */
+    public function getFormateurs(): Collection
+    {
+        return $this->formateurs;
+    }
+
+    public function addFormateur(Formateur $formateur): self
+    {
+        if (!$this->formateurs->contains($formateur)) {
+            $this->formateurs[] = $formateur;
+        }
+
+        return $this;
+    }
+
+    public function removeFormateur(Formateur $formateur): self
+    {
+        if ($this->formateurs->contains($formateur)) {
+            $this->formateurs->removeElement($formateur);
+        }
+
+        return $this;
+    }
+=======
+    
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
 }

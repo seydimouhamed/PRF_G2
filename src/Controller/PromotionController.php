@@ -11,6 +11,8 @@ use App\Entity\Apprenant;
 use App\Entity\Formateur;
 use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use App\Repository\GroupesRepository;
+use App\Repository\PromotionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,16 +30,22 @@ class PromotionController extends AbstractController
     private $serializer;
     private $validator;
     private $em;
+    private $repo;
+    private $repoGroupe;
 
     public function __construct(
+        PromotionRepository $repo,
+        GroupesRepository $repoGroupe,
         SerializerInterface $serializer,
         ValidatorInterface $validator,
         EntityManagerInterface $em,
         UserPasswordEncoderInterface $encoder
 )
     {
+        $this->repo=$repo;
         $this->serializer=$serializer;
         $this->validator=$validator;
+        $this->repoGroupe=$repoGroupe;
         $this->em=$em;
         $this->encoder=$encoder;
     }
@@ -105,16 +113,16 @@ class PromotionController extends AbstractController
      *     methods={"GET"},
      *     defaults={
      *          "__controller"="App\Controller\UserController::getPromoPrincipale",
-     *          "__api_resource_class"=User::class,
+     *          "__api_resource_class"=Promotion::class,
      *          "__api_collection_operation_name"="get_promo_princ"
      *     }
      * )
      */
-    public function getPromoPrincipale(PromotionRepository $repo)
+    public function getPromoPrincipale()
     {
-        $promo= $repo->findByArchivage(0);
+        $promo_princ=$this->getGroupesPrincipale();
         // $user=$this->serializer->serialize($user,"json");
-        return $this->json($promo,200);
+        return $this->json($promo_princ,200);
     }
     /**
      * @Route(
@@ -123,16 +131,196 @@ class PromotionController extends AbstractController
      *     methods={"GET"},
      *     defaults={
      *          "__controller"="App\Controller\UserController::getPromoApprenantAttente",
-     *          "__api_resource_class"=User::class,
+     *          "__api_resource_class"=Promotion::class,
      *          "__api_collection_operation_name"="get_apprenant_attente"
      *     }
      * )
      */
-    public function getPromoApprenantAttente(PromotionRepository $repo)
+    public function getPromoApprenantAttente()
     {
-        $promo= $repo->findByArchivage(0);
-        // $user=$this->serializer->serialize($user,"json");
-        return $this->json($promo,200);
+        $promos= $this->repo->findAll();
+        foreach($promos as $promo)
+        {
+            
+            $group_ref_detail['referentiel']=$promo->getReferentiel();
+            //get id promo
+            $idPromo = $promo->getID();
+            //recupération du groupe principal
+            $idGroupe=$this->repoGroupe->findBy(['promotion'=>$idPromo,'type'=>"groupe principale"], ['id' => 'DESC'])[0];
+
+            //$all=$this->repoGroupe->findBy([])
+
+        }
+        // $p_princs = $this->rep;
+        // $apprenant_attente=[];
+
+        // foreach($p_princs as $pp)
+        // {
+
+        //     foreach($pp as $groupe)
+        //     {
+        //         foreach($groupe->getApprenants() as $apprenant)
+        //         {
+
+        //             if($apprenant->getStatut()==="attente")
+        //             {
+        //                 $ap_ref_detail["apprenants"][]=$apprenant;
+        //             }
+        //         }
+        //     }
+        //     $apprenant_attente[]=$ap_ref_detail;
+        // }
+
+        return $this->json($idGroupe,200);
+    }
+
+    /**
+     * @Route(
+     *     name="get_promotion_id_apprenant_attente",
+     *     path="/api/admin/promo/{id}/apprenant/attente",
+     *     methods={"GET"},
+     *     defaults={
+     *          "__controller"="App\Controller\PromotionController::getPromoApprenantAttente",
+     *          "__api_resource_class"=Promotion::class,
+     *          "__api_collection_operation_name"="get_apprenant_id_attente"
+     *     }
+     * )
+     */
+    public function getPromoIdApprenantAttente($id)
+    {
+        $p_princs = $this->getGroupesPrincipale();
+        $apprenant_attente=[];
+        foreach($p_princs as $pp)
+        {
+            $apprenant_attente[]= $pp; 
+            foreach($pp as $groupe)
+            {
+                foreach($groupe->getApprenants() as $apprenant)
+                {
+
+                    if($apprenant->getStatut()==="attente")
+                    {                       
+                        // if($promo->getID()==$id)
+                        // {
+                        // }
+                    }
+                }
+            }
+        }
+
+        return $this->json($apprenant_attente,200);
+    }
+
+
+
+    /**
+     * @Route(
+     *     name="promo_get_principal",
+     *     path="/api/admin/promo/{id}/principal",
+     *     methods={"GET"},
+     *     defaults={
+     *          "__controller"="App\Controller\UserController::getPromoidPrincipal",
+     *          "__api_resource_class"=Promotion::class,
+     *          "__api_collection_operation_name"="get_PromoidPrincipal"
+     *     }
+     * )
+     */
+    public function getPromoidPrincipal($id)
+    {
+       $p_princs = $this->getGroupesPrincipale($id);
+
+        return $this->json($p_princs ,200);
+    }
+
+
+    /**
+     * @Route(
+     *     name="promo_get_referentiel",
+     *     path="/api/admin/promo/{id}/referentiel",
+     *     methods={"GET"},
+     *     defaults={
+     *          "__controller"="App\Controller\UserController::getPromoidreferentiel",
+     *          "__api_resource_class"=Promotion::class,
+     *          "__api_collection_operation_name"="get_Promoidreferentiel"
+     *     }
+     * )
+     */
+    public function getPromoidreferentiel($id)
+    {
+        //getreferentielpromo($id);
+      // $p_princs = $this->getGroupesPrincipale($id);
+
+        return $this->json($this->getreferentielpromo($id) ,200);
+    }
+
+
+
+    /**
+     * @Route(
+     *     name="promo_get_formateur",
+     *     path="/api/admin/promo/{id}/formateur",
+     *     methods={"GET"},
+     *     defaults={
+     *          "__controller"="App\Controller\UserController::getPromoidformateur",
+     *          "__api_resource_class"=Promotion::class,
+     *          "__api_collection_operation_name"="get_Promoidformateurl"
+     *     }
+     * )
+     */
+    public function getPromoidformateur($id)
+    {
+        $promo=$this->repo->find($id);
+
+        $data=array("referentiel"=>$promo->getReferentiels(), 'formateurs'=>$promo->getFormateurs());
+          
+
+        return $this->json($this->getreferentielpromo($id) ,200);
+    }
+
+
+    private function getGroupesPrincipale($id=null)
+    {
+        $promos=null;
+          $promos= $this->repo->findAll();
+        $promo_princ=[];
+        
+        foreach($promos as $promo)
+        {
+            
+            $group_ref_detail['referentiel']=$promo->getReferentiel();
+
+            foreach($promo->getGroupes() as $promo_det)
+            {
+                if($promo_det->getType()==="groupe principale")
+                {
+                    if($promo->getID()==$id)
+                    {
+                            return $promo_det;
+                    }
+                    $group_ref_detail['groupes']=$promo_det;
+                }
+            }
+
+            $promo_princ[]=$group_ref_detail;
+        }
+
+        if($id)
+        {
+            return null;
+        }else
+        {
+          return $promo_princ;
+        }
+    
+    }
+
+    private function getreferentielpromo($id=null)
+    {
+          $promos= $this->repo->find($id);
+        $promo_ref=$promos->getReferentiel();
+
+            return $promo_ref;
+
     }
     /**
      * @Route(

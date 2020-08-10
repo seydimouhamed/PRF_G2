@@ -11,11 +11,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- *       routePrefix="/admin",
+ * @ApiResource(routePrefix="/admin",
  *       normalizationContext={"groups"={"groupe:read"}},
- *       denormalizationContext={"groups"={"groupe:write"}}
- * )
+ *       denormalizationContext={"groups"={"groupe:write"}})
  * @ORM\Entity(repositoryClass=GroupesRepository::class)
  */
 class Groupes
@@ -24,59 +22,77 @@ class Groupes
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+<<<<<<< HEAD
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+=======
+     * @Groups({"groupe:read","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
+<<<<<<< HEAD
      * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
+=======
+     * @Groups({"groupe:read", "groupe:write","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $nom;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"groupe:read", "groupe:write"})
+     * @Groups({"groupe:read", "groupe:write","promo:read"})
      */
     private $dateCreation;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
+<<<<<<< HEAD
      * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
+=======
+     * @Groups({"groupe:read", "groupe:write","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $statut;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"groupe:read", "groupe:write"})
+     * @Groups({"groupe:read", "groupe:write","promo:read"})
      */
     private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes")
-     * @ApiSubresource()
-     * @Groups({"groupe:read"})
      */
     private $promotion;
 
     /**
      * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="groupes")
      * @ApiSubresource()
+<<<<<<< HEAD
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      *
+=======
+     * @Groups({"groupe:read","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $apprenants;
 
     /**
      * @ORM\ManyToMany(targetEntity=Formateur::class, mappedBy="groupes")
      * @ApiSubresource()
+<<<<<<< HEAD
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      *
+=======
+     * @Groups({"groupe:read","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $formateurs;
 

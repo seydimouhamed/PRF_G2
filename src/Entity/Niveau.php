@@ -45,13 +45,18 @@ class Niveau
     private $groupeAction;
 
     /**
-     * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
+     * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="niveaux")
      */
-    private $competences;
+    private $competence;
+
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
+    //  */
+    // private $competences;
 
     public function __construct()
     {
-        $this->competences = new ArrayCollection();
+       // $this->competences = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,34 +100,16 @@ class Niveau
         return $this;
     }
 
-    /**
-     * @return Collection|Competence[]
-     */
-    public function getCompetences(): Collection
+    public function getCompetence(): ?Competence
     {
-        return $this->competences;
+        return $this->competence;
     }
 
-    public function addCompetence(Competence $competence): self
+    public function setCompetence(?Competence $competence): self
     {
-        if (!$this->competences->contains($competence)) {
-            $this->competences[] = $competence;
-            $competence->setNiveau($this);
-        }
+        $this->competence = $competence;
 
         return $this;
     }
 
-    public function removeCompetence(Competence $competence): self
-    {
-        if ($this->competences->contains($competence)) {
-            $this->competences->removeElement($competence);
-            // set the owning side to null (unless already changed)
-            if ($competence->getNiveau() === $this) {
-                $competence->setNiveau(null);
-            }
-        }
-
-        return $this;
-    }
 }

@@ -56,7 +56,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user:read","profil:read"})
+     * @Groups({"user:read","profil:read","promo:read"})
      * 
      */
     private $id;
@@ -64,10 +64,14 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * 
+<<<<<<< HEAD
      * @Groups({"user:read", "user:write","profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups("formateurPromo:collection:put")
+=======
+     * @Groups({"user:read", "user:write","profil:read","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $username;
 
@@ -89,39 +93,55 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
+<<<<<<< HEAD
      * @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups("formateurPromo:collection:put")
+=======
+     * @Groups({"user:read", "user:write", "profil:read","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $fisrtName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
+<<<<<<< HEAD
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups("formateurPromo:collection:put")
+=======
+     *  @Groups({"user:read", "user:write", "profil:read", "promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
+<<<<<<< HEAD
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      *
+=======
+     *  @Groups({"user:read", "user:write", "profil:read","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $email;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
      * 
+<<<<<<< HEAD
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      *
+=======
+     *  @Groups({"user:read", "user:write", "profil:read","promo:read"})
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
      */
     private $photo;
 

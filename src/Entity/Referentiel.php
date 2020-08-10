@@ -108,12 +108,15 @@ class Referentiel
      */
     private $critereEvaluation;
 
+<<<<<<< HEAD
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
      * @ApiSubresource()
      * @Groups({"referentiel:read"})
      */
     private $promotions;
+=======
+>>>>>>> fab1c63d3579732ede7ace275443b2cc68d73fc3
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
@@ -122,10 +125,16 @@ class Referentiel
      */
     private $grpCompetences;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
+     */
+    private $promotions;
+
+
     public function __construct()
     {
-        $this->promotions = new ArrayCollection();
          $this->grpCompetences = new ArrayCollection();
+         $this->promotions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -193,6 +202,33 @@ class Referentiel
         return $this;
     }
 
+
+    /**
+     * @return Collection|GroupeCompetence[]
+     */
+    public function getGrpCompetences(): Collection
+    {
+        return $this->grpCompetences;
+    }
+
+    public function addGrpCompetence(GroupeCompetence $grpCompetence): self
+    {
+        if (!$this->grpCompetences->contains($grpCompetence)) {
+            $this->grpCompetences[] = $grpCompetence;
+        }
+
+        return $this;
+    }
+
+    public function removeGrpCompetence(GroupeCompetence $grpCompetence): self
+    {
+        if ($this->grpCompetences->contains($grpCompetence)) {
+            $this->grpCompetences->removeElement($grpCompetence);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection|Promotion[]
      */
@@ -224,29 +260,4 @@ class Referentiel
         return $this;
     }
 
-    /**
-     * @return Collection|GroupeCompetence[]
-     */
-    public function getGrpCompetences(): Collection
-    {
-        return $this->grpCompetences;
-    }
-
-    public function addGrpCompetence(GroupeCompetence $grpCompetence): self
-    {
-        if (!$this->grpCompetences->contains($grpCompetence)) {
-            $this->grpCompetences[] = $grpCompetence;
-        }
-
-        return $this;
-    }
-
-    public function removeGrpCompetence(GroupeCompetence $grpCompetence): self
-    {
-        if ($this->grpCompetences->contains($grpCompetence)) {
-            $this->grpCompetences->removeElement($grpCompetence);
-        }
-
-        return $this;
-    }
 }
