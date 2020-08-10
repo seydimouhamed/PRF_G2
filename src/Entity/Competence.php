@@ -69,21 +69,27 @@ class Competence
      */
     private $groupeCompetences;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="competences")
-     * @ApiSubresource
-     * @Groups({"competence:read"})
-     */
-    private $niveau;
+    // /**
+    //  * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="competences")
+    //  * @ApiSubresource
+    //  * @Groups({"competence:read"})
+    //  */
+    // private $niveau;
 
     /**
      * @ORM\Column(type="text")
      */
     private $descriptif;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Niveau::class, mappedBy="competence")
+     */
+    private $niveaux;
+
     public function __construct()
     {
         $this->groupeCompetences = new ArrayCollection();
+        $this->niveaux = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,17 +137,17 @@ class Competence
         return $this;
     }
 
-    public function getNiveau(): ?Niveau
-    {
-        return $this->niveau;
-    }
+    // public function getNiveau(): ?Niveau
+    // {
+    //     return $this->niveau;
+    // }
 
-    public function setNiveau(?Niveau $niveau): self
-    {
-        $this->niveau = $niveau;
+    // public function setNiveau(?Niveau $niveau): self
+    // {
+    //     $this->niveau = $niveau;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getDescriptif(): ?string
     {
@@ -151,6 +157,37 @@ class Competence
     public function setDescriptif(string $descriptif): self
     {
         $this->descriptif = $descriptif;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Niveau[]
+     */
+    public function getNiveaux(): Collection
+    {
+        return $this->niveaux;
+    }
+
+    public function addNiveau(Niveau $niveau): self
+    {
+        if (!$this->niveaux->contains($niveau)) {
+            $this->niveaux[] = $niveau;
+            $niveau->setCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): self
+    {
+        if ($this->niveaux->contains($niveau)) {
+            $this->niveaux->removeElement($niveau);
+            // set the owning side to null (unless already changed)
+            if ($niveau->getCompetence() === $this) {
+                $niveau->setCompetence(null);
+            }
+        }
 
         return $this;
     }
