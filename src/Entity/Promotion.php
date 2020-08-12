@@ -14,7 +14,56 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @ApiResource(
- *          routePrefix="/admin",           
+ *
+ *      itemOperations={
+ *                                  "get",
+ *                                  "Statut_Groupe"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/groupes/{id2}" ,
+ *                                      "route_name"="modifie_Statut_Groupe",
+ *                                         "defaults"={"id"=null},
+ *                                      "modifie_Statut_discontinuation",},
+ *
+ *
+ *                                    "add_Apprenant"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/apprenants" ,
+ *                                      "route_name"="add_promo_apprenant",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                                  "modifier_Promo"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}" ,
+ *                                      "route_name"="modifier_promo_id",
+ *                                       "defaults"={"id"=null},
+ *                                      "modifier_promo_discontinuation",},
+ *
+ *                                      "delete_Apprenant"={
+ *                                      "method"="DELETE",
+ *                                        "path"="/admin/promo/{id}/apprenants" ,
+ *                                      "route_name"="delete_promo_apprenant",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                           "delete_Formateur"={
+ *                                      "method"="DELETE",
+ *                                        "path"="/admin/promo/{id}/formateur" ,
+ *                                      "route_name"="delete_promo_formateur",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                                  "add_Formateur"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/Formateur" ,
+ *                                      "route_name"="add_promo_formateur",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *
+ *
+ *
+ *                      },
  *      normalizationContext={"groups"={"promo:read"}},
  *      denormalizationContext={"groups"={"promo:write"}}
  * )
@@ -123,7 +172,6 @@ class Promotion
      * @Groups({"promo:read"})
      */
     private $referentiel;
-
 
     public function __construct()
     {
@@ -278,10 +326,10 @@ class Promotion
 
     public function getAvatar()
     {
-        // $data = stream_get_contents($this->avatar);
-        // fclose($this->avatar);
-return $this->avatar;
-      // return base64_encode($data);
+         $data = stream_get_contents($this->avatar);
+         fclose($this->avatar);
+//return $this->avatar;
+      return base64_encode($data);
     }
 
     public function setAvatar($avatar): self
@@ -330,6 +378,7 @@ return $this->avatar;
         return $this;
     }
 
-    
+
+
 
 }

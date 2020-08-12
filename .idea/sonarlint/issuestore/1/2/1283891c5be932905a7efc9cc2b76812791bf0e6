@@ -1,2 +1,7 @@
 
-†	php:S1448H"eClass "Promotion" has 30 methods, which is greater than 20 authorized. Split it into smaller classes.(ø…¡Œøÿÿÿÿ8øÏƒ‰½.
+;php:S125Ì"Remove this commented out code.(–ç‡¡8²çÝÃ½.
+;php:S125É"Remove this commented out code.(ËÚù´8²çÝÃ½.
+Nphp:S836þ"2Review the data-flow - use of uninitialized value.(ƒõÖÊ8²çÝÃ½.
+†	php:S1448H"eClass "Promotion" has 30 methods, which is greater than 20 authorized. Split it into smaller classes.(ø…¡Œøÿÿÿÿ8²çÝÃ½.
+Q	php:S1068z"5Remove this unused "$datefinprvisoire" private field.(ì‘ËÒ8²çÝÃ½.
+V	php:S1172ü"9Remove the unused function parameter "$dateFinPrvisoire".(£´‹¥8²çÝÃ½.
