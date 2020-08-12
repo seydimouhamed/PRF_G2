@@ -25,3 +25,9 @@ C
 src/Entity/User.php,0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be
 H
 src/Entity/Apprenant.php,5/7/5752579c8c4da1b9d7c2535aed06ddf529c70856
+]
+-src/Controller/GroupeCompetenceController.php,4/d/4dfc8200f9ee99d2cf983d626f2573dac1a5e166
+X
+(src/Controller/ReferentielController.php,3/9/3940d5507b8bb6c7a81a5fb88627ff56589730e1
+4
+.env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a

@@ -555,6 +555,7 @@ class PromotionController extends AbstractController
      * )
      */
     public function addANDremoveUser(UserRepository $userRepository,Request $request,EntityManagerInterface $entityManager,int $id){
+        $promo = $entityManager->getRepository(promotion::class)->find($id);
 
         $reponse=json_decode($request->getContent(),true);
         $action=$reponse['action'];
@@ -569,13 +570,13 @@ class PromotionController extends AbstractController
                     $idProfil=$userId->getProfil()->getId();
 
                     if($idProfil==4){
-                                    $promo=new promotion();
+
                                     $promo->addFormateur($userId);
 
                                                          }
                     if($idProfil==6){
-                        $groupe=new Groupes();
-                        $groupe->addApprenant($userId);
+
+                        $promo->getGroupes()[0]->addApprenant($userId);
                                     }
 
 
@@ -583,7 +584,7 @@ class PromotionController extends AbstractController
                 }
             }
         }
-        if($reponse=="supprimer"){
+        if($action=="supprimer"){
 
             for ($i=0;$i<count($tableau);$i++){
 
@@ -592,19 +593,20 @@ class PromotionController extends AbstractController
                     $userId=$userRepository->findOneBy([$tableau[$i]=>$user]);
                     $idProfil=$userId->getProfil()->getId();
                     if($idProfil==4){
-                        $promo=new promotion();
+
                         $promo->removeFormateur($userId);
                     }
                     if($idProfil==6){
-                        $groupe=new Groupes();
-                        $groupe->removeApprenant($userId);
+
+                        $promo->getGroupes()[0]->removeApprenant($userId);
                     }
                 }
             }
         }
 
-
-       return $this->json(true,200);
+        $entityManager->persist($promo);
+        $entityManager->flush();
+       return $this->json($promo->getGroupes()[0]->getApprenants(),200);
 
     }
 }

@@ -108,6 +108,7 @@ class Referentiel
      */
     private $critereEvaluation;
 
+
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
      * @ApiSubresource()
@@ -115,14 +116,13 @@ class Referentiel
      */
     private $promotions;
 
+
     /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
      * @ApiSubresource
      * @Groups({"referentiel:read", "referentiel:write"})
      */
     private $grpCompetences;
-
-
 
     public function __construct()
     {
