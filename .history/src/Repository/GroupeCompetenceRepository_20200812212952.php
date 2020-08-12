@@ -26,11 +26,10 @@ class GroupeCompetenceRepository extends ServiceEntityRepository
     public function findByArchivage($value,$limit,$offset)
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.archivage = :val')
+            ->andWhere('g.exampleField = :val')
             ->setParameter('val', $value)
             ->orderBy('g.id', 'ASC')
-            ->setMaxResults($limit)
-            ->setFirstResult($offset)
+            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;

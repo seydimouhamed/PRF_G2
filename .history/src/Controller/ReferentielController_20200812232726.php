@@ -24,16 +24,16 @@ class ReferentielController extends AbstractController
      */
     public function getReferentielGroupeCompetence(Request $request,EntityManagerInterface $entityManager)
     {
-            $tab=[];
-            $tableau = $entityManager->getRepository(Referentiel::class)->findAll();
+        $tab=[];
+        $tableau = $entityManager->getRepository(Referentiel::class)->findAll();
 
-            $competence= $tableau[0]->getGrpCompetences()[0]->getCompetences()[0]->getLibelle();
-        $cou=$groupCompetence=$tableau[0]->getGrpCompetences()[0]->getLidelle();
+        $competence= $tableau[0]->getGrpCompetences()[0]->getCompetences()[0]->getLibelle();
+       $cou=$groupCompetence=$tableau[0]->getGrpCompetences()[0]->getLidelle();
 
-        for ($i=0;$i<count($tableau);$i++){
+      for ($i=0;$i<count($tableau);$i++){
 
-            $tab[]=$tableau[$i]->getGrpCompetences()[0];
-        }
-        return dd($tab);
-        }
+          $tab[]=$tableau[$i]->getGrpCompetences()[0];
+      }
+      return dd($tab);
+    }
 }

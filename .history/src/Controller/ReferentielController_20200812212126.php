@@ -16,24 +16,24 @@ class ReferentielController extends AbstractController
      *     path="/api/admin/referentiels/grpecompetences",
      *     methods={"GET"},
      *     defaults={
-     *          "__controller"="App\Controller\ReferentielController::getReferentielGroupeCompetence",
+     *          "__controller"="App\Controller\ReferentielController::add",
      *          "__api_resource_class"=Referentiel::class,
      *          "__api_collection_operation_name"="get_referentiels_grpCompetence"
      *     }
      * )
      */
-    public function getReferentielGroupeCompetence(Request $request,EntityManagerInterface $entityManager)
+    public function GetReferentielGroupeCompetence(Request $request,EntityManagerInterface $entityManager)
     {
-            $tab=[];
-            $tableau = $entityManager->getRepository(Referentiel::class)->findAll();
+        $tab=[];
+        $tableau = $entityManager->getRepository(Referentiel::class)->findAll();
 
-            $competence= $tableau[0]->getGrpCompetences()[0]->getCompetences()[0]->getLibelle();
-        $cou=$groupCompetence=$tableau[0]->getGrpCompetences()[0]->getLidelle();
+        $competence= $tableau[0]->getGrpCompetences()[0]->getCompetences()[0]->getLibelle();
+       $cou=$groupCompetence=$tableau[0]->getGrpCompetences()[0]->getLidelle();
 
-        for ($i=0;$i<count($tableau);$i++){
+      for ($i=0;$i<count($tableau);$i++){
 
-            $tab[]=$tableau[$i]->getGrpCompetences()[0];
-        }
-        return dd($tab);
-        }
+          $tab[]=$tableau[$i]->getGrpCompetences()[0];
+      }
+      return dd($tab);
+    }
 }

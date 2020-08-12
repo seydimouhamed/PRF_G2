@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -74,14 +73,12 @@ class GroupeCompetence
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"grpcompetence:read", "grpcompetence:write"})
-     * @Assert\NotBlank
      */
-    private $libelle;
+    private $lidelle;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"grpcompetence:read", "grpcompetence:write"})
-     * @Assert\NotBlank
      */
     private $description;
 
@@ -115,14 +112,14 @@ class GroupeCompetence
         return $this->id;
     }
 
-    public function getLibelle(): ?string
+    public function getLidelle(): ?string
     {
-        return $this->libelle;
+        return $this->lidelle;
     }
 
-    public function setLibelle(string $libelle): self
+    public function setLidelle(string $lidelle): self
     {
-        $this->libelle = $libelle;
+        $this->lidelle = $lidelle;
 
         return $this;
     }

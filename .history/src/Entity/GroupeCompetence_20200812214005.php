@@ -76,7 +76,7 @@ class GroupeCompetence
      * @Groups({"grpcompetence:read", "grpcompetence:write"})
      * @Assert\NotBlank
      */
-    private $libelle;
+    private $lidelle;
 
     /**
      * @ORM\Column(type="text")

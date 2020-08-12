@@ -137,7 +137,7 @@ class GroupeCompetenceController extends AbstractController
      /**
       * @Route(
       *     name="get_gc_id",
-      *     path="/api/admin/grpecompetences/{id}/competences",
+      *     path="/api/admin/grpecompetence/{id}/competences",
       *     methods={"GET"},
       *     defaults={
       *          "__controller"="App\Controller\GroupeCompetenceController::getGpreidComp",
@@ -146,21 +146,21 @@ class GroupeCompetenceController extends AbstractController
       *     }
       * )
       */
-      public function getGpreidComp($id)
+      public function getGpreidComp(Request $request,$id)
       {
-        $grc=$this->repoGC->find($id);
-        $tab=[];
-        if($grc || !$grc->getArchivage())
-        {
-                 $tab["groupecompetence"]=$grc->getLibelle();
-                 $tab["competences"]=[];
-                foreach( $grc->getCompetences() as $comp)
-                {
-                    $tab["competences"][]=$comp;
-                }
-               return$this->json($tab,201);
-        }
-        return $this->json("ce groupe de compétence n'existe pas ou a été archivé!",401);
+         //  $profil=$repo->find($id);
+         //  if($profil && !$profil->getArchivage())
+         //  {
+         //      $pSorties =json_decode( $request->getContent(),true);
+         //      foreach($pSorties as $k => $ps)
+         //      {
+         //          $profil->{"set".ucfirst($k)}($ps);
+         //      }
+         //      $this->em->persist($profil);
+         //      $this->em->flush();
+         //      return $this->json($profil,200);     
+         //  }
+         //  return $this->json($promo,201);
        }
  
 
@@ -180,10 +180,8 @@ class GroupeCompetenceController extends AbstractController
 
         $groupeCompetence= $entityManager->getRepository(GroupeCompetences::class)->find($id);
         $reponse=json_decode($request->getContent(),true);
-
         $competence=$reponse['competences'];
         $Competence= $entityManager->getRepository(Competences::class)->findOneBy(['libelle'=>$competence]);
-        
         $idCompGroupe=$Competence->getGroupeCompetence()[0]->getId();
 
         if($idCompGroupe==$groupeCompetence->getId()){

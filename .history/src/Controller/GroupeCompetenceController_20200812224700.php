@@ -120,16 +120,19 @@ class GroupeCompetenceController extends AbstractController
       */
       public function deleteGpreidComp($id)
       {
-          $grc=$this->repoGC->find($id);
-          if($grc || !$grc->getArchivage())
+          $grc=$this->repo->find($id);
+          if($grc && !$grc->getArchivage())
           {
-                 $grc->setArchivage(true);
-                 $this->em->persist($grc);
-                 $this->em->flush();
-
-                 return$this->json('success',201);
+              $pSorties =json_decode( $request->getContent(),true);
+              foreach($pSorties as $k => $ps)
+              {
+                  $profil->{"set".ucfirst($k)}($ps);
+              }
+              $this->em->persist($profil);
+              $this->em->flush();
+              return $this->json($profil,200);     
           }
-          return $this->json("ce groupe de compétence n'existe pas ou a été archivé!",401);
+          return $this->json("success",201);
        }
  
 
@@ -137,7 +140,7 @@ class GroupeCompetenceController extends AbstractController
      /**
       * @Route(
       *     name="get_gc_id",
-      *     path="/api/admin/grpecompetences/{id}/competences",
+      *     path="/api/admin/grpecompetence/{id}/competences",
       *     methods={"GET"},
       *     defaults={
       *          "__controller"="App\Controller\GroupeCompetenceController::getGpreidComp",
@@ -146,64 +149,22 @@ class GroupeCompetenceController extends AbstractController
       *     }
       * )
       */
-      public function getGpreidComp($id)
+      public function getGpreidComp(Request $request)
       {
-        $grc=$this->repoGC->find($id);
-        $tab=[];
-        if($grc || !$grc->getArchivage())
-        {
-                 $tab["groupecompetence"]=$grc->getLibelle();
-                 $tab["competences"]=[];
-                foreach( $grc->getCompetences() as $comp)
-                {
-                    $tab["competences"][]=$comp;
-                }
-               return$this->json($tab,201);
-        }
-        return $this->json("ce groupe de compétence n'existe pas ou a été archivé!",401);
+         //  $profil=$repo->find($id);
+         //  if($profil && !$profil->getArchivage())
+         //  {
+         //      $pSorties =json_decode( $request->getContent(),true);
+         //      foreach($pSorties as $k => $ps)
+         //      {
+         //          $profil->{"set".ucfirst($k)}($ps);
+         //      }
+         //      $this->em->persist($profil);
+         //      $this->em->flush();
+         //      return $this->json($profil,200);     
+         //  }
+         //  return $this->json($promo,201);
        }
  
-
-    /**
-     * @Route(
-     *     name="add_competence",
-     *     path="/api/admin/grpecompetences/{id}",
-     *     methods={"PUT"},
-     *     defaults={
-     *          "__controller"="App\Controller\GroupeCompetenceController::add",
-     *          "__api_resource_class"=GroupeCompetence::class,
-     *          "__api_item_operation_name"="addCompetenceGrpupeCompetence"
-     *     }
-     * )
-     */
-    public  function addCompetenceGrpupeCompetence(Request $request,EntityManagerInterface $entityManager,int $id){
-
-        $groupeCompetence= $entityManager->getRepository(GroupeCompetences::class)->find($id);
-        $reponse=json_decode($request->getContent(),true);
-
-        $competence=$reponse['competences'];
-        $Competence= $entityManager->getRepository(Competences::class)->findOneBy(['libelle'=>$competence]);
-        
-        $idCompGroupe=$Competence->getGroupeCompetence()[0]->getId();
-
-        if($idCompGroupe==$groupeCompetence->getId()){
-            return $this->json("Cette  competence est deja associé a cet groupe de competence Veuillez ajouter une autre competence",200);
-
-        }else{
-            if($reponse['action']=="supprimer"){
-                $groupeCompetence ->removeCompetence($Competence);
-            }
-
-            if($reponse['action']=="ajouter"){
-                $groupeCompetence ->addCompetence($Competence);
-            }
-            $entityManager->persist($groupeCompetence);
-            $entityManager->flush();
-            return $this->json($groupeCompetence->getCompetences(),200);
-        }
-
-      //  return $this->json($idCompGroupe,200);
-
-    }
   
 }

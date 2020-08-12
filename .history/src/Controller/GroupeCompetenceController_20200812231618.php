@@ -180,10 +180,8 @@ class GroupeCompetenceController extends AbstractController
 
         $groupeCompetence= $entityManager->getRepository(GroupeCompetences::class)->find($id);
         $reponse=json_decode($request->getContent(),true);
-
         $competence=$reponse['competences'];
         $Competence= $entityManager->getRepository(Competences::class)->findOneBy(['libelle'=>$competence]);
-        
         $idCompGroupe=$Competence->getGroupeCompetence()[0]->getId();
 
         if($idCompGroupe==$groupeCompetence->getId()){
