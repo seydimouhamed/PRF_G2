@@ -2,152 +2,196 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Competence;
-use App\Entity\Groupes;
-use App\Entity\GroupeTag;
-use App\Entity\Promotion;
-use App\Entity\Referentiel;
 use Faker\Factory;
-use App\Entity\GroupeCompetence;
+use App\Entity\User;
 use App\Entity\Niveau;
-use App\Entity\Tag;
+use App\Entity\Profil;
+use App\Entity\Groupes;
+use App\Entity\Apprenant;
+use App\Entity\Formateur;
+use App\Entity\Promotion;
+use App\Entity\Competence;
+use App\Entity\Referentiel;
+use App\Entity\ProfilSortie;
+use App\Entity\GroupeCompetence;
+use App\DataFixtures\AppFixtures;
+use App\Repository\ApprenantRepository;
+use App\Repository\FormateurRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use phpDocumentor\Reflection\DocBlock\Description;
-use PhpParser\Builder\Class_;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-
-class CompetenceFixtures extends Fixture
+class CompetenceFixtures extends Fixture implements DependentFixtureInterface
 {
-    private $encoder;
-    private $profilRepository;
+
+    protected $apprenantRepo;
+    protected $formateurRepo;
+
+    public function __construct(ApprenantRepository $apprenantRepo,FormateurRepository $formateurRepo)
+    {
+            $this->apprenantRepo= $apprenantRepo;
+            $this->formateurRepo=$formateurRepo;
+     }
+    
+public function getDependencies()
+{
+    return array(
+        AppFixtures::class,
+    );
+}
+
     public function load(ObjectManager $manager)
     {
         $fake = Factory::create('fr-FR');
+        $tab_niveau=[];
+    //     $tab_apprenant=$this->getReference(AppFixtures::APPRENANTS);
+    //    $tab_formateur=$this->getReference(AppFixtures::FORMATEURS);
 
-        //groupeCompetence
-        $groupeCompentences=["Développer le back-end d’une application web","Envoyer des emails automatiques","Développer les composants d’accès aux données"];
-        $competences=["Créer une base de données","Validation serveur et client","generer un token"];
-        $tags=["php","javascript","symfony","jqery"];
-        $groupedaction=[
-            "A partir d'un schéma
-                    physique de données et
-                    dans le contexte d'un
-                    besoin client décrit créer
-                    une base de données sur
-                    un SGBD désigné",
-            "Creer un formulaire d'inscription
-                     generique selon 
-                    les besoins de l'utilisteur ",
-            "Creer une application qui permet 
-                    de sauvegarder des donnees securise 
-                    avec avec email et un motdepasse",
-        ];
-        $Criteredevaluation=[
-            "La BD est créée à l'aide
-                        d'un script sans erreur et
-                        les données sont
-                        insérées à l'aide d'un
-                        script sans erreur",
-            "Les donnees serons envoyées 
-                        par ajax et bien valider",
-
-        ];
-
-        $niveau=['Niveau_1','Niveau_2','Niveau_3'];
-//groupe
-
-        $tab_grpCompetence=[];
-        $tab_referentiel=[];
-        foreach($competences as $value){
-            $groupeC=new GroupeCompetence();
-            $comp=new Competence();
-            foreach ($niveau as $key => $niv){
+        $tab_competence=[];
+        for($i=1; $i<=10;$i++)
+        {
+            $competence=new Competence();
+            $competence->setLibelle('libelle_'.$i)
+            ->setDescriptif($fake->text);
+          //  ->setNiveau($fake->randomElement($tab_niveau));
+            $manager->persist($competence);
+            //ajout des niveaux de compétences
+            for($j=1;$j<=3;$j++)
+            {
                 $niveau=new Niveau();
-                $niveau->setLibelle($niv)
-                    ->setCritereEvaluation($fake->randomElement($Criteredevaluation))
-                    ->setGroupeAction($fake->randomElement($groupedaction))
-                    ->setCompetence($comp);
+                $niveau->setLibelle('niveau '.$j);
+                $niveau->setCritereEvaluation('competentence '.$i.'critere_evaluation '.$j);
+                $niveau->setGroupeAction('competentence '.$i.'groupe action '.$j);
+                $niveau->setCompetence($competence);
                 $manager->persist($niveau);
             }
-            $groupeC->setLidelle($fake->unique()->randomElement($groupeCompentences))
-                    ->setDescription('Description'.$key)
-                    ->addCompetence($comp);
-            $tab_grpCompetence[]=$groupeC;
-            $manager->persist($groupeC);
 
-            $comp->setLibelle($fake->unique()->randomElement($competences))
-                ->setDescriptif('Descriptif'.$key)
-                ->addGroupeCompetence($groupeC);
-            $manager->persist($comp);
+            $tab_competence[]=$competence;
+        }
+        $manager->flush();
 
+        $tab_grpCompetence=[];
+        for($j=0 ; $j < 3;$j++)
+        {
+            $grpc=new GroupeCompetence();
+            $grpc->setLidelle($fake->realText($maxNBChars = 50, $indexSize = 2 ));
+            $grpc->setDescription($fake->text);
+            for($i=1;$i<=3;$i++)
+            {
+                 $grpc->addCompetence($fake->unique()->randomElement($tab_competence));
+            }
+            $tab_grpCompetence[]=$grpc;
+            $manager->persist($grpc);
         }
-        $manager ->flush();
-        foreach ($tags as $key => $val){
-            $t=new Tag();
-            $groupetag= new GroupeTag();
-            $t->setLibelle($val)
-                ->setDescription('Description'.$key)
-                ->addGroupeCompetence($groupeC)
-                ->addGroupeTag($groupetag);
-            $manager->persist($t);
-            $groupetag->setLibelle($fake->unique()->randomElement($tags))
-                ->addTag($t);
-            $manager->persist($groupetag);
-        }
-        $manager ->flush();
+        $manager->flush();
+        
+        $tab_referentiel=[];
         for($i=1;$i<=2;$i++)
         {
             $referenciel = new Referentiel();
 
             $referenciel->setCritereAdmission('critere d\'admission '.$i)
-                ->setCritereEvaluation('critere evaluation '.$i)
-                ->setLibelle('referentiel no'.$i)
-                ->setPresentation($fake->text)
-                ->setProgramme('programme '.$i);
-            for($j=0;$j<2;$j++)
-            {
-                $referenciel->addGrpCompetence($fake->randomElement($tab_grpCompetence));
-            }
-            $tab_competence[]=$referenciel;
+                         ->setCritereEvaluation('critere evaluation '.$i)
+                         ->setLibelle('referentiel no'.$i)
+                         ->setPresentation($fake->text)
+                         ->setProgramme('programme '.$i);
+                         for($j=0;$j<2;$j++)
+                         {
+                            $referenciel->addGrpCompetence($fake->randomElement($tab_grpCompetence));
+                         }
+             $tab_referentiel[]=$referenciel;
             $manager->persist($referenciel);
         }
-        $manager ->flush();
 
-        $tab_promo=[];
-        for($i=1 ; $i<=2 ; $i++)
-        {
-            $promo=new Promotion();
-            $promo->setDescription($fake->text)
-                ->setFabrique("fabrique 1")
-                ->setLangue('français')
-                ->setLieu('lieu1')
-                ->setStatus("encours")
-                ->setReferentiel($fake->randomElement($tab_referentiel))
-                ->setTitre('promo '.$i);
-
-            $tab_promo[]=$promo;
-            $manager->persist($promo);
-        }
+      $manager->flush();
+      //-----------------------------------//
+      //récupération de tout les apprrenant //
+      //-----------------------------------//
+    $apprenants=$this->apprenantRepo->findAll(); 
+    $tab_apprenant=[];
+    foreach($apprenants as $app)
+    {
+        $tab_apprenant[]=$app;
+    }
+        //-----------------------------------//
+        //récupération de tout les formateurs //
+        //-----------------------------------//
+      $formateurs=$this->formateurRepo->findAll(); 
+      $tab_formateurs=[];
+      foreach($formateurs as $for)
+      {
+          $tab_formateur[]=$for;
+      }
 
         //insertion de grpupes!
-        for($i=1; $i<=2 ; $i++)
+        $tab_group=[];
+        for($i=1; $i<=5 ; $i++)
         {
             $group=new Groupes();
-            $group->setNom("group principale ".$i);
+            $group->setNom("group ".$i);
             $group->setStatut($fake->randomElement(['encours','ferme']));
-            $group->setType($fake->randomElement(['binome','filerouge','general']));
-            $group->setPromotions($fake->randomElement($tab_promo));
+            $group->setType($fake->randomElement(['binome','filerouge']));
+            // $group->setPromotion($fake->randomElement($tab_promo));
+            
+            for($j=1;$j<=10;$j++)
+            {
+                $group->addApprenant($fake->unique()->randomElement($tab_apprenant));
+            }
 
             for($j=1;$j<=2;$j++)
             {
-                $group->addApprenant($this->getReference(AppFixtures::APPRENANTS));
+               $group->addFormateur($fake->unique()->randomElement($tab_formateur));
             }
+
+            $tab_group[] = $group;
+
             $manager->persist($group);
-
+  
         }
-        $manager->flush();
 
+      $tab_promo=[];
+      for($i=1 ; $i<=3 ; $i++)
+      {
+          $promo=new Promotion();
+          $promo->setDescription($fake->text)
+          ->setFabrique($fake->randomElement(['Sonatel Académie','Simplon']))
+          ->setLangue($fake->randomElement(['anglais','france']))
+          ->setLieu('lieu1')
+          ->setStatus($fake->randomElement(['encours','ferme','attente']))
+          ->setReferentiel($fake->randomElement($tab_referentiel))
+          ->setTitre('promo '.$i);
+          
+          //ajouter un groupe principal au promo!
+                $group_princ=new Groupes();
+                $group_princ->setNom("groupe principale promo ".$i)
+                            ->setStatut($fake->randomElement(['encours','ferme','attente']))
+                            ->setType('groupe principale');
+                            $manager->persist($group_princ);
+            
+                for($j=1;$j<=10;$j++)
+                {
+                    $group_princ->addApprenant($fake->unique()->randomElement($tab_apprenant));
+                }
+    
+                for($j=1;$j<=2;$j++)
+                {
+                    $group_princ->addFormateur($fake->unique()->randomElement($tab_formateur));
+                }
+            $promo->addGroupe($group_princ);
+            for($k=1;$k<=2;$k++)
+            {
+                $promo->addGroupe($fake->randomElement($tab_group));
+                $promo->addFormateur($fake->unique()->randomElement($tab_formateur));
+            }
+
+          //$tab_promo[]=$promo;
+          $manager->persist($promo);
+      }
+//recuperations des apprenants!
+
+      $manager->flush();
+        
     }
-
+    
 }

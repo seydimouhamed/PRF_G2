@@ -2,8 +2,6 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\InheritanceType;
@@ -18,19 +16,17 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\InheritanceType("JOINED")
 * @ORM\DiscriminatorColumn(name="discr", type="string")
-* @ORM\DiscriminatorMap({"user"="User","apprenant" = "Apprenant","formateur"="Formateur"})
+* @ORM\DiscriminatorMap({"user"="User","apprenant" = "Apprenant","formateur"="Formateur", "cm"="CommunityManager"})
  * @ApiResource(
  *      collectionOperations={
- *           "get_admin_users"={
+ *           "get_admin_users"={ 
  *               "method"="GET", 
  *               "path"="/admin/users",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
  *            "add_users"={ 
  *               "method"="POST", 
  *               "path"="/admin/users",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                 "security_message"="Acces non autorisé",
  *          },
  *      },
@@ -38,14 +34,15 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  *           "get_admin_users_id"={ 
  *               "method"="GET", 
  *               "path"="/admin/users/{id}",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
+ *                  "defaults"={"id"=null},
  *          },
+ * 
  *            "modifier_admin_users_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/users/{id}",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
+ *                  "defaults"={"id"=null},
  *          },
  *      },
  *       normalizationContext={"groups"={"user:read"}},
@@ -59,7 +56,7 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user:read","profil:read"})
+     * @Groups({"user:read","profil:read","promo:read"})
      * 
      */
     private $id;
@@ -68,6 +65,10 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=180, unique=true)
      * 
      * @Groups({"user:read", "user:write","profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups("formateurPromo:collection:put")
+     * @Groups({"user:read", "user:write","profil:read","promo:read"})
      */
     private $username;
 
@@ -77,6 +78,7 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     *
      */
     private $password;
 
@@ -89,6 +91,10 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
      * @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups("formateurPromo:collection:put")
+     * @Groups({"user:read", "user:write", "profil:read","promo:read"})
      */
     private $fisrtName;
 
@@ -96,6 +102,10 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups("formateurPromo:collection:put")
+     *  @Groups({"user:read", "user:write", "profil:read", "promo:read"})
      */
     private $lastName;
 
@@ -103,6 +113,9 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     *
+     *  @Groups({"user:read", "user:write", "profil:read","promo:read"})
      */
     private $email;
 
@@ -110,6 +123,10 @@ class User implements UserInterface
      * @ORM\Column(type="blob", nullable=true)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     *
+     *  @Groups({"user:read", "user:write", "profil:read","promo:read"})
      */
     private $photo;
 
@@ -117,23 +134,17 @@ class User implements UserInterface
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
      * @ApiSubresource
      * Groups({"user:read", "user:write"})
+     * @Groups({"promo:read"})
      */
     private $profil;
 
     /**
      * @ORM\Column(type="boolean",options={"default" : false})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     *
      */
     private $archivage;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="users")
-     */
-    private $promotions;
-
-    public function __construct()
-    {
-        $this->promotions = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -248,10 +259,11 @@ class User implements UserInterface
 
     public function getPhoto()
     {
-         $data = stream_get_contents($this->photo);
-         fclose($this->photo);
+        //  $data = stream_get_contents($this->photo);
+        //  fclose($this->photo);
 
-        return base64_encode($data);
+        // return base64_encode($data);
+        return $this->photo;
     }
 
     public function setPhoto($photo): self
@@ -301,37 +313,6 @@ class User implements UserInterface
     public function setArchivage(bool $archivage): self
     {
         $this->archivage = $archivage;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Promotion[]
-     */
-    public function getPromotions(): Collection
-    {
-        return $this->promotions;
-    }
-
-    public function addPromotion(Promotion $promotion): self
-    {
-        if (!$this->promotions->contains($promotion)) {
-            $this->promotions[] = $promotion;
-            $promotion->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removePromotion(Promotion $promotion): self
-    {
-        if ($this->promotions->contains($promotion)) {
-            $this->promotions->removeElement($promotion);
-            // set the owning side to null (unless already changed)
-            if ($promotion->getUsers() === $this) {
-                $promotion->setUsers(null);
-            }
-        }
 
         return $this;
     }

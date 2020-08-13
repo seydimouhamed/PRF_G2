@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping\JoinColumn;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -67,38 +66,54 @@ class Apprenant extends User
 
     /**
      * @ORM\Column(type="string", length=30)
-     * @Groups({"apprenant:read", "apprenant:write"})
+     * @Groups({"apprenant:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups({"apprenant:read", "apprenant:write","promo:read"})
      */
     private $genre;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"apprenant:read", "apprenant:write"})
+     * @Groups({"apprenant:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups({"apprenant:read", "apprenant:write","promo:read"})
      */
     private $adresse;
 
     /**
      * @ORM\Column(type="string", length=50)
-     * @Groups({"apprenant:read", "apprenant:write"})
+     * @Groups({"apprenant:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
+     * @Groups({"apprenant:read", "apprenant:write", "promo:read"})
      */
     private $telephone;
 
     /**
      * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
-     * @Groups({"apprenant:read"})
+     * @Groups({"apprenant:read", "groupe:read"})
      *  @ApiSubresource
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
      */
     private $profilSortie;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Groupes::class, mappedBy="apprenants")
+     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="apprenants")
      */
-    private $groupe;
+    private $groupes;
+
+    /**
+     * @ORM\Column(type="string", length=50,options={"default" : "attente"})
+     * @Groups({"apprenant:read", "apprenant:write", "groupe:read"})
+     */
+    private $statut;
 
     public function __construct()
     {
-        parent::__construct();
-        $this->groupe = new ArrayCollection();
+        $this->groupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -157,16 +172,15 @@ class Apprenant extends User
     /**
      * @return Collection|Groupes[]
      */
-    public function getGroupe(): Collection
+    public function getGroupes(): Collection
     {
-        return $this->groupe;
+        return $this->groupes;
     }
 
     public function addGroupe(Groupes $groupe): self
     {
-        if (!$this->groupe->contains($groupe)) {
-            $this->groupe[] = $groupe;
-            $groupe->addApprenant($this);
+        if (!$this->groupes->contains($groupe)) {
+            $this->groupes[] = $groupe;
         }
 
         return $this;
@@ -174,12 +188,22 @@ class Apprenant extends User
 
     public function removeGroupe(Groupes $groupe): self
     {
-        if ($this->groupe->contains($groupe)) {
-            $this->groupe->removeElement($groupe);
-            $groupe->removeApprenant($this);
+        if ($this->groupes->contains($groupe)) {
+            $this->groupes->removeElement($groupe);
         }
 
         return $this;
     }
 
+    public function getStatut(): ?string
+    {
+        return $this->statut;
+    }
+
+    public function setStatut(string $statut): self
+    {
+        $this->statut = $statut;
+
+        return $this;
+    }
 }

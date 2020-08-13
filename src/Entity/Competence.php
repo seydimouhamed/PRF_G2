@@ -69,6 +69,13 @@ class Competence
      */
     private $groupeCompetences;
 
+    // /**
+    //  * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="competences")
+    //  * @ApiSubresource
+    //  * @Groups({"competence:read"})
+    //  */
+    // private $niveau;
+
     /**
      * @ORM\Column(type="text")
      */
@@ -130,6 +137,18 @@ class Competence
         return $this;
     }
 
+    // public function getNiveau(): ?Niveau
+    // {
+    //     return $this->niveau;
+    // }
+
+    // public function setNiveau(?Niveau $niveau): self
+    // {
+    //     $this->niveau = $niveau;
+
+    //     return $this;
+    // }
+
     public function getDescriptif(): ?string
     {
         return $this->descriptif;
@@ -172,5 +191,4 @@ class Competence
 
         return $this;
     }
-
 }

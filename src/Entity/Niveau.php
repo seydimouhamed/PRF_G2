@@ -49,6 +49,16 @@ class Niveau
      */
     private $competence;
 
+    // /**
+    //  * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
+    //  */
+    // private $competences;
+
+    public function __construct()
+    {
+       // $this->competences = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;

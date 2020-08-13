@@ -30,6 +30,8 @@ class ProfilSortie
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"apprenant:read", "profilSortie:read"})
+     * @Groups({"groupe:read"})
+     * @Groups({"promo:read"})
      */
     private $libele;
 

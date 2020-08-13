@@ -50,7 +50,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  *            "PUT"={ 
  *               "path"="/admin/grpecompetences/{id}",
- *                "security"="is_granted('GC_EDIT',object) or is_granted('ROLE_ADMIN')",
+ *                "security"="is_granted('GC_EDIT',object)",
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
@@ -96,22 +96,10 @@ class GroupeCompetence
      */
     private $competences;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="groupecompetences")
-     */
-    private $tags;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Tag::class, mappedBy="groupecompetences")
-     */
-    private $tag;
-
     public function __construct()
     {
         $this->referentiels = new ArrayCollection();
         $this->competences = new ArrayCollection();
-        $this->tags = new ArrayCollection();
-        $this->tag = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,41 +183,5 @@ class GroupeCompetence
         }
 
         return $this;
-    }
-
-    /**
-     * @return Collection|Tag[]
-     */
-    public function getTags(): Collection
-    {
-        return $this->tags;
-    }
-
-    public function addTag(Tag $tag): self
-    {
-        if (!$this->tags->contains($tag)) {
-            $this->tags[] = $tag;
-            $tag->addGroupecompetence($this);
-        }
-
-        return $this;
-    }
-
-    public function removeTag(Tag $tag): self
-    {
-        if ($this->tags->contains($tag)) {
-            $this->tags->removeElement($tag);
-            $tag->removeGroupecompetence($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Tag[]
-     */
-    public function getTag(): Collection
-    {
-        return $this->tag;
     }
 }

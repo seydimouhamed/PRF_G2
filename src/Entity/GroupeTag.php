@@ -16,14 +16,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_grptags"={ 
  *               "method"="GET", 
  *               "path"="/admin/grptags",
- *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
  *               "security_message"="Acces non autorisé",
  *          },
  *            "add_grptags"={ 
  *               "method"="POST", 
  *               "path"="/admin/grptags",
- *               "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
- *               "security_message"="Acces non autorisé",
  *          }
  *      },
  *      itemOperations={
@@ -31,15 +28,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *               "method"="GET", 
  *               "path"="/admin/grptags/{id}",
  *                "defaults"={"id"=null},
- *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') )",
- *                  "security_message"="Acces non autorisé",
  *          },
  *
  *            "update_grptag_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/grptags/{id}",
- *                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
- *                  "security_message"="Acces non autorisé",
  *          },
  *      },
  *       normalizationContext={"groups"={"grptag:read"}},

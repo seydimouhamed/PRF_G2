@@ -18,20 +18,17 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_admin_profils"={ 
  *               "method"="GET", 
  *               "path"="/admin/profils",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé"
  *          },
  * 
  *            "get_admin_profils_users"={ 
  *               "method"="GET", 
  *               "path"="/admin/profils/{id}/users",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé"
  *          },
  *            "create_profil"={ 
  *               "method"="POST", 
  *               "path"="/admin/profils",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé"
  *          }
  *      },
@@ -39,21 +36,18 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *           "get_admin_profils_id"={ 
  *               "method"="GET", 
  *               "path"="/admin/profils/{id}",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé"
  *          },
  * 
  *            "put_admin_profils_id"={ 
  *               "method"="PUT", 
  *               "path"="/admin/profils/{id}",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *          },
  *            "delete_profil"={ 
  *               "method"="DELETE", 
  *               "path"="/admin/profils/{id}",
  *                "controller"="App\Controller\ProfilArchiveController",
- *                "security"="is_granted('ROLE_ADMIN')",
  *                  "security_message"="Acces non autorisé",
  *                  "swagger_context"={
  *                                          "summary"="archive un profil",

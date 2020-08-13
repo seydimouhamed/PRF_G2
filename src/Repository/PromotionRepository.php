@@ -19,11 +19,11 @@ class PromotionRepository extends ServiceEntityRepository
         parent::__construct($registry, Promotion::class);
     }
 
-    // /**
-    //  * @return Promotion[] Returns an array of Promotion objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Promotion[] Returns an array of Promotion objects
+     */
+    
+    public function findByGroupePrincipal($value)
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')
@@ -34,7 +34,7 @@ class PromotionRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Promotion

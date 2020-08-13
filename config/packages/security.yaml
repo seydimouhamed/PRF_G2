@@ -47,6 +47,12 @@ security:
     access_control: # Allows accessing the Swagger UI
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/admin/promo, roles: [ROLE_ADMIN, ROLE_FORMATEUR, ROLE_CM] }
+        - { path: ^/api/admin/groupes, roles: [ROLE_ADMIN, ROLE_FORMATEUR] }
+        - { path: ^/api/admin/tags, roles: [ROLE_ADMIN, ROLE_FORMATEUR] }
+        - { path: ^/api/admin/grptags, roles: [ROLE_ADMIN, ROLE_FORMATEUR] }
+        - { path: ^/api/admin/users, roles: ROLE_ADMIN }
+        - { path: ^/api/admin/profils, roles: ROLE_ADMIN }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
         # - { path: ^/admin, roles: ROLE_ADMIN }
