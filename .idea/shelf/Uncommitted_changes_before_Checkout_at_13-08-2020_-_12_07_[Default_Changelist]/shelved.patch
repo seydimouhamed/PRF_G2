@@ -1,0 +1,315 @@
+Index: config/bundles.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?php\n\nreturn [\n    Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle::class => ['all' => true],\n    Symfony\\Bundle\\TwigBundle\\TwigBundle::class => ['all' => true],\n    Symfony\\Bundle\\SecurityBundle\\SecurityBundle::class => ['all' => true],\n    Nelmio\\CorsBundle\\NelmioCorsBundle::class => ['all' => true],\n    Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle::class => ['all' => true],\n    ApiPlatform\\Core\\Bridge\\Symfony\\Bundle\\ApiPlatformBundle::class => ['all' => true],\n    Symfony\\Bundle\\MakerBundle\\MakerBundle::class => ['dev' => true],\n    Doctrine\\Bundle\\MigrationsBundle\\DoctrineMigrationsBundle::class => ['all' => true],\n    Lexik\\Bundle\\JWTAuthenticationBundle\\LexikJWTAuthenticationBundle::class => ['all' => true],\n    Symfony\\Bundle\\MonologBundle\\MonologBundle::class => ['all' => true],\n    Doctrine\\Bundle\\FixturesBundle\\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],\n    Vich\\UploaderBundle\\VichUploaderBundle::class => ['all' => true],\n    Symfony\\Bundle\\WebServerBundle\\WebServerBundle::class => ['dev' => true],\n    Sensio\\Bundle\\FrameworkExtraBundle\\SensioFrameworkExtraBundle::class => ['all' => true],\n];\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- config/bundles.php	(revision fac2b3560c94aedc46edb6ae70cd7db0f67729ec)
++++ config/bundles.php	(date 1597320156999)
+@@ -7,12 +7,8 @@
+     Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
+     Doctrine\Bundle\DoctrineBundle\DoctrineBundle::class => ['all' => true],
+     ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
+-    Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
+     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
+     Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle::class => ['all' => true],
+     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
+-    Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
+     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+-    Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
+-    Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
+ ];
+Index: .idea/dataSources.local.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"dataSourceStorageLocal\">\n    <data-source name=\"MySQL - @localhost\" uuid=\"d56a3392-274f-42ed-86ce-2eaa90e237f6\">\n      <database-info product=\"MySQL\" version=\"8.0.21-0ubuntu0.20.04.3\" jdbc-version=\"4.2\" driver-name=\"MySQL Connector/J\" driver-version=\"mysql-connector-java-8.0.21 (Revision: 33f65445a1bcc544eb0120491926484da168f199)\" dbms=\"MYSQL\" exact-version=\"8.0.21\" exact-driver-version=\"8.0\">\n        <extra-name-characters>#@</extra-name-characters>\n        <identifier-quote-string>`</identifier-quote-string>\n      </database-info>\n      <case-sensitivity plain-identifiers=\"exact\" quoted-identifiers=\"exact\" />\n      <secret-storage>master_key</secret-storage>\n      <user-name>root</user-name>\n      <schema-mapping />\n    </data-source>\n    <data-source name=\"MariaDB - @localhost\" uuid=\"f8dc77d1-9fdd-4fc8-b94a-53e6f44b56eb\">\n      <database-info product=\"MySQL\" version=\"8.0.21-0ubuntu0.20.04.3\" jdbc-version=\"4.2\" driver-name=\"MariaDB Connector/J\" driver-version=\"2.6.0\" dbms=\"MYSQL\" exact-version=\"8.0.21\" exact-driver-version=\"2.6\">\n        <extra-name-characters>#@</extra-name-characters>\n        <identifier-quote-string>`</identifier-quote-string>\n      </database-info>\n      <case-sensitivity plain-identifiers=\"exact\" quoted-identifiers=\"exact\" />\n      <secret-storage>master_key</secret-storage>\n      <user-name>root</user-name>\n      <schema-mapping>\n        <introspection-scope>\n          <node kind=\"schema\" negative=\"1\" />\n        </introspection-scope>\n      </schema-mapping>\n    </data-source>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/dataSources.local.xml	(revision fac2b3560c94aedc46edb6ae70cd7db0f67729ec)
++++ .idea/dataSources.local.xml	(date 1597318613610)
+@@ -2,28 +2,12 @@
+ <project version="4">
+   <component name="dataSourceStorageLocal">
+     <data-source name="MySQL - @localhost" uuid="d56a3392-274f-42ed-86ce-2eaa90e237f6">
+-      <database-info product="MySQL" version="8.0.21-0ubuntu0.20.04.3" jdbc-version="4.2" driver-name="MySQL Connector/J" driver-version="mysql-connector-java-8.0.21 (Revision: 33f65445a1bcc544eb0120491926484da168f199)" dbms="MYSQL" exact-version="8.0.21" exact-driver-version="8.0">
+-        <extra-name-characters>#@</extra-name-characters>
+-        <identifier-quote-string>`</identifier-quote-string>
+-      </database-info>
+-      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+-      <secret-storage>master_key</secret-storage>
+-      <user-name>root</user-name>
++      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
+       <schema-mapping />
+     </data-source>
+     <data-source name="MariaDB - @localhost" uuid="f8dc77d1-9fdd-4fc8-b94a-53e6f44b56eb">
+-      <database-info product="MySQL" version="8.0.21-0ubuntu0.20.04.3" jdbc-version="4.2" driver-name="MariaDB Connector/J" driver-version="2.6.0" dbms="MYSQL" exact-version="8.0.21" exact-driver-version="2.6">
+-        <extra-name-characters>#@</extra-name-characters>
+-        <identifier-quote-string>`</identifier-quote-string>
+-      </database-info>
+-      <case-sensitivity plain-identifiers="exact" quoted-identifiers="exact" />
+-      <secret-storage>master_key</secret-storage>
+-      <user-name>root</user-name>
+-      <schema-mapping>
+-        <introspection-scope>
+-          <node kind="schema" negative="1" />
+-        </introspection-scope>
+-      </schema-mapping>
++      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MARIADB" exact-version="0" />
++      <schema-mapping />
+     </data-source>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"89b32608-9ac2-47fd-813d-a0662bdfe8e3\" name=\"Default Changelist\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/d/f/dfc667031767b2ab90930f4dabf18b5ebc2e9fba\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/d/f/dfc667031767b2ab90930f4dabf18b5ebc2e9fba\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/f/e/fe25c1878e3c8f904f51b724639e3d6b9fcc4100\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/f/e/fe25c1878e3c8f904f51b724639e3d6b9fcc4100\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Controller/GroupeCompetenceController.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Controller/GroupeCompetenceController.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Controller/UserController.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Controller/UserController.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/DataFixtures/AppFixtures.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/DataFixtures/AppFixtures.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/DataFixtures/CompetenceFixture.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/DataFixtures/CompetenceFixture.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Entity/Apprenant.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Entity/Apprenant.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Entity/Competences.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Entity/Competences.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Entity/GroupeCompetences.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Entity/GroupeCompetences.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Entity/Niveau.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Entity/Niveau.php\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/src/Entity/User.php\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/src/Entity/User.php\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ComposerSettings\" doNotAsk=\"true\" synchronizationState=\"SYNCHRONIZE\">\n    <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>\n    <execution />\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\n  </component>\n  <component name=\"PhpWorkspaceProjectConfiguration\">\n    <include_path>\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/orm\" />\n      <path value=\"$PROJECT_DIR$/vendor/nikic/php-parser\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/yaml\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/dbal\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/translation-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/console\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/monolog-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/config\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/sql-formatter\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-guard\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/http-kernel\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-php73\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/var-dumper\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/expression-language\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/dotenv\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-normalizer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/stopwatch\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/var-exporter\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/migrations\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/flex\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/form\" />\n      <path value=\"$PROJECT_DIR$/vendor/fig/link-util\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/validator\" />\n      <path value=\"$PROJECT_DIR$/vendor/phpdocumentor/type-resolver\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/options-resolver\" />\n      <path value=\"$PROJECT_DIR$/vendor/phpdocumentor/reflection-docblock\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/web-server-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/phpdocumentor/reflection-common\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/monolog-bridge\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/doctrine-bridge\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/maker-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/intl\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-csrf\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/serializer\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/web-link\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/error-handler\" />\n      <path value=\"$PROJECT_DIR$/vendor/jms/metadata\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/deprecation-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-mbstring\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/property-access\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/dependency-injection\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/mime\" />\n      <path value=\"$PROJECT_DIR$/vendor/webmozart/assert\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/twig-bridge\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/property-info\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-grapheme\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/service-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/namshi/jose\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/framework-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/process\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/finder\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/http-foundation\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-http\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-php80\" />\n      <path value=\"$PROJECT_DIR$/vendor/fzaninotto/faker\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/event-dispatcher-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/asset\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/twig-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/cache-contracts\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/security-core\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/filesystem\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/routing\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/event-dispatcher\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn\" />\n      <path value=\"$PROJECT_DIR$/vendor/symfony/string\" />\n      <path value=\"$PROJECT_DIR$/vendor/ocramius/package-versions\" />\n      <path value=\"$PROJECT_DIR$/vendor/ocramius/proxy-manager\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/container\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/event-dispatcher\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/log\" />\n      <path value=\"$PROJECT_DIR$/vendor/psr/link\" />\n      <path value=\"$PROJECT_DIR$/vendor/lexik/jwt-authentication-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/webimpress/safe-writer\" />\n      <path value=\"$PROJECT_DIR$/vendor/willdurand/negotiation\" />\n      <path value=\"$PROJECT_DIR$/vendor/twig/twig\" />\n      <path value=\"$PROJECT_DIR$/vendor/nelmio/cors-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/monolog/monolog\" />\n      <path value=\"$PROJECT_DIR$/vendor/api-platform/core\" />\n      <path value=\"$PROJECT_DIR$/vendor/sensio/framework-extra-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/cache\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-migrations-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/inflector\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/event-manager\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/lexer\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/reflection\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/collections\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/annotations\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/instantiator\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/doctrine-fixtures-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/data-fixtures\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/common\" />\n      <path value=\"$PROJECT_DIR$/vendor/doctrine/persistence\" />\n      <path value=\"$PROJECT_DIR$/vendor/vich/uploader-bundle\" />\n      <path value=\"$PROJECT_DIR$/vendor/lcobucci/jwt\" />\n      <path value=\"$PROJECT_DIR$/vendor/laminas/laminas-eventmanager\" />\n      <path value=\"$PROJECT_DIR$/vendor/laminas/laminas-zendframework-bridge\" />\n      <path value=\"$PROJECT_DIR$/vendor/laminas/laminas-code\" />\n      <path value=\"$PROJECT_DIR$/vendor/composer\" />\n    </include_path>\n  </component>\n  <component name=\"ProjectId\" id=\"1fkerFIbZwbkkKYZEKItQmem95i\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">\n    <property name=\"DatabaseDriversLRU\" value=\"mysql&#10;mariadb\" />\n    <property name=\"RunOnceActivity.OpenProjectViewOnStart\" value=\"true\" />\n    <property name=\"WebServerToolWindowFactoryState\" value=\"false\" />\n    <property name=\"node.js.detected.package.eslint\" value=\"true\" />\n    <property name=\"node.js.detected.package.tslint\" value=\"true\" />\n    <property name=\"node.js.path.for.package.eslint\" value=\"project\" />\n    <property name=\"node.js.path.for.package.tslint\" value=\"project\" />\n    <property name=\"node.js.selected.package.eslint\" value=\"(autodetect)\" />\n    <property name=\"node.js.selected.package.tslint\" value=\"(autodetect)\" />\n    <property name=\"nodejs_package_manager_path\" value=\"npm\" />\n    <property name=\"settings.editor.selected.configurable\" value=\"preferences.lookFeel\" />\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"89b32608-9ac2-47fd-813d-a0662bdfe8e3\" name=\"Default Changelist\" comment=\"\" />\n      <created>1596766716945</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1596766716945</updated>\n      <workItem from=\"1596766718586\" duration=\"103000\" />\n      <workItem from=\"1596766830370\" duration=\"979000\" />\n      <workItem from=\"1596792818614\" duration=\"7864000\" />\n      <workItem from=\"1596805076818\" duration=\"1063000\" />\n      <workItem from=\"1596806168573\" duration=\"6180000\" />\n      <workItem from=\"1596842712537\" duration=\"1504000\" />\n      <workItem from=\"1596844876204\" duration=\"117000\" />\n      <workItem from=\"1596845019229\" duration=\"5310000\" />\n      <workItem from=\"1596912905941\" duration=\"1481000\" />\n      <workItem from=\"1596975150123\" duration=\"40000\" />\n      <workItem from=\"1596975218688\" duration=\"3722000\" />\n      <workItem from=\"1596981405635\" duration=\"75000\" />\n      <workItem from=\"1596981504655\" duration=\"13872000\" />\n      <workItem from=\"1597000146973\" duration=\"6396000\" />\n      <workItem from=\"1597014044553\" duration=\"877000\" />\n      <workItem from=\"1597058073692\" duration=\"1053000\" />\n      <workItem from=\"1597067339556\" duration=\"1808000\" />\n      <workItem from=\"1597081005712\" duration=\"1860000\" />\n      <workItem from=\"1597184801070\" duration=\"2571000\" />\n      <workItem from=\"1597188237752\" duration=\"4389000\" />\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"Vcs.Log.History.Properties\">\n    <option name=\"COLUMN_ORDER\">\n      <list>\n        <option value=\"0\" />\n        <option value=\"2\" />\n        <option value=\"3\" />\n        <option value=\"1\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"WindowStateProjectService\">\n    <state x=\"710\" y=\"432\" width=\"489\" height=\"244\" key=\"#Composer\" timestamp=\"1596766840436\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"710\" y=\"432\" width=\"489\" height=\"244\" key=\"#Composer/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596766840436\" />\n    <state x=\"555\" y=\"215\" width=\"800\" height=\"678\" key=\"#com.intellij.execution.impl.EditConfigurationsDialog\" timestamp=\"1596767753540\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"555\" y=\"215\" width=\"800\" height=\"678\" key=\"#com.intellij.execution.impl.EditConfigurationsDialog/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596767753540\" />\n    <state x=\"735\" y=\"225\" width=\"440\" height=\"658\" key=\"#com.intellij.ide.util.MemberChooser\" timestamp=\"1596793487613\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"735\" y=\"225\" width=\"440\" height=\"658\" key=\"#com.intellij.ide.util.MemberChooser/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596793487613\" />\n    <state x=\"693\" y=\"312\" width=\"524\" height=\"485\" key=\"#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog\" timestamp=\"1596986586463\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"693\" y=\"312\" width=\"524\" height=\"485\" key=\"#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596986586463\" />\n    <state x=\"100\" y=\"128\" width=\"1720\" height=\"852\" key=\"DiffContextDialog\" timestamp=\"1596995840554\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"100\" y=\"128\" width=\"1720\" height=\"852\" key=\"DiffContextDialog/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596995840554\" />\n    <state width=\"292\" height=\"542\" key=\"HiddenNamespacesPopup\" timestamp=\"1596767730674\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state width=\"292\" height=\"542\" key=\"HiddenNamespacesPopup/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596767730674\" />\n    <state x=\"693\" y=\"119\" width=\"1052\" height=\"731\" key=\"SettingsEditor\" timestamp=\"1596917336959\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"693\" y=\"119\" width=\"1052\" height=\"731\" key=\"SettingsEditor/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596917336959\" />\n    <state x=\"702\" y=\"170\" width=\"505\" height=\"768\" key=\"VCS.ChangeListViewerDialog\" timestamp=\"1596995633977\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"702\" y=\"170\" width=\"505\" height=\"768\" key=\"VCS.ChangeListViewerDialog/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596995633977\" />\n    <state x=\"555\" y=\"286\" width=\"800\" height=\"537\" key=\"Vcs.Push.Dialog.v2\" timestamp=\"1596813370900\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"555\" y=\"286\" width=\"800\" height=\"537\" key=\"Vcs.Push.Dialog.v2/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596813370900\" />\n    <state x=\"716\" y=\"467\" width=\"478\" height=\"175\" key=\"com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2\" timestamp=\"1596986124989\">\n      <screen x=\"0\" y=\"28\" width=\"1920\" height=\"1052\" />\n    </state>\n    <state x=\"716\" y=\"467\" width=\"478\" height=\"175\" key=\"com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.28.1920.1052@0.28.1920.1052\" timestamp=\"1596986124989\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/workspace.xml	(revision fac2b3560c94aedc46edb6ae70cd7db0f67729ec)
++++ .idea/workspace.xml	(date 1597318613594)
+@@ -1,22 +1,27 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
++  <component name="BranchesTreeState">
++    <expand>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++      <path>
++        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
++        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
++      </path>
++    </expand>
++    <select />
++  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="89b32608-9ac2-47fd-813d-a0662bdfe8e3" name="Default Changelist" comment="">
+-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/f/dfc667031767b2ab90930f4dabf18b5ebc2e9fba" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/f/dfc667031767b2ab90930f4dabf18b5ebc2e9fba" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/e/fe25c1878e3c8f904f51b724639e3d6b9fcc4100" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/f/e/fe25c1878e3c8f904f51b724639e3d6b9fcc4100" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
++    <list default="true" id="616230c9-1139-4e5d-948f-37ed1360cdad" name="Default Changelist" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Controller/GroupeCompetenceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GroupeCompetenceController.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixture.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixture.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Entity/Apprenant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Apprenant.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Entity/Competences.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Competences.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Entity/GroupeCompetences.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeCompetences.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Entity/Niveau.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Niveau.php" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/src/Controller/ProfilArchiveController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataPersister/ProfilArchiveController.php" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -26,8 +31,20 @@
+   <component name="ComposerSettings" doNotAsk="true" synchronizationState="SYNCHRONIZE">
+     <pharConfigPath>$PROJECT_DIR$/composer.json</pharConfigPath>
+     <execution />
++  </component>
++  <component name="FileTemplateManagerImpl">
++    <option name="RECENT_TEMPLATES">
++      <list>
++        <option value="composer.json" />
++      </list>
++    </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="samba" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="PhpWorkspaceProjectConfiguration">
+@@ -135,17 +152,29 @@
+       <path value="$PROJECT_DIR$/vendor/laminas/laminas-zendframework-bridge" />
+       <path value="$PROJECT_DIR$/vendor/laminas/laminas-code" />
+       <path value="$PROJECT_DIR$/vendor/composer" />
++      <path value="$PROJECT_DIR$/vendor/hshn/base64-encoded-file" />
++      <path value="$PROJECT_DIR$/vendor/symfony/debug-bundle" />
++      <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
++      <path value="$PROJECT_DIR$/vendor/symfony/swiftmailer-bundle" />
++      <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
+     </include_path>
+   </component>
+-  <component name="ProjectId" id="1fkerFIbZwbkkKYZEKItQmem95i" />
++  <component name="ProjectId" id="1fmdBV9w7wfFrF4GhOPfonzvyN7" />
++  <component name="ProjectLevelVcsManager">
++    <ConfirmationsSetting value="2" id="Add" />
++  </component>
+   <component name="ProjectViewState">
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+   <component name="PropertiesComponent">
+-    <property name="DatabaseDriversLRU" value="mysql&#10;mariadb" />
++    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
++    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
++    <property name="DatabaseDriversLRU" value="mariadb" />
+     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
++    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+     <property name="WebServerToolWindowFactoryState" value="false" />
++    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+     <property name="node.js.detected.package.eslint" value="true" />
+     <property name="node.js.detected.package.tslint" value="true" />
+     <property name="node.js.path.for.package.eslint" value="project" />
+@@ -153,92 +182,85 @@
+     <property name="node.js.selected.package.eslint" value="(autodetect)" />
+     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+     <property name="nodejs_package_manager_path" value="npm" />
+-    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
++    <property name="settings.editor.selected.configurable" value="editor.preferences.import" />
++  </component>
++  <component name="RecentsManager">
++    <key name="CopyFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/config/jwt" />
++      <recent name="$PROJECT_DIR$/src/DataFixtures" />
++    </key>
++    <key name="MoveFile.RECENT_KEYS">
++      <recent name="$PROJECT_DIR$/src/DataPersister" />
++      <recent name="$PROJECT_DIR$/src/DataFixtures" />
++    </key>
+   </component>
+   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="TaskManager">
+     <task active="true" id="Default" summary="Default task">
+-      <changelist id="89b32608-9ac2-47fd-813d-a0662bdfe8e3" name="Default Changelist" comment="" />
+-      <created>1596766716945</created>
++      <changelist id="616230c9-1139-4e5d-948f-37ed1360cdad" name="Default Changelist" comment="" />
++      <created>1596827066857</created>
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+-      <updated>1596766716945</updated>
+-      <workItem from="1596766718586" duration="103000" />
+-      <workItem from="1596766830370" duration="979000" />
+-      <workItem from="1596792818614" duration="7864000" />
+-      <workItem from="1596805076818" duration="1063000" />
+-      <workItem from="1596806168573" duration="6180000" />
+-      <workItem from="1596842712537" duration="1504000" />
+-      <workItem from="1596844876204" duration="117000" />
+-      <workItem from="1596845019229" duration="5310000" />
+-      <workItem from="1596912905941" duration="1481000" />
+-      <workItem from="1596975150123" duration="40000" />
+-      <workItem from="1596975218688" duration="3722000" />
+-      <workItem from="1596981405635" duration="75000" />
+-      <workItem from="1596981504655" duration="13872000" />
+-      <workItem from="1597000146973" duration="6396000" />
+-      <workItem from="1597014044553" duration="877000" />
+-      <workItem from="1597058073692" duration="1053000" />
+-      <workItem from="1597067339556" duration="1808000" />
+-      <workItem from="1597081005712" duration="1860000" />
+-      <workItem from="1597184801070" duration="2571000" />
+-      <workItem from="1597188237752" duration="4389000" />
++      <updated>1596827066857</updated>
++      <workItem from="1596827068319" duration="6548000" />
++      <workItem from="1596840524927" duration="4051000" />
++      <workItem from="1596880584124" duration="3516000" />
++      <workItem from="1596927687821" duration="12637000" />
++      <workItem from="1596975063246" duration="7189000" />
++      <workItem from="1597318146328" duration="468000" />
+     </task>
+     <servers />
+   </component>
+   <component name="TypeScriptGeneratedFilesManager">
+     <option name="version" value="3" />
+   </component>
+-  <component name="Vcs.Log.History.Properties">
+-    <option name="COLUMN_ORDER">
+-      <list>
+-        <option value="0" />
+-        <option value="2" />
+-        <option value="3" />
+-        <option value="1" />
+-      </list>
++  <component name="Vcs.Log.Tabs.Properties">
++    <option name="TAB_STATES">
++      <map>
++        <entry key="MAIN">
++          <value>
++            <State />
++          </value>
++        </entry>
++      </map>
+     </option>
++    <option name="oldMeFiltersMigrated" value="true" />
++  </component>
++  <component name="VcsManagerConfiguration">
++    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+   </component>
+   <component name="WindowStateProjectService">
+-    <state x="710" y="432" width="489" height="244" key="#Composer" timestamp="1596766840436">
++    <state x="555" y="215" width="800" height="673" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596827272502">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state x="710" y="432" width="489" height="244" key="#Composer/0.28.1920.1052@0.28.1920.1052" timestamp="1596766840436" />
+-    <state x="555" y="215" width="800" height="678" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596767753540">
++    <state x="555" y="215" width="800" height="673" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596827272502" />
++    <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl" timestamp="1597001555042">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state x="555" y="215" width="800" height="678" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596767753540" />
+-    <state x="735" y="225" width="440" height="658" key="#com.intellij.ide.util.MemberChooser" timestamp="1596793487613">
++    <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl/0.28.1920.1052@0.28.1920.1052" timestamp="1597001555042" />
++    <state width="263" height="500" key="HiddenNamespacesPopup" timestamp="1596827400069">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state x="735" y="225" width="440" height="658" key="#com.intellij.ide.util.MemberChooser/0.28.1920.1052@0.28.1920.1052" timestamp="1596793487613" />
+-    <state x="693" y="312" width="524" height="485" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1596986586463">
++    <state width="263" height="500" key="HiddenNamespacesPopup/0.28.1920.1052@0.28.1920.1052" timestamp="1596827400069" />
++    <state x="187" y="118" width="1536" height="867" key="MergeDialog" timestamp="1597318385618">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state x="693" y="312" width="524" height="485" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596986586463" />
+-    <state x="100" y="128" width="1720" height="852" key="DiffContextDialog" timestamp="1596995840554">
++    <state x="187" y="118" width="1536" height="867" key="MergeDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1597318385618" />
++    <state x="449" y="189" key="SettingsEditor" timestamp="1596935205824">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state x="100" y="128" width="1720" height="852" key="DiffContextDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596995840554" />
+-    <state width="292" height="542" key="HiddenNamespacesPopup" timestamp="1596767730674">
++    <state x="449" y="189" key="SettingsEditor/0.28.1920.1052@0.28.1920.1052" timestamp="1596935205824" />
++    <state x="685" y="248" width="539" height="608" key="git4idea.branch.GitSmartOperationDialog" timestamp="1597318266704">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state width="292" height="542" key="HiddenNamespacesPopup/0.28.1920.1052@0.28.1920.1052" timestamp="1596767730674" />
+-    <state x="693" y="119" width="1052" height="731" key="SettingsEditor" timestamp="1596917336959">
++    <state x="685" y="248" width="539" height="608" key="git4idea.branch.GitSmartOperationDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1597318266704" />
++    <state x="624" y="255" key="run.anything.popup" timestamp="1596836267606">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state x="693" y="119" width="1052" height="731" key="SettingsEditor/0.28.1920.1052@0.28.1920.1052" timestamp="1596917336959" />
+-    <state x="702" y="170" width="505" height="768" key="VCS.ChangeListViewerDialog" timestamp="1596995633977">
++    <state x="624" y="255" key="run.anything.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1596836267606" />
++    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup" timestamp="1596934182840">
+       <screen x="0" y="28" width="1920" height="1052" />
+     </state>
+-    <state x="702" y="170" width="505" height="768" key="VCS.ChangeListViewerDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596995633977" />
+-    <state x="555" y="286" width="800" height="537" key="Vcs.Push.Dialog.v2" timestamp="1596813370900">
+-      <screen x="0" y="28" width="1920" height="1052" />
+-    </state>
+-    <state x="555" y="286" width="800" height="537" key="Vcs.Push.Dialog.v2/0.28.1920.1052@0.28.1920.1052" timestamp="1596813370900" />
+-    <state x="716" y="467" width="478" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1596986124989">
+-      <screen x="0" y="28" width="1920" height="1052" />
+-    </state>
+-    <state x="716" y="467" width="478" height="175" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.28.1920.1052@0.28.1920.1052" timestamp="1596986124989" />
++    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1596934182840" />
+   </component>
+ </project>
+\ No newline at end of file
+diff --git src/Controller/ProfilArchiveController.php src/DataPersister/ProfilArchiveController.php
+rename from src/Controller/ProfilArchiveController.php
+rename to src/DataPersister/ProfilArchiveController.php
