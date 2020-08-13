@@ -16,8 +16,11 @@ use App\Repository\PromotionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,7 +42,8 @@ class PromotionController extends AbstractController
         SerializerInterface $serializer,
         ValidatorInterface $validator,
         EntityManagerInterface $em,
-        UserPasswordEncoderInterface $encoder
+        UserPasswordEncoderInterface $encoder,
+        TokenStorageInterface $tokenStorage
 )
     {
         $this->repo=$repo;
@@ -48,6 +52,7 @@ class PromotionController extends AbstractController
         $this->repoGroupe=$repoGroupe;
         $this->em=$em;
         $this->encoder=$encoder;
+        $this->tokenStorage = $tokenStorage;
     }
     /**
      * @Route(
@@ -554,7 +559,7 @@ class PromotionController extends AbstractController
      *     }
      * )
      */
-    public function addANDremoveUser(UserRepository $userRepository,Request $request,EntityManagerInterface $entityManager,int $id){
+    public function addANDremoveUser(MailerInterface $mailer,UserRepository $userRepository,Request $request,EntityManagerInterface $entityManager,int $id){
         $promo = $entityManager->getRepository(promotion::class)->find($id);
 
         $reponse=json_decode($request->getContent(),true);
@@ -577,6 +582,17 @@ class PromotionController extends AbstractController
                     if($idProfil==6){
 
                         $promo->getGroupes()[0]->addApprenant($userId);
+                        $email = (new Email())
+                            ->from("abdoukarimsidibe1@gmail.com")
+                            ->to($promo->getGroupes()[0]->getApprenants()[0]->getEmail())
+                            ->subject('Message teste!')
+                            ->text("Bonjour {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()}! ❤️ce message est un teste")
+                            ->html("<h1>Felicitation {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()} !! vous avez ete selectionné(e) suite
+                                    a votre test d'entré a la Sonatel Academy! ❤.<br>Veuillez utiliser ces informations pour vous connecter a votre Promo,Username:
+                                    {$promo->getGroupes()[0]->getApprenants()[0]->getUsername()}, Password:Pass123️</h1>");
+
+
+                        $mailer->send($email);
                                     }
 
 
@@ -606,8 +622,8 @@ class PromotionController extends AbstractController
 
         $entityManager->persist($promo);
         $entityManager->flush();
-       return $this->json($promo->getGroupes()[0]->getApprenants(),200);
-
+       return $this->json(true,200);
+//return dd($promo->getGroupes()[0]->getApprenants()[0]->getEmail());
     }
 }
 

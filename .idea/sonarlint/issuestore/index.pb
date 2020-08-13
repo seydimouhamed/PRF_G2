@@ -31,3 +31,20 @@ X
 (src/Controller/ReferentielController.php,3/9/3940d5507b8bb6c7a81a5fb88627ff56589730e1
 4
 .env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
+<<<<<<< Updated upstream
+E
+src/Entity/Profil.php,c/2/c20a4546fcba14c9da17e41bb3b73afe70249838
+]
+-src/DataPersister/ProfilArchiveController.php,b/e/be046ea243b2172ba17b5dd163ee7af1bc433fac
+K
+src/Entity/ProfilSortie.php,1/e/1e8d888d175adb65b4ab8274ed7379941d2dbe33
+v
+F.idea/shelf/Uncommitted_changes_before_rebase__Default_Changelist_.xml,1/6/16bd94dbe31b8f7ee7eced6cc634ea81cb16507f
+w
+G.idea/sonarlint/issuestore/3/7/37f597c1d59a6e7baa9f156ecc3ca33a08a4069b,1/2/1270432ce60aac0ae31a063202b56916760648b2
+K
+config/packages/mailer.yaml,1/5/157f49740d485f16c276482e7b9e0f180b8ccd9f
+=======
+I
+src/Entity/Competence.php,3/7/37f597c1d59a6e7baa9f156ecc3ca33a08a4069b
+>>>>>>> Stashed changes
