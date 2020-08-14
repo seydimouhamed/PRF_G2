@@ -1,0 +1,14 @@
+
+<<<<<<< Updated upstream
+O	php:S1068"5Remove this unused "$datefinprvisoire" private field.(ì‘ËÒ8ëš’†¾.
+S	php:S1172"9Remove the unused function parameter "$dateFinPrvisoire".(£´‹¥8ëš’†¾.
+„	php:S1448"eClass "Promotion" has 30 methods, which is greater than 20 authorized. Split it into smaller classes.(ø…¡Œøÿÿÿÿ8ëš’†¾.
+Kphp:S836"2Review the data-flow - use of uninitialized value.(ƒõÖÊ8ëš’†¾.
+8php:S125"Remove this commented out code.(ê†£·8ëš’†¾.
+=======
+Nphp:S836ş"2Review the data-flow - use of uninitialized value.(ƒõÖÊ8ëš’†¾.
+V	php:S1172ü"9Remove the unused function parameter "$dateFinPrvisoire".(£´‹¥8ëš’†¾.
+†	php:S1448H"eClass "Promotion" has 30 methods, which is greater than 20 authorized. Split it into smaller classes.(ø…¡Œøÿÿÿÿ8ëš’†¾.
+;php:S125Ë"Remove this commented out code.(ê†£·8ëš’†¾.
+Q	php:S1068z"5Remove this unused "$datefinprvisoire" private field.(ì‘ËÒ8ëš’†¾.
+>>>>>>> Stashed changes
