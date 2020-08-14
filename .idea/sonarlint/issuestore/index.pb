@@ -27,6 +27,7 @@ H
 src/Entity/Apprenant.php,5/7/5752579c8c4da1b9d7c2535aed06ddf529c70856
 ]
 -src/Controller/GroupeCompetenceController.php,4/d/4dfc8200f9ee99d2cf983d626f2573dac1a5e166
+<<<<<<< Updated upstream
 X
 (src/Controller/ReferentielController.php,3/9/3940d5507b8bb6c7a81a5fb88627ff56589730e1
 4
@@ -45,6 +46,26 @@ G.idea/sonarlint/issuestore/3/7/37f597c1d59a6e7baa9f156ecc3ca33a08a4069b,1/2/12
 K
 config/packages/mailer.yaml,1/5/157f49740d485f16c276482e7b9e0f180b8ccd9f
 =======
+I
+src/Entity/Competence.php,3/7/37f597c1d59a6e7baa9f156ecc3ca33a08a4069b
+>>>>>>> Stashed changes
+=======
+4
+.env,3/c/3c84dcdc6bbe3d7817c49dcdc327b926fea1808a
+X
+(src/Controller/ReferentielController.php,3/9/3940d5507b8bb6c7a81a5fb88627ff56589730e1
+V
+&src/DataFixtures/PromotionFixtures.php,9/b/9b43a59c65132d8804b4b6f9cba5eabb754f82e4
+P
+ src/DataFixtures/TagFixtures.php,4/b/4bc9ddd722023891fcc1ab0340d98ba433d0d274
+B
+src/Entity/Tag.php,1/f/1fbc03b10e88faac395ca908a459126fd444005f
+V
+&src/Controller/GroupeTagController.php,f/5/f5ae583d1f479517c56203d5230d70fdd0d9b802
+H
+src/Entity/GroupeTag.php,2/f/2f52ffcfa001acf3d4fa6162e660e3c71502b7a2
+M
+config/packages/security.yaml,c/5/c5f941b4d4e9404f23935164fabdd261abb68e93
 I
 src/Entity/Competence.php,3/7/37f597c1d59a6e7baa9f156ecc3ca33a08a4069b
 >>>>>>> Stashed changes

@@ -12,32 +12,37 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *      collectionOperations={
- *           "get_grptags"={ 
- *               "method"="GET", 
- *               "path"="/admin/grptags",
+ *               routePrefix="/admin",
+ *     collectionOperations={
+ *           "get_grptags"={
+ *               "method"="GET",
+ *               "path"="/grptags",
  *               "security_message"="Acces non autorisé",
  *          },
- *            "add_grptags"={ 
- *               "method"="POST", 
+ *            "add_grptags"={
+ *               "method"="POST",
  *               "path"="/admin/grptags",
  *          }
  *      },
  *      itemOperations={
- *           "get_grptag_id"={ 
- *               "method"="GET", 
- *               "path"="/admin/grptags/{id}",
+ *           "get_grptag"={
+ *               "method"="GET",
+ *               "path"="/grptags/{id}",
  *                "defaults"={"id"=null},
  *          },
+ *              "get_taggrp_groupetags"={
+ *               "method"="GET",
+ *               "path"="/grptags/{id}/tags",
+ *              "route_name"="get_taggrp_groupetags",
+ *          },
  *
- *            "update_grptag_id"={ 
- *               "method"="PUT", 
- *               "path"="/admin/grptags/{id}",
+ *            "update_grptag_id"={
+ *               "method"="PUT",
+ *               "path"="/grptags/{id}",
  *          },
  *      },
- *       normalizationContext={"groups"={"grptag:read"}},
- *       denormalizationContext={"groups"={"grptag:write"}},
- *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=10}
+ *      normalizationContext={"groups"={"grptag:read"}},
+ *       denormalizationContext={"groups"={"grptag:write"}}
  * )
  * @ORM\Entity(repositoryClass=GroupeTagRepository::class)
  */

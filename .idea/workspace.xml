@@ -6,6 +6,7 @@
 =======
     <list default="true" id="6dfe208f-e282-4613-80ba-21cb94ad9c60" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/.idea/demo1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/demo1.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be" afterDir="false" />
@@ -14,12 +15,25 @@
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4dfc8200f9ee99d2cf983d626f2573dac1a5e166" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/4/d/4dfc8200f9ee99d2cf983d626f2573dac1a5e166" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/7/87b99206717ccce222f05190f36b6273e3ea6228" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/7/87b99206717ccce222f05190f36b6273e3ea6228" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/0/a/0a3e99b9da178509aeb5b3fa6f5dce46bc0eb8be" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/2/1283891c5be932905a7efc9cc2b76812791bf0e6" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/1/2/1283891c5be932905a7efc9cc2b76812791bf0e6" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/5/25ed6f190761038c97aa2c0299b9205878d8dd91" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/2/5/25ed6f190761038c97aa2c0299b9205878d8dd91" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/7/87b99206717ccce222f05190f36b6273e3ea6228" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/7/87b99206717ccce222f05190f36b6273e3ea6228" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/b/d/bd40e5504ff9d25586c516537316c24981df19f7" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/4/d44638963307a58769a5fafb1b56e365de710995" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/d/4/d44638963307a58769a5fafb1b56e365de710995" afterDir="false" />
+>>>>>>> Stashed changes
       <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/PromotionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PromotionController.php" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/src/Entity/GroupeTag.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeTag.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/Tag.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Tag.php" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
 >>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +48,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
+<<<<<<< Updated upstream
         <entry key="$PROJECT_DIR$" value="basse" />
+=======
+        <entry key="$PROJECT_DIR$" value="sidibe" />
+>>>>>>> Stashed changes
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -145,6 +163,7 @@
       <path value="$PROJECT_DIR$/vendor/symfony/process" />
       <path value="$PROJECT_DIR$/vendor/sensio/framework-extra-bundle" />
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
       <path value="$PROJECT_DIR$/vendor/phpoffice/phpspreadsheet" />
       <path value="$PROJECT_DIR$/vendor/psr/simple-cache" />
       <path value="$PROJECT_DIR$/vendor/psr/http-client" />
@@ -159,6 +178,10 @@
 =======
       <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
       <path value="$PROJECT_DIR$/vendor/symfony/mailer" />
+>>>>>>> Stashed changes
+=======
+      <path value="$PROJECT_DIR$/vendor/symfony/mailer" />
+      <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
 >>>>>>> Stashed changes
     </include_path>
   </component>
@@ -206,12 +229,21 @@
       <workItem from="1596981686839" duration="5756000" />
       <workItem from="1597005487223" duration="4790000" />
       <workItem from="1597014043443" duration="5408000" />
+<<<<<<< Updated upstream
       <workItem from="1597057089679" duration="8224000" />
       <workItem from="1597075438388" duration="847000" />
       <workItem from="1597185864800" duration="1549000" />
       <workItem from="1597197547295" duration="752000" />
       <workItem from="1597238793358" duration="1739000" />
       <workItem from="1597244436522" duration="610000" />
+=======
+      <workItem from="1597057089679" duration="855000" />
+      <workItem from="1597276103742" duration="15000" />
+      <workItem from="1597324421009" duration="286000" />
+      <workItem from="1597329576738" duration="23531000" />
+      <workItem from="1597361884168" duration="2551000" />
+      <workItem from="1597411988608" duration="2987000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
@@ -230,6 +262,7 @@
   </component>
   <component name="WindowStateProjectService">
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     <state x="471" y="346" width="968" height="417" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597276290418">
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
@@ -241,6 +274,12 @@
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state x="693" y="312" width="524" height="485" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1597237570749" />
+=======
+    <state x="693" y="312" width="524" height="485" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog" timestamp="1597361245556">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="693" y="312" width="524" height="485" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1597361245556" />
+>>>>>>> Stashed changes
     <state x="100" y="128" width="1720" height="852" key="DiffContextDialog" timestamp="1596844990319">
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
@@ -273,6 +312,10 @@
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state x="624" y="254" key="run.anything.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1596843927018" />
+    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup" timestamp="1597364074032">
+      <screen x="0" y="28" width="1920" height="1052" />
+    </state>
+    <state x="623" y="260" width="672" height="678" key="search.everywhere.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1597364074032" />
     <state x="685" y="461" width="540" height="187" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1596941150952">
       <screen x="0" y="28" width="1920" height="1052" />
     </state>

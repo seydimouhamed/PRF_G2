@@ -44,7 +44,11 @@ class PromotionController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordEncoderInterface $encoder,
         TokenStorageInterface $tokenStorage
+
 )
+
+
+
     {
         $this->repo=$repo;
         $this->serializer=$serializer;
@@ -70,10 +74,10 @@ class PromotionController extends AbstractController
     {
         //recupéré tout les données de la requete
         $promo=json_decode($request->getContent(),true);
-         
+
         //recupération  recupération imga promo!
         //@$avatar = $request->files->get("avatar");
-        
+
         $promo = $this->serializer->denormalize($promo,"App\Entity\Promotion",true);
         // if($avatar)
         // {
@@ -90,25 +94,25 @@ class PromotionController extends AbstractController
             $errors = $this->serializer->serialize($errors,"json");
             return new JsonResponse($errors,Response::HTTP_BAD_REQUEST,[],true);
         }
-      //$promo->setArchivage(false);
+        //$promo->setArchivage(false);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($promo);
-       $em->flush();
-       //creation dun groupe pour la promo
-       
-       $group= new Groupes();
-      // $date = date('Y-m-d');
-       $group->setNom('Groupe Générale')
-             ->setDateCreation(new \DateTime())
-             ->setStatut('ouvert')
-             ->setType('groupe principale')
-             ->setPromotion($promo);
-             $em->persist($group);
-            $em->flush();
-        
+        $em->flush();
+        //creation dun groupe pour la promo
+
+        $group= new Groupes();
+        // $date = date('Y-m-d');
+        $group->setNom('Groupe Générale')
+            ->setDateCreation(new \DateTime())
+            ->setStatut('ouvert')
+            ->setType('groupe principale')
+            ->setPromotion($promo);
+        $em->persist($group);
+        $em->flush();
+
         return $this->json($promo,201);
-     }
+    }
 
 
     /**
@@ -166,7 +170,7 @@ class PromotionController extends AbstractController
         $gc=[];
         foreach($promos as $promo)
         {
-            
+
             $group_ref_detail['referentiel']=$promo->getReferentiel();
             //get id promo
             $idPromo = $promo->getID();
@@ -177,11 +181,11 @@ class PromotionController extends AbstractController
             {
                 if($apprenant->getStatut()=="attente")
                 {
-                     $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
+                    $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
                 }
             }
 
-           $gc[]= $group_ref_detail;
+            $gc[]= $group_ref_detail;
 
         }
 
@@ -208,7 +212,7 @@ class PromotionController extends AbstractController
         $gc=[];
         foreach($promos as $promo)
         {
-            
+
             $group_ref_detail['referentiel']=$promo->getReferentiel();
             //get id promo
             $idPromo = $promo->getID();
@@ -220,12 +224,12 @@ class PromotionController extends AbstractController
                 if($apprenant->getStatut()=="attente")
                 {
                     if($idPromo==$id){
-                     $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
+                        $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
                     }
                 }
             }
 
-           $gc= $group_ref_detail;
+            $gc= $group_ref_detail;
 
         }
 
@@ -249,7 +253,7 @@ class PromotionController extends AbstractController
      */
     public function getPromoidPrincipal($id)
     {
-       $p_princs = $this->getGroupesPrincipale($id);
+        $p_princs = $this->getGroupesPrincipale($id);
 
         return $this->json($p_princs ,200);
     }
@@ -270,7 +274,7 @@ class PromotionController extends AbstractController
     public function getPromoidreferentiel($id)
     {
         //getreferentielpromo($id);
-      // $p_princs = $this->getGroupesPrincipale($id);
+        // $p_princs = $this->getGroupesPrincipale($id);
 
         return $this->json($this->getreferentielpromo($id) ,200);
     }
@@ -294,7 +298,7 @@ class PromotionController extends AbstractController
         $promo=$this->repo->find($id);
 
         $data=array("referentiel"=>$promo->getReferentiel(), 'formateurs'=>$promo->getFormateurs());
-          
+
 
         return $this->json($data ,200);
     }
@@ -314,27 +318,27 @@ class PromotionController extends AbstractController
      */
     public  function getpromogroupeapprenant($id,$id1)
     {
-    //     $promo= $this->em->getRepository(Promotion::class)->find($id);
-    //     $groupe = $this->em->getRepository(Groupes::class)->find($id1);
-    //     $r
-    //     $titreG=$promo->getTitre();
-    //     $appGroupe=$promo->getGroupes()[0]->getApprenants()[0]->getUsername();
+        //     $promo= $this->em->getRepository(Promotion::class)->find($id);
+        //     $groupe = $this->em->getRepository(Groupes::class)->find($id1);
+        //     $r
+        //     $titreG=$promo->getTitre();
+        //     $appGroupe=$promo->getGroupes()[0]->getApprenants()[0]->getUsername();
 
-    //     $libelleGroupe=$promo->getGroupes()[0]->getNom();
+        //     $libelleGroupe=$promo->getGroupes()[0]->getNom();
 
-    //    // return dd($promo->getReferentiel());
-         return $this->json("groupe" ,200);
+        //    // return dd($promo->getReferentiel());
+        return $this->json("groupe" ,200);
 
     }
     private function getGroupesPrincipale($id=null)
     {
         $promos=null;
-          $promos= $this->repo->findAll();
+        $promos= $this->repo->findAll();
         $promo_princ=[];
-        
+
         foreach($promos as $promo)
         {
-            
+
             $group_ref_detail['referentiel']=$promo->getReferentiel();
 
             foreach($promo->getGroupes() as $promo_det)
@@ -344,7 +348,7 @@ class PromotionController extends AbstractController
                     if($promo->getID()==$id)
                     {
                         $group_ref_detail['groupes']=$promo_det;
-                            return $group_ref_detail;
+                        return $group_ref_detail;
                     }
                     $group_ref_detail['groupes']=$promo_det;
                 }
@@ -358,17 +362,17 @@ class PromotionController extends AbstractController
             return null;
         }else
         {
-          return $promo_princ;
+            return $promo_princ;
         }
-    
+
     }
 
     private function getreferentielpromo($id=null)
     {
-          $promos= $this->repo->find($id);
+        $promos= $this->repo->find($id);
         $promo_ref=$promos->getReferentiel();
 
-            return $promo_ref;
+        return $promo_ref;
 
     }
     /**
@@ -404,59 +408,11 @@ class PromotionController extends AbstractController
                 }
             }
         } else {
-            return $this->json("Ce groupe n'existe pas", 200);
+            return $this->json("Ce groupe n'existe pas dans ce promo", 200);
         }
 
     }
 
-
-    /*public function addApprenant(Request $request,EntityManagerInterface $entityManager,int $id){
-//recupéré tout les données de la requete
-        $apprenants=json_decode($request->getContent(),true);
-        $promo = $entityManager->getRepository(promotion::class)->find($id);
-        $apprenants = $this->serializer->denormalize($apprenants,"App\Entity\User","JSON");
-
-
-
-            $genre=$apprenants['genre'];
-            $adresse=$apprenants['adresse'];
-            $telephone=$apprenants['telephone'];
-            $username=$apprenants['username'];
-            $firstname=$apprenants['fisrtName'];
-            $lastname=$apprenants['lastName'];
-            $email=$apprenants['email'];
-            $password=['password'];
-            $profil=$apprenants['profil'];
-            $archivage=$apprenants['archivage'];
-            $photo = $request->files->get("photo");
-            $photoBlob = fopen($photo->getRealPath(),"rb");
-                if($profil==6){
-
-                    $ajApprenants=new apprenant();
-                    $ajApprenants->setGenre($genre)
-                        ->setAdresse($adresse)
-                        ->setTelephone($telephone);
-                }elseif ($profil==4){
-                    $ajApprenants=new formateur();
-                }else{
-                    return $this->json("Ce profil ne peut pas etre ajouter",400);
-                }
-
-        $ajApprenants->setUsername($username)
-                ->setFisrtName($firstname)
-                ->setLastName($lastname)
-                ->setEmail($email)
-                ->setPassword($this->encoder->encodePassword ($ajApprenants, $password ))
-                ->setProfil($profil)
-                ->setPhoto($photoBlob)
-                ->setArchivage($archivage);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($ajApprenants);
-            $em->flush();
-            return $this->json($apprenants,201);
-
-    }
-*/
 
     /**
      * @Route(
@@ -486,8 +442,8 @@ class PromotionController extends AbstractController
 
         $username=$reponse['username'];
         $userId=$userRepository->findOneBy(["username"=>$username])
-           ->setArchivage(false);
-       $this->em->persist($userId);
+            ->setArchivage(false);
+        $this->em->persist($userId);
         $this->em->flush();
         return $this->json(true,200);
 
@@ -504,36 +460,52 @@ class PromotionController extends AbstractController
      *          "__api_item_operation_name"="modifier_Promo"
      *     }
      *     ),
-    */
+     */
     public function ModifierPromo(Request $request,EntityManagerInterface $entityManager,int $id){
+
         $reponse=json_decode($request->getContent(),true);
-        $libele=['langue','titre','description','lieu','dateDebut','dateFinPrvisoire','fabrique','dateFinReelle','status'];
-
+        $libele=['langue','titre','description','lieu','fabrique','status','referentiel'];
+        $dateLib=['dateFinPrvisoire','dateFinReelle','dateDebut'];
+        $refern="referentiel";
+        $referentiel=['libelle','presentation','programme','critereAdmission','critereEvaluation'];
         $promo = $entityManager->getRepository(promotion::class)->find($id);
-        $tabfonct=[
-            $promo->setLangue($reponse['langue']),
-            $promo->setTitre($reponse['titre']),
-            $promo->setdescription($reponse['description']),
-            $promo->setLieu($reponse['lieu']),
-            $promo->setDateDebut(\DateTime::createFromFormat('Y-m-d',$reponse['dateDebut'])),
-            $promo->setDateFinPrvisoire(\DateTime::createFromFormat('Y-m-d',$reponse['dateFinPrvisoire'])),
-            $promo->setFabrique($reponse['fabrique']),
-            $promo->setDateFinReelle(\DateTime::createFromFormat('Y-m-d',$reponse['dateFinReelle'])),
-            $promo->setStatus($reponse['status'])];
-        $tab=[];
-        for ($i=0;$i<count($reponse);$i++){
+             for($i=0;$i<count($reponse);$i++){
 
-            if(isset($reponse[$libele[$i]])){
+                if(isset($reponse[$libele[$i]])){
 
-                $tab1[]=$reponse[$libele[$i]];
-                $entityManager->persist($tabfonct[$i]);
-                $entityManager->flush();
+                  $promo->{"set".ucfirst($libele[$i])}($reponse[$libele[$i]]);
+            for($a=0;$a<count($dateLib);$a++){
+
+                if(isset($reponse[$dateLib[$a]])){
+
+                    $promo->{"set".ucfirst($dateLib[$a])}(\DateTime::createFromFormat('Y-m-d',$reponse[$dateLib[$a]]));
+                }
+
             }
 
-        }
+                for($b=0;$b<count($referentiel);$b++){
+
+                    if(isset($reponse['referentiel'])){
+
+                        $promo->getReferentiel()->{"set".ucfirst($referentiel[$b])}($reponse[$referentiel[$b]]);
 
 
-        return $this->json(true,200);
+                    }
+
+                }
+
+    }
+
+
+                   $entityManager->persist($promo);
+                   $entityManager->flush();
+}
+
+
+
+
+        return $this->json("success",200);
+
 
 
     }
@@ -573,27 +545,35 @@ class PromotionController extends AbstractController
                     $user=$reponse[$tableau[$i]];
                     $userId=$userRepository->findOneBy([$tableau[$i]=>$user]);
                     $idProfil=$userId->getProfil()->getId();
+                    $libelle=$userId->getProfil()->getLibelle();
 
-                    if($idProfil==4){
+                    if($libelle=="Formateur"){
 
-                                    $promo->addFormateur($userId);
+                        $promo->addFormateur($userId);
 
-                                                         }
-                    if($idProfil==6){
+                    }
+                    if($libelle=="Aprenant"){
 
-                        $promo->getGroupes()[0]->addApprenant($userId);
-                        $email = (new Email())
-                            ->from("abdoukarimsidibe1@gmail.com")
-                            ->to($promo->getGroupes()[0]->getApprenants()[0]->getEmail())
-                            ->subject('Message teste!')
-                            ->text("Bonjour {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()}! ❤️ce message est un teste")
-                            ->html("<h1>Felicitation {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()} !! vous avez ete selectionné(e) suite
+                        for($z=0;$z<count($promo->getGroupes());$z++) {
+
+                            if ($promo->getGroupes()[$z]->getType() == "groupe principale") {
+
+                                $promo->getGroupes()[$z]->addApprenant($userId);
+                                $email = (new Email())
+                                    ->from("abdoukarimsidibe1@gmail.com")
+                                    ->to($promo->getGroupes()[0]->getApprenants()[0]->getEmail())
+                                    ->subject('Message teste!')
+                                    ->text("Bonjour {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()}! ❤️ce message est un teste")
+                                    ->html("<h1>Felicitation {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()} !! vous avez ete selectionné(e) suite
                                     a votre test d'entré a la Sonatel Academy! ❤.<br>Veuillez utiliser ces informations pour vous connecter a votre Promo,Username:
                                     {$promo->getGroupes()[0]->getApprenants()[0]->getUsername()}, Password:Pass123️</h1>");
 
 
-                        $mailer->send($email);
-                                    }
+                                $mailer->send($email);
+                            }
+                        }
+
+                    }
 
 
 
@@ -608,11 +588,26 @@ class PromotionController extends AbstractController
                     $user=$reponse[$tableau[$i]];
                     $userId=$userRepository->findOneBy([$tableau[$i]=>$user]);
                     $idProfil=$userId->getProfil()->getId();
-                    if($idProfil==4){
+                    $libelle=$userId->getProfil()->getLibelle();
+                    if($libelle=="Formateur"){
 
                         $promo->removeFormateur($userId);
                     }
-                    if($idProfil==6){
+                    if($libelle=="Aprenant"){
+
+                        for($z=0;$z<count($promo->getGroupes());$z++){
+
+                            if($promo->getGroupes()[$z]->getType()=="groupe principale"){
+
+                                $promo->getGroupes()[$z]->removeApprenant($userId);
+                            }
+                            if($promo->getGroupes()[$z]->getType()=="binome" || $promo->getGroupes()[$z]->getType()=="filerouge"){
+
+                                $promo->getGroupes()[$z]->removeApprenant($userId);
+                            }
+                        }
+
+
 
                         $promo->getGroupes()[0]->removeApprenant($userId);
                     }
@@ -622,8 +617,10 @@ class PromotionController extends AbstractController
 
         $entityManager->persist($promo);
         $entityManager->flush();
-       return $this->json(true,200);
+        return $this->json(true,200);
 //return dd($promo->getGroupes()[0]->getApprenants()[0]->getEmail());
+        // return $this->json($promo->getGroupes()[1]->getType(),200);
     }
 }
+
 

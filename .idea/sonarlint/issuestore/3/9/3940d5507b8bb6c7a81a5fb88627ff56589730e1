@@ -1,4 +1,10 @@
 
+<<<<<<< Updated upstream
 Q	php:S1481"0Remove this unused "$competence" local variable.(ù˜îóøÿÿÿÿ8¶Ú´¨¾.
 J	php:S1481")Remove this unused "$cou" local variable.(»¢„§ÿÿÿÿÿ8¶Ú´¨¾.
 V	php:S1481"5Remove this unused "$groupCompetence" local variable.(»¢„§ÿÿÿÿÿ8¶Ú´¨¾.
+=======
+J	php:S1481")Remove this unused "$cou" local variable.(»¢„§ÿÿÿÿÿ8ñŸ’Å½.
+Q	php:S1481"0Remove this unused "$competence" local variable.(ù˜îóøÿÿÿÿ8ñŸ’Å½.
+V	php:S1481"5Remove this unused "$groupCompetence" local variable.(»¢„§ÿÿÿÿÿ8ñŸ’Å½.
+>>>>>>> Stashed changes

@@ -13,6 +13,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ApiResource(
+ *
  *      routePrefix="/admin",
  *       normalizationContext={"groups"={"tag:read"}},
  *       denormalizationContext={"groups"={"tag:write"}},
