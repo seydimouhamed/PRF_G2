@@ -49,6 +49,11 @@ class Niveau
      */
     private $competence;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Brief::class, inversedBy="niveau")
+     */
+    private $brief;
+
     // /**
     //  * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
     //  */
@@ -108,6 +113,18 @@ class Niveau
     public function setCompetence(?Competence $competence): self
     {
         $this->competence = $competence;
+
+        return $this;
+    }
+
+    public function getBrief(): ?Brief
+    {
+        return $this->brief;
+    }
+
+    public function setBrief(?Brief $brief): self
+    {
+        $this->brief = $brief;
 
         return $this;
     }
