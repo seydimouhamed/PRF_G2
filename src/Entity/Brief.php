@@ -91,12 +91,12 @@ class Brief
     private $referentiel;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Promotion::class, inversedBy="briefs")
+     * @ORM\ManyToMany(targetEntity=Promotion::class, inversedBy="briefs", cascade = { "persist" })
      */
     private $promo;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="briefs")
+     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="briefs", cascade = { "persist" })
      */
     private $groupe;
 
@@ -112,7 +112,7 @@ class Brief
     private $tag;
 
     /**
-     * @ORM\ManyToMany(targetEntity=LivrableAttendus::class, inversedBy="briefs")
+     * @ORM\ManyToMany(targetEntity=LivrableAttendus::class, inversedBy="briefs", cascade = { "persist" })
      */
     private $LivrableAttendus;
 

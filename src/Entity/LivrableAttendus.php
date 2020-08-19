@@ -25,7 +25,7 @@ class LivrableAttendus
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="LivrableAttendus")
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="LivrableAttendus", cascade = { "persist" })
      */
     private $briefs;
 

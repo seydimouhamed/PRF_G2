@@ -147,7 +147,7 @@ class Promotion
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion")
+     * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion", cascade = { "persist" })
      * @ApiSubresource()
      * @Groups({"promo:read"})
      *
@@ -164,7 +164,7 @@ class Promotion
 
 
     /**
-     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions")
+     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions", cascade = { "persist" })
      * @ApiSubresource()
      * @Groups({"promo:read"})
      */
@@ -178,7 +178,7 @@ class Promotion
     private $referentiel;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="promo")
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="promo", cascade = { "persist" })
      */
     private $briefs;
 
