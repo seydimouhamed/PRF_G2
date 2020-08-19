@@ -54,7 +54,7 @@ class Groupes
     private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes")
+     * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes", cascade = { "persist" })
      */
     private $promotion;
 
@@ -74,7 +74,7 @@ class Groupes
     private $formateurs;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="groupe")
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="groupe", cascade = { "persist" })
      */
     private $briefs;
 
