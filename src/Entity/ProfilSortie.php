@@ -11,9 +11,22 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+//-----------------------------------------------------
+
+//routePrefix="/admin",
+//*          collectionOperations={
+  //  *              "add_profilSortie"={
+   // *                  "method"="POST",
+   // *                  "path"="/admin/profilsorties"}
+   // *          },
+   //--------------------------------------------------------
+
 /**
- * @ApiResource(
+ * @ApiResource( 
+ * 
+ * 
  *       normalizationContext={"groups"={"profilSortie:read","apprenant:read"}},
+ *       denormalizationContext={"groups"={"profilSortie:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )
  * @ORM\Entity(repositoryClass=ProfilSortieRepository::class)
@@ -24,13 +37,13 @@ class ProfilSortie
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"apprenant:read", "profilSortie:read"})
+     * @Groups({"apprenant:read", "profilSortie:read", "profilSortie:write"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"apprenant:read", "profilSortie:read"})
+     * @Groups({"apprenant:read", "profilSortie:read", "profilSortie:write"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Assert\NotBlank
@@ -46,6 +59,7 @@ class ProfilSortie
 
     /**
      * @ORM\Column(type="boolean", options={"default":false})
+     * @Groups({"profilSortie:read", "profilSortie:write"})
      */
     private $archivage;
 

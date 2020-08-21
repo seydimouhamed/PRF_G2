@@ -53,6 +53,7 @@ security:
         - { path: ^/api/admin/grptags, roles: [ROLE_ADMIN, ROLE_FORMATEUR] }
         - { path: ^/api/admin/users, roles: ROLE_ADMIN }
         - { path: ^/api/admin/profils, roles: ROLE_ADMIN }
+        - { path: ^/api/admin/profilSorties roles: ROLE_ADMIN }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
         # - { path: ^/admin, roles: ROLE_ADMIN }

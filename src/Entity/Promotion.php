@@ -64,12 +64,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *                                       "defaults"={"id"=null},
  *                                      "add_promo_discontinuation",},
  *
- *
- *
- *
  *                      },
- *      normalizationContext={"groups"={"promo:read"}},
- *      denormalizationContext={"groups"={"promo:write"}}
+ *      normalizationContext={"groups"={"promo:read","groupe:read"}},
+ *      denormalizationContext={"groups"={"promo:write","groupe:write"}}
  * )
  * @ORM\Entity(repositoryClass=PromotionRepository::class)
  */
@@ -93,7 +90,7 @@ class Promotion
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write", "groupe:read"})
      * @Assert\NotBlank
      */
     private $titre;
@@ -149,12 +146,11 @@ class Promotion
     /**
      * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion", cascade = { "persist" })
      * @ApiSubresource()
-     * @Groups({"promo:read"})
+     * @Groups({"groupe:read", "groupe:write","promo:read"})
      *
      */
     private $groupes;
 
-   
 
     /**
      * @ORM\Column(type="blob", nullable=true)

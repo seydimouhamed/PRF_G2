@@ -719,5 +719,9 @@ $tabrjz=[];
 //return dd($promo->getGroupes()[0]->getApprenants()[0]->getEmail());
         // return $this->json($promo->getGroupes()[1]->getType(),200);
     }
+
+
+
+
 }
 

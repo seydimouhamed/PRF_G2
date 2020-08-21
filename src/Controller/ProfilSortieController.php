@@ -6,6 +6,8 @@ use App\Entity\User;
 use App\Entity\ProfilSortie;
 use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use App\Repository\GroupesRepository;
+use App\Repository\PromotionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ProfilSortieRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,17 +25,21 @@ class ProfilSortieController extends AbstractController
     private $serializer;
     private $validator;
     private $em;
+    //private $repoGroupe;
 
     public function __construct(
         UserPasswordEncoderInterface $encoder,
         SerializerInterface $serializer,
         ValidatorInterface $validator,
-        EntityManagerInterface $em)
+        EntityManagerInterface $em
+      //  GroupesRepository $repoGroupe
+      )
     {
         $this->encoder=$encoder;
         $this->serializer=$serializer;
         $this->validator=$validator;
         $this->em=$em;
+      //  $this->repoGroupe=$repoGroupe;
     }
 
 
@@ -138,14 +144,65 @@ class ProfilSortieController extends AbstractController
         if($profil && !$profil->getArchivage())
         {
             $pSorties =json_decode( $request->getContent(),true);
-            foreach($pSorties as $k => $ps)
-            {
-                $profil->{"set".ucfirst($k)}($ps);
-            }
             $this->em->persist($profil);
             $this->em->flush();
             return $this->json($profil,200);     
         }
         return $this->json("ce profil de sortie n'existe pas! \n ou a été archivé!",Response::HTTP_BAD_REQUEST);  
     }
+
+        /**
+         * @Route(
+         *     name="ajout_profilSortie",
+         *     path="/api/admin/profilSorties",
+         *     methods={"POST"},
+         *     defaults={
+         *          "__controller"="App\Controller\ProfilSortieController::AjoutProfilSortie",
+         *          "__api_resource_class"=ProfilSortie::class,
+         *          "__api_collection_operation_name"="AjouterProfilSortie"
+         *     }
+         * )
+         */
+
+
+        public function AddProfilSortie(Request $request, SerializerInterface $serializer, EntityManagerInterface $em)
+        {
+            $post=$request->getContent();
+            $profil= $serializer->deserialize($post, ProfilSortie::class, 'json');
+            $em->persist($profil);
+            $em->flush();
+
+            return $this->json($profil, 201, [], ['groups'=>'profilSortie:read']);  
+ 
+        }
+
+        /**
+         * @Route(
+         *     name="list_apprenant_promo_profilSortie",
+         *     path="/api/admin/promo/{id}/profilSorties",
+         *     methods={"GET"},
+         *     defaults={
+         *          "__controller"="App\Controller\ProfilSortieController::listerProfilSortie_promo",
+         *          "__api_resource_class"=ProfilSortie::class,
+         *          "__api_collection_operation_name"="Lister_ProfilSortie_promo"
+         *     }
+         * )
+         */
+
+        public function list_Promo_ProfilSortie(PromotionRepository $repoPromo, $id, GroupesRepository $repoGroupe, ProfilSortieRepository $repo){
+
+        $promo= $repoPromo->find($id);
+        $groupe = $repoGroupe->find($id);
+        $profilSortie =$repo->find($id);
+
+            //$returnProfils=[];
+            //foreach($promo as $pro){
+                //$arr=["id"=>$pro->getID(),"groupe"=>$pro->getGroupes()];
+                //$returnProfils[]=$arr;   
+            //}
+
+        //$arr=["id"=>$pfl->getID(),"libelle"=>$pfl->getLibelle(), "abbr"=>$pfl->getAbbr()];
+
+            return $this->json($promo, 200); 
+        }
 }

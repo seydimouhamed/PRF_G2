@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -141,6 +143,16 @@ class User implements UserInterface
      * @Groups({"promo:read"})
      */
     private $archivage;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Chat::class, mappedBy="user")
+     */
+    private $chat;
+
+    public function __construct()
+    {
+        $this->chat = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -309,6 +321,37 @@ class User implements UserInterface
     public function setArchivage(bool $archivage): self
     {
         $this->archivage = $archivage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Chat[]
+     */
+    public function getChat(): Collection
+    {
+        return $this->chat;
+    }
+
+    public function addChat(Chat $chat): self
+    {
+        if (!$this->chat->contains($chat)) {
+            $this->chat[] = $chat;
+            $chat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): self
+    {
+        if ($this->chat->contains($chat)) {
+            $this->chat->removeElement($chat);
+            // set the owning side to null (unless already changed)
+            if ($chat->getUser() === $this) {
+                $chat->setUser(null);
+            }
+        }
 
         return $this;
     }

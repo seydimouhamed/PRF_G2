@@ -12,8 +12,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(routePrefix="/admin",
- *       normalizationContext={"groups"={"groupe:read"}},
- *       denormalizationContext={"groups"={"groupe:write"}})
+ *       normalizationContext={"groups"={"groupe:read","promo:read"}},
+ *       denormalizationContext={"groups"={"groupe:write","promo:write"}})
  * @ORM\Entity(repositoryClass=GroupesRepository::class)
  */
 class Groupes
@@ -55,6 +55,8 @@ class Groupes
 
     /**
      * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes", cascade = { "persist" })
+     * @Groups({"groupe:read", "groupe:write","promo:read","promo:write"})
+     * 
      */
     private $promotion;
 
