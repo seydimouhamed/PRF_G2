@@ -21,9 +21,9 @@ class ProfilArchiveController extends AbstractController
        $users=$userRepository->findByProfil($id);
        foreach($users as $user){
 
-        $user->setArchivage(false);
-        $entityManager->persist($user);
-        $entityManager->flush();
+            $user->setArchivage(true);
+            $entityManager->persist($user);
+            $entityManager->flush();
        }
        
        

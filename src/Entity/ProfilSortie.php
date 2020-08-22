@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProfilSortieRepository;
 use Doctrine\Common\Collections\Collection;
@@ -32,6 +33,7 @@ class ProfilSortie
      * @Groups({"apprenant:read", "profilSortie:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Assert\NotBlank
      */
     private $libele;
 
@@ -43,7 +45,7 @@ class ProfilSortie
     private $apprenants;
 
     /**
-     * @ORM\Column(type="boolean", options={"default":true})
+     * @ORM\Column(type="boolean", options={"default":false})
      */
     private $archivage;
 
@@ -67,6 +69,17 @@ class ProfilSortie
     public function setLibele(string $libele): self
     {
         $this->libele = $libele;
+
+        return $this;
+    }
+    public function getArchivage(): ?bool
+    {
+        return $this->archivage;
+    }
+
+    public function setArchivage(bool $archivage): self
+    {
+        $this->archivage = $archivage;
 
         return $this;
     }
@@ -101,16 +114,5 @@ class ProfilSortie
         return $this;
     }
 
-    public function getArchivage(): ?bool
-    {
-        return $this->archivage;
-    }
-
-    public function setArchivage(bool $archivage): self
-    {
-        $this->archivage = $archivage;
-
-        return $this;
-    }
 
 }

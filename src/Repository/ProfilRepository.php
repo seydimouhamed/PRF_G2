@@ -19,14 +19,14 @@ class ProfilRepository extends ServiceEntityRepository
         parent::__construct($registry, Profil::class);
     }
 
-    // /**
-    //  * @return Profil[] Returns an array of Profil objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Profil[] Returns an array of Profil objects
+     */
+    
+    public function findByArchivage($value)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
+            ->andWhere('p.archivage = :val')
             ->setParameter('val', $value)
             ->orderBy('p.id', 'ASC')
             ->setMaxResults(10)
@@ -34,7 +34,7 @@ class ProfilRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+    
 
     /*
     public function findOneBySomeField($value): ?Profil

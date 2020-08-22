@@ -14,8 +14,57 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @ApiResource(
- *          routePrefix="/admin",           
- *      normalizationContext={"groups"={"promo:read"}},
+ *
+ *      itemOperations={
+ *                                  "get_id_promos"={
+ *                                      "method"="GET",
+ *                                        "path"="/admin/promos/{id}" ,
+ *                                         "defaults"={"id"=null},
+ *                                          },
+ *                                  "Statut_Groupe"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/groupes/{id2}" ,
+ *                                      "route_name"="modifie_Statut_Groupe",
+ *                                         "defaults"={"id"=null},
+ *                                      "modifie_Statut_discontinuation",},
+ *
+ *
+ *                                    "add_Apprenant"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/apprenants" ,
+ *                                      "route_name"="add_promo_apprenant",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                                  "modifier_Promo"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}" ,
+ *                                      "route_name"="modifier_promo_id",
+ *                                       "defaults"={"id"=null},
+ *                                      "modifier_promo_discontinuation",},
+ *
+ *                                      "delete_Apprenant"={
+ *                                      "method"="DELETE",
+ *                                        "path"="/admin/promo/{id}/apprenants" ,
+ *                                      "route_name"="delete_promo_apprenant",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                           "delete_Formateur"={
+ *                                      "method"="DELETE",
+ *                                        "path"="/admin/promo/{id}/formateur" ,
+ *                                      "route_name"="delete_promo_formateur",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *
+ *                                  "add_Formateur"={
+ *                                      "method"="PUT",
+ *                                        "path"="/admin/promo/{id}/Formateur" ,
+ *                                      "route_name"="add_promo_formateur",
+ *                                       "defaults"={"id"=null},
+ *                                      "add_promo_discontinuation",},
+ *                      },
+ *      normalizationContext={"groups"={"promo:read","brief:read"}},
  *      denormalizationContext={"groups"={"promo:write"}}
  * )
  * @ORM\Entity(repositoryClass=PromotionRepository::class)
@@ -26,62 +75,62 @@ class Promotion
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"promo:read"})
+     * @Groups({"promo:read","brief:read"})
      * @Groups({"groupe:read"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $langue;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $titre;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      */
     private $lieu;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $dateDebut;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $dateFinPrvisoire;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $fabrique;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $dateFinReelle;
@@ -94,9 +143,9 @@ class Promotion
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion")
+     * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion", cascade = { "persist" })
      * @ApiSubresource()
-     * @Groups({"promo:read"})
+     * @Groups({"promo:read","brief:read"})
      *
      */
     private $groupes;
@@ -105,13 +154,13 @@ class Promotion
 
     /**
      * @ORM\Column(type="blob", nullable=true)
-     * @Groups({"promo:read"})
+     * @Groups({"promo:read","brief:read"})
      */
     private $avatar;
 
 
     /**
-     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions")
+     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions", cascade = { "persist" })
      * @ApiSubresource()
      * @Groups({"promo:read"})
      */
@@ -124,11 +173,17 @@ class Promotion
      */
     private $referentiel;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="promo", cascade = { "persist" })
+     * @Groups({"promo:read"})
+     */
+    private $briefs;
 
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
         $this->formateurs = new ArrayCollection();
+        $this->briefs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,14 +251,14 @@ class Promotion
         return $this;
     }
 
-    public function getDateFinProvisoire(): ?\DateTimeInterface
+    public function getDateFinPrvisoire(): ?\DateTimeInterface
     {
-        return $this->dateFinProvisoire;
+        return $this->dateFinPrvisoire;
     }
 
-    public function setDateFinProvisoire(?\DateTimeInterface $dateFinPrvisoire): self
+    public function setDateFinPrvisoire(?\DateTimeInterface $dateFinPrvisoire): self
     {
-        $this->dateFinProvisoire = $dateFinPorvisoire;
+        $this->dateFinPrvisoire = $dateFinPrvisoire;
 
         return $this;
     }
@@ -278,10 +333,10 @@ class Promotion
 
     public function getAvatar()
     {
-        // $data = stream_get_contents($this->avatar);
-        // fclose($this->avatar);
-return $this->avatar;
-      // return base64_encode($data);
+        //  $data = stream_get_contents($this->avatar);
+        //  fclose($this->avatar);
+       return $this->avatar;
+      //return base64_encode($data);
     }
 
     public function setAvatar($avatar): self
@@ -330,6 +385,35 @@ return $this->avatar;
         return $this;
     }
 
-    
+    /**
+     * @return Collection|Brief[]
+     */
+    public function getBriefs(): Collection
+    {
+        return $this->briefs;
+    }
+
+    public function addBrief(Brief $brief): self
+    {
+        if (!$this->briefs->contains($brief)) {
+            $this->briefs[] = $brief;
+            $brief->addPromo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrief(Brief $brief): self
+    {
+        if ($this->briefs->contains($brief)) {
+            $this->briefs->removeElement($brief);
+            $brief->removePromo($this);
+        }
+
+        return $this;
+    }
+
+
+
 
 }

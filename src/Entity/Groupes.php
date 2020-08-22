@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(routePrefix="/admin",
- *       normalizationContext={"groups"={"groupe:read"}},
+ *       normalizationContext={"groups"={"groupe:read","brief:read"}},
  *       denormalizationContext={"groups"={"groupe:write"}})
  * @ORM\Entity(repositoryClass=GroupesRepository::class)
  */
@@ -22,39 +22,39 @@ class Groupes
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"groupe:read"})
+     * @Groups({"groupe:read","brief:read"})
      * @Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"groupe:read", "groupe:write"})
+     * @Groups({"groupe:read", "groupe:write","brief:read"})
      * @Groups({"promo:read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"groupe:read", "groupe:write","promo:read"})
+     * @Groups({"groupe:read", "groupe:write","promo:read","brief:read"})
      */
     private $dateCreation;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"groupe:read", "groupe:write"})
+     * @Groups({"groupe:read", "groupe:write","brief:read"})
      * @Groups({"promo:read"})
      */
     private $statut;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"groupe:read", "groupe:write","promo:read"})
+     * @Groups({"groupe:read", "groupe:write","promo:read","brief:read"})
      */
     private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes")
+     * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes", cascade = { "persist" })
      */
     private $promotion;
 
@@ -73,10 +73,16 @@ class Groupes
      */
     private $formateurs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="groupe", cascade = { "persist" })
+     */
+    private $briefs;
+
     public function __construct()
     {
         $this->apprenants = new ArrayCollection();
         $this->formateurs = new ArrayCollection();
+        $this->briefs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -195,6 +201,34 @@ class Groupes
         if ($this->formateurs->contains($formateur)) {
             $this->formateurs->removeElement($formateur);
             $formateur->removeGroupe($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Brief[]
+     */
+    public function getBriefs(): Collection
+    {
+        return $this->briefs;
+    }
+
+    public function addBrief(Brief $brief): self
+    {
+        if (!$this->briefs->contains($brief)) {
+            $this->briefs[] = $brief;
+            $brief->addGroupe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrief(Brief $brief): self
+    {
+        if ($this->briefs->contains($brief)) {
+            $this->briefs->removeElement($brief);
+            $brief->removeGroupe($this);
         }
 
         return $this;

@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=TagRepository::class)
  * @ApiResource(
  *      routePrefix="/admin",
- *       normalizationContext={"groups"={"tag:read"}},
+ *       normalizationContext={"groups"={"tag:read","brief:read"}},
  *       denormalizationContext={"groups"={"tag:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=10}
  * )
@@ -25,21 +25,31 @@ class Tag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"tag:read","grptag:read"})
+     * @Groups({"tag:read","grptag:read","brief:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:write", "grptag:read"})
+     * @Groups({"tag:read","tag:write", "grptag:read","brief:read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:write", "grptag:read"})
+     * @Groups({"tag:read","tag:write", "grptag:read","brief:read"})
      */
     private $description;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="tag", cascade = { "persist" })
+     */
+    private $briefs;
+
+    public function __construct()
+    {
+        $this->briefs = new ArrayCollection();
+    }
 
     // /**
     //  * @ORM\ManyToMany(targetEntity=GroupeTag::class, mappedBy="tags")
@@ -107,4 +117,32 @@ class Tag
 
     //     return $this;
     // }
+
+    /**
+     * @return Collection|Brief[]
+     */
+    public function getBriefs(): Collection
+    {
+        return $this->briefs;
+    }
+
+    public function addBrief(Brief $brief): self
+    {
+        if (!$this->briefs->contains($brief)) {
+            $this->briefs[] = $brief;
+            $brief->addTag($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrief(Brief $brief): self
+    {
+        if ($this->briefs->contains($brief)) {
+            $this->briefs->removeElement($brief);
+            $brief->removeTag($this);
+        }
+
+        return $this;
+    }
 }

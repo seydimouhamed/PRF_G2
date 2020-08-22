@@ -39,13 +39,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * @return User[] Returns an array of User objects
      */
-    public function findByArchivage($value)
+    public function findByArchivage($value,$limit,$offset)
     {
         return $this->createQueryBuilder('u')
             ->andWhere('u.archivage = :val')
             ->setParameter('val', $value)
             ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
             ->getQuery()
             ->getResult()
         ;

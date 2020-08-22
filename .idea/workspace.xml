@@ -20,18 +20,173 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="616230c9-1139-4e5d-948f-37ed1360cdad" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/PRF_G2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/packages/dev/swiftmailer.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/packages/swiftmailer.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config/packages/test/swiftmailer.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200807184715.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200819152154.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200819215124.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200819215548.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200819224818.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820000135.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820165724.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820165948.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820170322.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820183659.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820183720.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820185855.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200820190601.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200821104736.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200821104813.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200821155013.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200821160727.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200821160927.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200821161159.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200821161505.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PRF_G2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PRF_G2.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_00_11_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_00_11__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_01_00_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_01_00__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_01_10_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_01_10__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_01_12_[Default_Changelist]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_01_12__Default_Changelist_1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_02_21_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_02_21__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_11_31_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_11_31__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_12_07_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_13-08-2020_-_12_07__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/.idea/shelf/Uncommitted_changes_before_rebase_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/.idea/shelf/Uncommitted_changes_before_rebase__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/bin/console" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/composer.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/composer.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/bundles.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/api_platform.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/cache.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/dev/monolog.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/doctrine.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/doctrine_migrations.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/framework.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/lexik_jwt_authentication.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/mailer.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/nelmio_cors.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/prod/deprecations.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/prod/doctrine.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/prod/monolog.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/prod/routing.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/routing.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/security.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/sensio_framework_extra.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/test/framework.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/test/monolog.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/test/twig.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/test/validator.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/twig.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/validator.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/packages/vich_uploader.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/routes.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/routes/annotations.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/routes/api_platform.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/routes/dev/framework.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/config/services.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/migrations/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/migrations/Version20200818172106.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/migrations/Version20200818172431.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/public/index.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/BriefController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/GroupeCompetenceController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/GroupeController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/GroupeTagController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/ProfilController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/ProfilSortieController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/PromotionController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/ReferentielController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/TestController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Controller/UserController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/DataFixtures/AppFixtures.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/DataFixtures/CompetenceFixtures.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/DataFixtures/PromotionFixtures.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/DataFixtures/TagFixtures.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/DataPersister/ProfilArchiveController.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/DataPersister/UserDataPersister.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Apprenant.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Brief.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/CommunityManager.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Competence.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Formateur.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/GroupeCompetence.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/GroupeTag.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Groupes.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/LivrableAttendus.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/LivrablePartiels.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Niveau.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Profil.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/ProfilSortie.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Promotion.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Referentiel.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Ressource.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/Tag.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Entity/User.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Kernel.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/ApprenantRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/BriefRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/CommunityManagerRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/CompetenceRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/FormateurRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/GroupeCompetenceRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/GroupeTagRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/GroupesRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/LivrableAttendusRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/LivrablePartielsRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/NiveauRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/ProfilRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/ProfilSortieRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/PromotionRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/ReferentielRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/RessourceRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/TagRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Repository/UserRepository.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Security/Voter/GroupeCompetenceVoter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/src/Security/Voter/UserVoter.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/symfony.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/templates/base.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/templates/brief/index.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/templates/referentiel/index.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRF_G2/templates/user/index.html.twig" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.lock" beforeDir="false" afterPath="$PROJECT_DIR$/composer.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/bundles.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/bundles.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/api_platform.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/api_platform.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/mailer.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/sensio_framework_extra.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/GroupeCompetenceController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GroupeCompetenceController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/ProfilSortieController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ProfilSortieController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/PromotionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PromotionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ReferentielController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ReferentielController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/TestController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/TestController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/UserController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/UserController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/AppFixtures.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataFixtures/TagFixtures.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/DataPersister/ProfilArchiveController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataPersister/ProfilArchiveController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Apprenant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Apprenant.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Competence.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Competence.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Formateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Formateur.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/GroupeCompetence.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeCompetence.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/GroupeTag.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/GroupeTag.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Groupes.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Groupes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Niveau.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Niveau.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Profil.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Profil.php" afterDir="false" />
@@ -40,12 +195,12 @@
       <change beforePath="$PROJECT_DIR$/src/Entity/Referentiel.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Referentiel.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Tag.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Tag.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Repository/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/GroupeCompetenceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/GroupeCompetenceRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/ProfilRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ProfilRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/ProfilSortieRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/ProfilSortieRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Repository/PromotionRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/PromotionRepository.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Repository/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Repository/UserRepository.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Security/Voter/GroupeCompetenceVoter.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Security/Voter/GroupeCompetenceVoter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/symfony.lock" beforeDir="false" afterPath="$PROJECT_DIR$/symfony.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,10 +323,34 @@
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-eventmanager" />
       <path value="$PROJECT_DIR$/vendor/laminas/laminas-zendframework-bridge" />
       <path value="$PROJECT_DIR$/vendor/webimpress/safe-writer" />
+      <path value="$PROJECT_DIR$/vendor/jms/metadata" />
+      <path value="$PROJECT_DIR$/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/vendor/sensio/framework-extra-bundle" />
+      <path value="$PROJECT_DIR$/vendor/ocramius/package-versions" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-idn" />
+      <path value="$PROJECT_DIR$/vendor/symfony/form" />
+      <path value="$PROJECT_DIR$/vendor/symfony/mailer" />
+      <path value="$PROJECT_DIR$/vendor/symfony/intl" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-intl-icu" />
+      <path value="$PROJECT_DIR$/vendor/symfony/options-resolver" />
+      <path value="$PROJECT_DIR$/vendor/symfony/mime" />
+      <path value="$PROJECT_DIR$/vendor/vich/uploader-bundle" />
+      <path value="$PROJECT_DIR$/vendor/maennchen/zipstream-php" />
+      <path value="$PROJECT_DIR$/vendor/myclabs/php-enum" />
+      <path value="$PROJECT_DIR$/vendor/phpoffice/phpspreadsheet" />
+      <path value="$PROJECT_DIR$/vendor/psr/simple-cache" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-client" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-message" />
+      <path value="$PROJECT_DIR$/vendor/psr/http-factory" />
+      <path value="$PROJECT_DIR$/vendor/markbaker/matrix" />
+      <path value="$PROJECT_DIR$/vendor/markbaker/complex" />
+      <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
+      <path value="$PROJECT_DIR$/vendor/symfony/swiftmailer-bundle" />
+      <path value="$PROJECT_DIR$/vendor/swiftmailer/swiftmailer" />
     </include_path>
   </component>
   <component name="ProjectId" id="1fmdBV9w7wfFrF4GhOPfonzvyN7" />
-  <component name="ProjectLevelVcsManager">
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -221,6 +400,17 @@
       <workItem from="1597318041100" duration="3978000" />
       <workItem from="1597322907262" duration="310000" />
       <workItem from="1597326031963" duration="376000" />
+      <workItem from="1597327680831" duration="5008000" />
+      <workItem from="1597360720409" duration="1730000" />
+      <workItem from="1597400099687" duration="909000" />
+      <workItem from="1597846296773" duration="42000" />
+      <workItem from="1597846369002" duration="16000" />
+      <workItem from="1597847167209" duration="864000" />
+      <workItem from="1597848448925" duration="208000" />
+      <workItem from="1597848731166" duration="1272000" />
+      <workItem from="1597917660745" duration="4541000" />
+      <workItem from="1597922674779" duration="49165000" />
+      <workItem from="1598091612550" duration="4028000" />
     </task>
     <servers />
   </component>
@@ -243,9 +433,10 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="555" y="215" width="800" height="673" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1596827272502">
-      <screen x="0" y="28" width="1920" height="1052" />
+    <state x="555" y="214" width="800" height="673" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597954465691">
+      <screen x="0" y="27" width="1920" height="1053" />
     </state>
+    <state x="555" y="214" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1597954465691" />
     <state x="555" y="215" width="800" height="673" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596827272502" />
     <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl" timestamp="1597322043946">
       <screen x="0" y="28" width="1920" height="1052" />
@@ -267,13 +458,60 @@
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state x="685" y="248" width="539" height="608" key="git4idea.branch.GitSmartOperationDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1597320451844" />
-    <state x="624" y="255" key="run.anything.popup" timestamp="1596836267606">
-      <screen x="0" y="28" width="1920" height="1052" />
+    <state x="624" y="254" key="run.anything.popup" timestamp="1597920476391">
+      <screen x="0" y="27" width="1920" height="1053" />
     </state>
+    <state x="624" y="254" key="run.anything.popup/0.27.1920.1053@0.27.1920.1053" timestamp="1597920476391" />
     <state x="624" y="255" key="run.anything.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1596836267606" />
     <state x="623" y="260" width="672" height="678" key="search.everywhere.popup" timestamp="1596934182840">
       <screen x="0" y="28" width="1920" height="1052" />
     </state>
     <state x="623" y="260" width="672" height="678" key="search.everywhere.popup/0.28.1920.1052@0.28.1920.1052" timestamp="1596934182840" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>356</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>165</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>171</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>179</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>99</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>159</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>164</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="php">
+          <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
+          <line>178</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

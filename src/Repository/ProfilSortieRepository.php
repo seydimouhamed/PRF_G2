@@ -23,13 +23,14 @@ class ProfilSortieRepository extends ServiceEntityRepository
      * @return ProfilSortie[] Returns an array of ProfilSortie objects
      */
     
-    public function findByArchivage($value)
+    public function findByArchivage($value,$limit,$offset)
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.archivage = :val')
             ->setParameter('val', $value)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
             ->getQuery()
             ->getResult()
         ;

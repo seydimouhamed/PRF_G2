@@ -8,6 +8,7 @@ use App\Entity\Profil;
 use App\Entity\Apprenant;
 use App\Entity\Formateur;
 use App\Entity\ProfilSortie;
+use App\Entity\CommunityManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -54,6 +55,7 @@ class AppFixtures extends Fixture
           $profil =new Profil() ;
           $profil ->setLibelle ($libelle[$key]);
           $profil ->setAbbr($abbr);
+          $profil ->setArchivage(false);
           $manager ->persist($profil);
 
           $manager ->flush();
@@ -82,6 +84,11 @@ class AppFixtures extends Fixture
                 if($abbr=="FORMATEUR")
                 {
                     $user=new Formateur();
+
+                }
+                if($abbr=="CM")
+                {
+                    $user=new CommunityManager();
 
                 }
                 $user ->setProfil ($profil);

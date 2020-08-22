@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -73,12 +74,14 @@ class GroupeCompetence
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"grpcompetence:read", "grpcompetence:write"})
+     * @Assert\NotBlank
      */
-    private $lidelle;
+    private $libelle;
 
     /**
      * @ORM\Column(type="text")
      * @Groups({"grpcompetence:read", "grpcompetence:write"})
+     * @Assert\NotBlank
      */
     private $description;
 
@@ -96,6 +99,11 @@ class GroupeCompetence
      */
     private $competences;
 
+    /**
+     * @ORM\Column(type="boolean", options={"default":false})
+     */
+    private $archivage;
+
     public function __construct()
     {
         $this->referentiels = new ArrayCollection();
@@ -107,14 +115,14 @@ class GroupeCompetence
         return $this->id;
     }
 
-    public function getLidelle(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->lidelle;
+        return $this->libelle;
     }
 
-    public function setLidelle(string $lidelle): self
+    public function setLibelle(string $libelle): self
     {
-        $this->lidelle = $lidelle;
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -181,6 +189,18 @@ class GroupeCompetence
         if ($this->competences->contains($competence)) {
             $this->competences->removeElement($competence);
         }
+
+        return $this;
+    }
+
+    public function getArchivage(): ?bool
+    {
+        return $this->archivage;
+    }
+
+    public function setArchivage(bool $archivage): self
+    {
+        $this->archivage = $archivage;
 
         return $this;
     }

@@ -1,3 +1,9 @@
 authentication_token:
    path: /api/login
    methods:  ['POST']
+archiver_Cloturer_Brief:
+   path: /api/formateurs/promo/{id}/briefs/{id1}
+   controller: 'App\Controller\BriefController::archiver_Cloturer_Brief'
+assigner_deassigner_Brief:
+   path: /api/formateurs/promo/{id}/briefs/{id1}/assignation
+   controller: 'App\Controller\BriefController::assigner_deassigner_Brief'

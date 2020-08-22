@@ -3,19 +3,9 @@
 namespace App\Controller;
 
 use DateTime;
-use App\Entity\User;
-use App\Entity\Groupes;
-use App\Entity\Apprenant;
-use App\Entity\Formateur;
-use App\Entity\Promotion;
-use Doctrine\ORM\EntityManager;
-use App\Repository\UserRepository;
-use App\Repository\GroupesRepository;
-use App\Repository\PromotionRepository;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use ContainerTqjcrpd\getUserRepositoryService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,27 +18,10 @@ class TestController extends AbstractController
 {
 
 
-    private $serializer;
-    private $validator;
-    private $em;
-    private $repo;
-    private $repoGroupe;
 
     public function __construct(
-        PromotionRepository $repo,
-        GroupesRepository $repoGroupe,
-        SerializerInterface $serializer,
-        ValidatorInterface $validator,
-        EntityManagerInterface $em,
-        UserPasswordEncoderInterface $encoder
 )
     {
-        $this->repo=$repo;
-        $this->serializer=$serializer;
-        $this->validator=$validator;
-        $this->repoGroupe=$repoGroupe;
-        $this->em=$em;
-        $this->encoder=$encoder;
     }
     /**
      * @Route(

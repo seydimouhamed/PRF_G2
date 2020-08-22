@@ -36,7 +36,7 @@ class UserController extends AbstractController
     /**
      * @Route(
      *     name="addUser",
-     *     path="/api/addUser",
+     *     path="/api/admin/users",
      *     methods={"POST"},
      *     defaults={
      *          "__controller"="App\Controller\UserController::add",
@@ -86,7 +86,8 @@ class UserController extends AbstractController
         $em->flush();
         
         return $this->json("success",201);
-    }
+     }
+
     /**
      * @Route(
      *     name="getUser",
@@ -99,12 +100,17 @@ class UserController extends AbstractController
      *     }
      * )
      */
-    public function getUsers(UserRepository $repo)
+    public function getUsers(UserRepository $repo,Request $request)
     {
-        $user= $repo->findByArchivage(0);
+        $page = (int) $request->query->get('page', 1);
+        $limit=3;
+        $offset=($page-1)*$limit;
+        $user= $repo->findByArchivage(0,$limit,$offset);
         // $user=$this->serializer->serialize($user,"json");
         return $this->json($user,200);
     }
+
+    
     /**
      * @Route(
      *     name="archive_user",

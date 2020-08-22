@@ -19,22 +19,24 @@ class GroupeCompetenceRepository extends ServiceEntityRepository
         parent::__construct($registry, GroupeCompetence::class);
     }
 
-    // /**
-    //  * @return GroupeCompetence[] Returns an array of GroupeCompetence objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return GroupeCompetence[] Returns an array of GroupeCompetence objects
+     */
+    
+    public function findByArchivage($value,$limit,$offset)
     {
         return $this->createQueryBuilder('g')
-            ->andWhere('g.exampleField = :val')
+            ->andWhere('g.archivage = :val')
             ->setParameter('val', $value)
             ->orderBy('g.id', 'ASC')
-            ->setMaxResults(10)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+    
+    
 
     /*
     public function findOneBySomeField($value): ?GroupeCompetence

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ProfilRepository;
 use Doctrine\Common\Collections\Collection;
@@ -47,7 +48,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *            "delete_profil"={ 
  *               "method"="DELETE", 
  *               "path"="/admin/profils/{id}",
- *                "controller"="App\Controller\ProfilArchiveController",
  *                  "security_message"="Acces non autorisé",
  *                  "swagger_context"={
  *                                          "summary"="archive un profil",
@@ -71,12 +71,14 @@ class Profil
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"profil:read", "user:read"})
+     * @Assert\NotBlank
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"profil:read", "user:read"})
+     * @Assert\NotBlank
      */
     private $abbr;
 
@@ -86,6 +88,11 @@ class Profil
      * @Groups({"profil:read"})
      */
     private $users;
+
+    /**
+     * @ORM\Column(type="boolean", options={"default":false})
+     */
+    private $archivage;
 
     public function __construct()
     {
@@ -148,6 +155,18 @@ class Profil
                 $user->setProfil(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getArchivage(): ?bool
+    {
+        return $this->archivage;
+    }
+
+    public function setArchivage(bool $archivage): self
+    {
+        $this->archivage = $archivage;
 
         return $this;
     }

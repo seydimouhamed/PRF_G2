@@ -49,11 +49,20 @@ class ProfilSortieController extends AbstractController
      *     }
      * )
      */
-    public function getProfilSortie(ProfilSortieRepository $repo)
+    public function getProfilSortie(ProfilSortieRepository $repo,Request $request)
     {
-        $user= $repo->findByArchivage(0);
-        // $user=$this->serializer->serialize($user,"json");
-        return $this->json($user,200);
+        $page = (int) $request->query->get('page', 1);
+        $limit=3;
+        $offset=($page-1)*$limit;
+
+        $profils= $repo->findByArchivage(0,$limit,$offset);
+        $tab_profil=[];
+        foreach($profils as $prf)
+        {
+            $tab_profil[]=["id"=>$prf->getID(),"libelle"=>$prf->getLibele()];
+        }
+
+        return $this->json($tab_profil,200);
     }
 
 
@@ -71,11 +80,20 @@ class ProfilSortieController extends AbstractController
      */
     public function archiveProfil(ProfilSortieRepository $repo,$id)
     {
-        $profil=$repo->find($id)
-                  ->setArchivage(1);
-        $this->em->persist($profil);
-        $this->em->flush();
-        return $this->json(true,200);
+        $profil=$repo->find($id);
+
+        if($profil!==null)
+        {
+            if( $profil->getArchivage() !==true)
+            {          
+                  $profil->setArchivage(1);
+                $this->em->persist($profil);
+                $this->em->flush();
+                return $this->json(true,200);
+            }
+            return $this->json("ce profil a été déjà archiver!",400);
+       }
+       return $this->json("ce profil de sortie n'existe pas!",400);
     }
 
 

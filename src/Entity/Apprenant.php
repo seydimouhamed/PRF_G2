@@ -93,10 +93,7 @@ class Apprenant extends User
 
     /**
      * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
-     * @Groups({"apprenant:read", "groupe:read"})
-     *  @ApiSubresource
-     * @Groups({"groupe:read"})
-     * @Groups({"promo:read"})
+     *  @ApiSubresource()
      */
     private $profilSortie;
 

@@ -2,11 +2,18 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Brief;
+use App\Entity\LivrableAttendus;
+use App\Entity\LivrablePartiels;
+use App\Entity\Ressource;
+use App\Repository\TagRepository;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Niveau;
 use App\Entity\Profil;
 use App\Entity\Groupes;
+use App\Entity\Tag;
+use App\Entity\GroupeTag;
 use App\Entity\Apprenant;
 use App\Entity\Formateur;
 use App\Entity\Promotion;
@@ -20,6 +27,7 @@ use App\Repository\FormateurRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Faker\Provider\DateTime;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class CompetenceFixtures extends Fixture implements DependentFixtureInterface
@@ -28,16 +36,19 @@ class CompetenceFixtures extends Fixture implements DependentFixtureInterface
     protected $apprenantRepo;
     protected $formateurRepo;
 
+
     public function __construct(ApprenantRepository $apprenantRepo,FormateurRepository $formateurRepo)
     {
             $this->apprenantRepo= $apprenantRepo;
             $this->formateurRepo=$formateurRepo;
+
      }
     
 public function getDependencies()
 {
     return array(
         AppFixtures::class,
+
     );
 }
 
@@ -57,15 +68,7 @@ public function getDependencies()
           //  ->setNiveau($fake->randomElement($tab_niveau));
             $manager->persist($competence);
             //ajout des niveaux de compétences
-            for($j=1;$j<=3;$j++)
-            {
-                $niveau=new Niveau();
-                $niveau->setLibelle('niveau '.$j);
-                $niveau->setCritereEvaluation('competentence '.$i.'critere_evaluation '.$j);
-                $niveau->setGroupeAction('competentence '.$i.'groupe action '.$j);
-                $niveau->setCompetence($competence);
-                $manager->persist($niveau);
-            }
+
 
             $tab_competence[]=$competence;
         }
@@ -75,8 +78,9 @@ public function getDependencies()
         for($j=0 ; $j < 3;$j++)
         {
             $grpc=new GroupeCompetence();
-            $grpc->setLidelle($fake->realText($maxNBChars = 50, $indexSize = 2 ));
+            $grpc->setLibelle($fake->realText($maxNBChars = 50, $indexSize = 2 ));
             $grpc->setDescription($fake->text);
+            $grpc->setArchivage(false);
             for($i=1;$i<=3;$i++)
             {
                  $grpc->addCompetence($fake->unique()->randomElement($tab_competence));
@@ -124,6 +128,8 @@ public function getDependencies()
           $tab_formateur[]=$for;
       }
 
+
+
         //insertion de grpupes!
         $tab_group=[];
         for($i=1; $i<=5 ; $i++)
@@ -151,16 +157,21 @@ public function getDependencies()
         }
 
       $tab_promo=[];
-      for($i=1 ; $i<=3 ; $i++)
+      for($i=0 ; $i<=3 ; $i++)
       {
-          $promo=new Promotion();
-          $promo->setDescription($fake->text)
-          ->setFabrique($fake->randomElement(['Sonatel Académie','Simplon']))
-          ->setLangue($fake->randomElement(['anglais','france']))
-          ->setLieu('lieu1')
-          ->setStatus($fake->randomElement(['encours','ferme','attente']))
-          ->setReferentiel($fake->randomElement($tab_referentiel))
-          ->setTitre('promo '.$i);
+          for($oo=0;$oo<5;$oo++){
+
+              $promo=new Promotion();
+              $promo->setDescription($fake->text)
+                  ->setFabrique($fake->randomElement(['Sonatel Académie','Simplon']))
+                  ->setLangue($fake->randomElement(['anglais','français']))
+                  ->setLieu('lieu'.$oo)
+                  ->setStatus($fake->randomElement(['encours','ferme','attente']))
+                  ->setReferentiel($fake->randomElement($tab_referentiel))
+                  ->setTitre('promo '.$oo);
+              $manager->persist($promo);
+          }
+
           
           //ajouter un groupe principal au promo!
                 $group_princ=new Groupes();
@@ -186,8 +197,117 @@ public function getDependencies()
             }
 
           //$tab_promo[]=$promo;
-          $manager->persist($promo);
+
+
+            //////////////////////////
+
+          $tab=["HTML5", "php", "javascript", "angular", "wordpress", "bootstrap","json","python","java","joomla","c++","fortran","algo"];
+
+
+          $tab_objt_tag=[];
+          for($i=0;$i<count($tab);$i++)
+          {
+              $tag=new Tag();
+              $tag->setLibelle($tab[$i]);
+              $tag->setDescription("description ".$i);
+
+
+
+              $tab_objt_tag[]=$tag;
+              $manager->persist($tag);
+          }
+
+          $manager->flush();
+
+          for($i=1;$i<=3;$i++)
+          {
+              $grpTag=new GroupeTag();
+              $grpTag->setLibelle('libelle '.$i);
+              for($j=1;$j<=4;$j++)
+              {
+                  $grpTag->addTag($fake->unique()->randomElement($tab_objt_tag));
+              }
+              $manager->persist($grpTag);
+
+          }
+          $manager->flush();
+            /////////////////////////
+          $photo = $fake->imageUrl($width = 640, $height = 480);
+          for($h=0;$h<3;$h++){
+
+              $brief=new Brief();
+
+              $brief->setTitre('titre'.$h)
+                  ->setContexte('context'.$h)
+                  ->setDatePoste(new \DateTime())
+                  ->setDateLimite(new \DateTime())
+                  ->setLangue($fake->randomElement(['français','anglais','espagnol']))
+                  ->setDescriptionRapide('description'.$h)
+                  ->setCricterePerformance('cricterePerformance'.$h)
+                  ->setModalitePedagogique('MoodalitePedagogique'.$h)
+                  ->setModaliteDevaluation('ModaliteEvaluation'.$h)
+                  ->setListeLivrable('lien'.$h)
+                  ->setArchivage(false)
+                  ->setEtat($fake->randomElement(['brouillon','validé','assigné']))
+                  ->setFormateur($fake->randomElement($tab_formateur))
+                  ->setReferentiel($fake->randomElement($tab_referentiel));
+              $group_princ->addBrief($brief);
+              $brief->addGroupe($group_princ);
+              $brief->addPromo($promo);
+
+
+
+
+
+
+              for($m=0;$m<4;$m++){
+                  $brief->addTag($fake->randomElement($tab_objt_tag));
+              }
+            $tag->addBrief($brief);
+              for($x=0;$x<2;$x++){
+                  $livrable_attendu=new LivrableAttendus();
+                  $livrable_attendu->setLibelle('libelle'.$i)
+                                    ->addBrief($brief);
+
+                  $manager->persist($livrable_attendu);
+
+              }
+              $promo->addBrief($brief);
+              for($y=0;$y<2;$y++){
+                  $ressource=new Ressource();
+                  $ressource->setTitre('titre'.$y)
+                            ->setUrl('url'.$y)
+                            ->setBrief($brief);
+                  $manager->persist($ressource);
+              }
+              for($j=1;$j<=3;$j++)
+              {
+                  $niveau=new Niveau();
+                  $niveau->setLibelle('niveau '.$j);
+                  $niveau->setCritereEvaluation('competentence '.$i.'critere_evaluation '.$j);
+                  $niveau->setGroupeAction('competentence '.$i.'groupe action '.$j);
+                  $niveau->setCompetence($competence);
+                  $niveau->setBrief($brief);
+                  $manager->persist($niveau);
+              }
+              for($s=1;$s<=3;$s++)
+              {
+                  $liv=new LivrablePartiels();
+                  $liv->setLibelle('LivrablePartiel'.$s)
+                      ->setDescription('Description'.$s)
+                      ->setDateCreation(new \DateTime())
+                      ->setDelai(new \DateTime())
+                      ->setBrief($brief);
+
+                  $manager->persist($liv);
+              }
+
+              $brief->addLivrableAttendu($livrable_attendu);
+
+              $manager->persist($brief,$group_princ,$tag);
+          }
       }
+
 //recuperations des apprenants!
 
       $manager->flush();

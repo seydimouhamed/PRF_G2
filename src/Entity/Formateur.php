@@ -42,7 +42,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
- *       normalizationContext={"groups"={"user:read","formateur:read"}},
+ *       normalizationContext={"groups"={"user:read","formateur:read","brief:read"}},
  *       denormalizationContext={"groups"={"user:write","formateur:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )
@@ -54,10 +54,7 @@ class Formateur extends User
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups("formateur:read")
-     * @Groups({"promo:read"})
-     * @Groups("formateurPromo:collection:put")
-     *
+     * @Groups({"formateur:read","brief:read"})
      */
     private $id;
 
@@ -71,10 +68,16 @@ class Formateur extends User
      */
     private $promotions;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Brief::class, mappedBy="formateur")
+     */
+    private $briefs;
+
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
         $this->promotions = new ArrayCollection();
+        $this->briefs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -143,6 +146,37 @@ class Formateur extends User
         if ($this->promotions->contains($promotion)) {
             $this->promotions->removeElement($promotion);
             $promotion->removeFormateur($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Brief[]
+     */
+    public function getBriefs(): Collection
+    {
+        return $this->briefs;
+    }
+
+    public function addBrief(Brief $brief): self
+    {
+        if (!$this->briefs->contains($brief)) {
+            $this->briefs[] = $brief;
+            $brief->setFormateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrief(Brief $brief): self
+    {
+        if ($this->briefs->contains($brief)) {
+            $this->briefs->removeElement($brief);
+            // set the owning side to null (unless already changed)
+            if ($brief->getFormateur() === $this) {
+                $brief->setFormateur(null);
+            }
         }
 
         return $this;

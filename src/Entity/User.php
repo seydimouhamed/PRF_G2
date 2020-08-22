@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping\InheritanceType;
@@ -16,7 +17,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\InheritanceType("JOINED")
 * @ORM\DiscriminatorColumn(name="discr", type="string")
-* @ORM\DiscriminatorMap({"user"="User","apprenant" = "Apprenant","formateur"="Formateur", "cm"="CommunityManager"})
+* @ORM\DiscriminatorMap({"admin"="User","apprenant" = "Apprenant","formateur"="Formateur","cm"="CommunityManager"})
  * @ApiResource(
  *      collectionOperations={
  *           "get_admin_users"={ 
@@ -62,13 +63,12 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=180)
      * 
      * @Groups({"user:read", "user:write","profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
-     * @Groups("formateurPromo:collection:put")
-     * @Groups({"user:read", "user:write","profil:read","promo:read"})
+     * @Assert\NotBlank
      */
     private $username;
 
@@ -84,38 +84,37 @@ class User implements UserInterface
 
     /**
      * @Groups("user:write")
+     * @Assert\NotBlank
      */
     private $plainPassword;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      * 
      * @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
-     * @Groups("formateurPromo:collection:put")
-     * @Groups({"user:read", "user:write", "profil:read","promo:read"})
+     * @Assert\NotBlank
      */
     private $fisrtName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
-     * @Groups("formateurPromo:collection:put")
-     *  @Groups({"user:read", "user:write", "profil:read", "promo:read"})
+     * @Assert\NotBlank
      */
     private $lastName;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
-     *
-     *  @Groups({"user:read", "user:write", "profil:read","promo:read"})
+     * @Assert\Email
+     * @Assert\Unique
      */
     private $email;
 
@@ -123,10 +122,8 @@ class User implements UserInterface
      * @ORM\Column(type="blob", nullable=true)
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
-     * @Groups({"groupe:read"})
-     * @Groups({"promo:read"})
-     *
-     *  @Groups({"user:read", "user:write", "profil:read","promo:read"})
+     *  @Groups({"groupe:read"})
+     *  @Groups({"promo:read"})
      */
     private $photo;
 
@@ -142,7 +139,6 @@ class User implements UserInterface
      * @ORM\Column(type="boolean",options={"default" : false})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
-     *
      */
     private $archivage;
 
