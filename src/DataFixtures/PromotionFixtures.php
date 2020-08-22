@@ -11,10 +11,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class PromotionFixtures extends Fixture
 {
 
-    public function __construct()
-    {
 
-     }
     
 
 

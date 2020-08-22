@@ -2,25 +2,26 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Brief;
-use App\Entity\LivrableAttendus;
-use App\Entity\Ressource;
-use App\Repository\TagRepository;
 use Faker\Factory;
+use App\Entity\Tag;
+use App\Entity\Chat;
 use App\Entity\User;
+use App\Entity\Brief;
 use App\Entity\Niveau;
 use App\Entity\Profil;
 use App\Entity\Groupes;
-use App\Entity\Tag;
-use App\Entity\GroupeTag;
 use App\Entity\Apprenant;
 use App\Entity\Formateur;
+use App\Entity\GroupeTag;
 use App\Entity\Promotion;
+use App\Entity\Ressource;
 use App\Entity\Competence;
 use App\Entity\Referentiel;
 use App\Entity\ProfilSortie;
 use App\Entity\GroupeCompetence;
+use App\Entity\LivrableAttendus;
 use App\DataFixtures\AppFixtures;
+use App\Repository\TagRepository;
 use App\Repository\ApprenantRepository;
 use App\Repository\FormateurRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -293,6 +294,19 @@ public function getDependencies()
 
               $manager->persist($brief,$group_princ,$tag);
           }
+
+/*----------------------------------------------------------------------------------------------------------------------------------------------
+          les fixtures pour le chat
+------------------------------------------------------------------------------------------------------------------------------------------------*/
+          for ($ca=0; $ca < 10; $ca++) { 
+            $chat=new Chat();
+            $chat->setMessage("mon message".$ca)
+                ->setPieceJointes('PieceJointes'.$ca);
+                
+            $manager->persist($chat);
+          }
+          
+
       }
 
 //recuperations des apprenants!

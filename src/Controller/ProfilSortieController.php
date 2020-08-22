@@ -184,25 +184,54 @@ class ProfilSortieController extends AbstractController
          *     defaults={
          *          "__controller"="App\Controller\ProfilSortieController::listerProfilSortie_promo",
          *          "__api_resource_class"=ProfilSortie::class,
-         *          "__api_collection_operation_name"="Lister_ProfilSortie_promo"
+         *          "__api_collection_operation_name"="Lister_promo_ProfilSortie"
          *     }
          * )
          */
 
-        public function list_Promo_ProfilSortie(PromotionRepository $repoPromo, $id, GroupesRepository $repoGroupe, ProfilSortieRepository $repo){
+       public function list_Promo_ProfilSortie(PromotionRepository $repoPromo, $id, GroupesRepository $repoGroupe, ProfilSortieRepository $repo){
 
-        $promo= $repoPromo->find($id);
-        $groupe = $repoGroupe->find($id);
-        $profilSortie =$repo->find($id);
+            $promo= $repoPromo->find($id);
 
-            //$returnProfils=[];
-            //foreach($promo as $pro){
-                //$arr=["id"=>$pro->getID(),"groupe"=>$pro->getGroupes()];
-                //$returnProfils[]=$arr;   
-            //}
+            
+            for ($i=0; $i <count($promo->getGroupes()) ; $i++) { 
+                
+                for ($a=0; $a < count($promo->getGroupes()[$i]->getApprenants()); $a++) { 
+                    $tabApprenant[]=["liste apprenant par profil de sortie" => $promo->getGroupes()[$i]->getApprenants()[$a]->getProfilSortie()] ;
+                }
 
-        //$arr=["id"=>$pfl->getID(),"libelle"=>$pfl->getLibelle(), "abbr"=>$pfl->getAbbr()];
+            }
 
-            return $this->json($promo, 200); 
+            return $this->json($tabApprenant, 200); 
         }
+
+
+        /**
+         * @Route(
+         *     name="list_apprenant_profilSortie_promo",
+         *     path="/api/admin/promo/{id}/profilSorties/{id2}",
+         *     methods={"GET"},
+         *     defaults={
+         *          "__controller"="App\Controller\ProfilSortieController::listeLesProfilSortie_promo",
+         *          "__api_resource_class"=ProfilSortie::class,
+         *          "__api_item_operation_name"="Lister_ProfilSortie_promo"
+         *     }
+         * )
+         */
+
+       public function liste_apprenant_promo_profilSortie(PromotionRepository $repoPromo, int $id, int $id2, ProfilSortieRepository $repo){
+
+            $promo= $repoPromo->find($id);
+            $profilSortie= $repo->find($id2);
+
+        
+            for ($i=0; $i <count($promo->getGroupes()) ; $i++) { 
+            
+                for ($a=0; $a < count($promo->getGroupes()[$i]->getApprenants()); $a++) { 
+                    $tabApprenant[]=["liste apprenant par profil de sortie d'une promo" => $promo->getGroupes()[$i]->getApprenants()[$a]->getProfilSortie($profilSortie)] ;
+                }
+        }
+
+        return $this->json($profilSortie, 200); 
+    }
 }

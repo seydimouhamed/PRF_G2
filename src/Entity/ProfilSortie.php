@@ -11,21 +11,21 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-//-----------------------------------------------------
 
-//routePrefix="/admin",
-//*          collectionOperations={
-  //  *              "add_profilSortie"={
-   // *                  "method"="POST",
-   // *                  "path"="/admin/profilsorties"}
-   // *          },
-   //--------------------------------------------------------
 
 /**
  * @ApiResource( 
  * 
+ *          collectionOperations={
+ *              "Lister_promo_ProfilSortie"={
+ *              "method"="GET",
+ *               "path"="/users/promo/id/apprenant/id/chats",
+ *              "route_name"="list_apprenant_profilSortie_promo"
+ *              }
+ *          },
+ *         
  * 
- *       normalizationContext={"groups"={"profilSortie:read","apprenant:read"}},
+ *       normalizationContext={"groups"={"profilSortie:read", "promo:read"}},
  *       denormalizationContext={"groups"={"profilSortie:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )
@@ -52,14 +52,13 @@ class ProfilSortie
 
     /**
      * @ORM\OneToMany(targetEntity=Apprenant::class, mappedBy="profilSortie")
-     * @ApiSubresource
      * @Groups({"profilSortie:read"})
      */
     private $apprenants;
 
     /**
      * @ORM\Column(type="boolean", options={"default":false})
-     * @Groups({"profilSortie:read", "profilSortie:write"})
+     * @Groups({"profilSortie:write"})
      */
     private $archivage;
 
