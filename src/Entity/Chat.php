@@ -7,6 +7,8 @@ use App\Repository\ChatRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
+
+
 /**
  * @ApiResource(
  * 
@@ -14,7 +16,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *              "envoieComment"={
  *              "method"="POST",
  *               "path"="/users/promo/{id}/apprenant/{id2}/chats",
- *              "route_name"="envoyerUncommentaire"
+ *               "route_name"="envoyerUncommentaire"
  *              }
  *          },
  *         
@@ -44,19 +46,20 @@ class Chat
 
     /**
      * @ORM\Column(type="blob", nullable=true)
-     * @Groups({"chat:read", "chat:write"})
+     * Groups({"chat:read", "chat:write"})
      */
     private $pieceJointes;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="chat")
+     * @ORM\Column(type="date")
+     * @Groups({"chat:read", "chat:write"})
      */
-    private $user;
+    private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="chat")
+     * @ORM\ManyToOne(targetEntity=Apprenant::class, inversedBy="chats")
      */
-    private $promotion;
+    private $apprenant;
 
     public function getId(): ?int
     {
@@ -87,26 +90,27 @@ class Chat
         return $this;
     }
 
-    public function getUser(): ?User
+
+    public function getDate(): ?\DateTimeInterface
     {
-        return $this->user;
+        return $this->date;
     }
 
-    public function setUser(?User $user): self
+    public function setDate(\DateTimeInterface $date): self
     {
-        $this->user = $user;
+        $this->date = $date;
 
         return $this;
     }
 
-    public function getPromotion(): ?Promotion
+    public function getApprenant(): ?Apprenant
     {
-        return $this->promotion;
+        return $this->apprenant;
     }
 
-    public function setPromotion(?Promotion $promotion): self
+    public function setApprenant(?Apprenant $apprenant): self
     {
-        $this->promotion = $promotion;
+        $this->apprenant = $apprenant;
 
         return $this;
     }

@@ -300,11 +300,14 @@ public function getDependencies()
 ------------------------------------------------------------------------------------------------------------------------------------------------*/
           for ($ca=0; $ca < 10; $ca++) { 
             $chat=new Chat();
+            $PieceJointes = fopen($fake->imageUrl($width = 640, $height = 480),"rb");
             $chat->setMessage("mon message".$ca)
-                ->setPieceJointes('PieceJointes'.$ca);
-                
+                ->setPieceJointes($PieceJointes)
+                ->setDate(new \DateTime())
+                ->setApprenant($fake->unique()->randomElement($tab_apprenant));
+
             $manager->persist($chat);
-          }
+          } 
           
 
       }

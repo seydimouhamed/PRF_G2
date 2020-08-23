@@ -228,10 +228,10 @@ class ProfilSortieController extends AbstractController
             for ($i=0; $i <count($promo->getGroupes()) ; $i++) { 
             
                 for ($a=0; $a < count($promo->getGroupes()[$i]->getApprenants()); $a++) { 
-                    $tabApprenant[]=["liste apprenant par profil de sortie d'une promo" => $promo->getGroupes()[$i]->getApprenants()[$a]->getProfilSortie($profilSortie)] ;
+                    $tabApprenant[]=["liste apprenant par profil de sortie d'une promo" => $promo->getGroupes()[$i]->getApprenants()[$a]->getProfilSortie($profilSortie)->getApprenants()] ;
                 }
         }
 
-        return $this->json($profilSortie, 200); 
+        return $this->json($tabApprenant, 200); 
     }
 }

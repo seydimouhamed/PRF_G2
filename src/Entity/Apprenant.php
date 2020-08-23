@@ -70,6 +70,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+     * @Groups({"chat:read", "chat:write"})
      */
     private $genre;
 
@@ -79,6 +80,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+     * @Groups({"chat:read", "chat:write"})
      */
     private $adresse;
 
@@ -88,6 +90,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write", "promo:read"})
+     * @Groups({"chat:read", "chat:write"})
      */
     private $telephone;
 
@@ -109,9 +112,15 @@ class Apprenant extends User
      */
     private $statut;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Chat::class, mappedBy="apprenant")
+     */
+    private $chats;
+
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
+        $this->chats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -201,6 +210,37 @@ class Apprenant extends User
     public function setStatut(string $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Chat[]
+     */
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): self
+    {
+        if (!$this->chats->contains($chat)) {
+            $this->chats[] = $chat;
+            $chat->setApprenant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): self
+    {
+        if ($this->chats->contains($chat)) {
+            $this->chats->removeElement($chat);
+            // set the owning side to null (unless already changed)
+            if ($chat->getApprenant() === $this) {
+                $chat->setApprenant(null);
+            }
+        }
 
         return $this;
     }
