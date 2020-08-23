@@ -81,12 +81,14 @@ class Promotion
      * @ORM\Column(type="integer")
      * @Groups({"promo:read"})
      * @Groups({"groupe:read"})
+     *
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     *  * @Groups({"groupe:read"})
      * @Assert\NotBlank
      */
     private $langue;
@@ -94,6 +96,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     *  * @Groups({"groupe:read"})
      * @Assert\NotBlank
      */
     private $titre;
@@ -101,6 +104,7 @@ class Promotion
     /**
      * @ORM\Column(type="text")
      * @Groups({"promo:read", "promo:write"})
+     *  * @Groups({"groupe:read"})
      * @Assert\NotBlank
      */
     private $description;
@@ -108,6 +112,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     *  * @Groups({"groupe:read"})
      */
     private $lieu;
 
@@ -148,7 +153,6 @@ class Promotion
 
     /**
      * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion", cascade = { "persist" })
-     * @ApiSubresource()
      * @Groups({"promo:read"})
      *
      */
@@ -336,10 +340,13 @@ class Promotion
 
     public function getAvatar()
     {
-        //  $data = stream_get_contents($this->avatar);
-        //  fclose($this->avatar);
-       return $this->avatar;
-      //return base64_encode($data);
+          $data = stream_get_contents($this->avatar);
+          if(!$this->avatar){
+              fclose($this->avatar);
+          }
+
+      // return $this->avatar;
+      return base64_encode($data);
     }
 
     public function setAvatar($avatar): self

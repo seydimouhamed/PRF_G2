@@ -18,7 +18,32 @@ class BriefRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Brief::class);
     }
+    public function myFindAll($limit,$offset)
 
+    {
+
+        return $this
+
+            ->createQueryBuilder('a')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult()
+
+
+            ;
+
+    }
+    public function findBriefAttributs(){
+        return $this
+            ->createQueryBuilder('b')
+            ->select('b.id,b.Titre , b.contexte, b.DatePoste, b.DateLimite, 
+            b.ListeLivrable, b.DescriptionRapide, b.ModalitePedagogique, b.CricterePerformance,
+             b.ModaliteDevaluation, b.langue')
+            ->getQuery()
+            ->getResult();
+
+    }
     // /**
     //  * @return Brief[] Returns an array of Brief objects
     //  */

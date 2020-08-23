@@ -55,6 +55,8 @@ class Groupes
 
     /**
      * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes", cascade = { "persist" })
+     *  * @Groups({"groupe:read"})
+     *
      */
     private $promotion;
 
@@ -75,6 +77,7 @@ class Groupes
 
     /**
      * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="groupe", cascade = { "persist" })
+     * @Groups({"groupe:read"})
      */
     private $briefs;
 

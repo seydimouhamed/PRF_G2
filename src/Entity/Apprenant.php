@@ -57,12 +57,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Apprenant extends User
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -70,6 +65,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+     * @Groups("briefbygroupe:collection:get")
      */
     private $genre;
 
@@ -79,6 +75,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+     * @Groups("briefbygroupe:collection:get")
      */
     private $adresse;
 
@@ -88,11 +85,13 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write", "promo:read"})
+     * @Groups("briefbygroupe:collection:get")
      */
     private $telephone;
 
     /**
      * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
+     * @Groups("briefbygroupe:collection:get")
      *  @ApiSubresource()
      */
     private $profilSortie;
@@ -113,10 +112,6 @@ class Apprenant extends User
         $this->groupes = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getGenre(): ?string
     {

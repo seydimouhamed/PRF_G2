@@ -70,6 +70,7 @@ class Referentiel
      * @ORM\Column(type="integer")
      * @Groups({"referentiel:read"})
      * @Groups({"promo:read"})
+
      */
     private $id;
 
@@ -77,6 +78,8 @@ class Referentiel
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
      * @Groups({"promo:read", "promo:write"})
+
+     *
      */
     private $libelle;
 
@@ -111,16 +114,12 @@ class Referentiel
 
     /**
      * @ORM\OneToMany(targetEntity=Promotion::class, mappedBy="referentiel")
-     * @ApiSubresource()
-     * @Groups({"referentiel:read"})
      */
     private $promotions;
 
 
     /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, inversedBy="referentiels")
-     * @ApiSubresource
-     * @Groups({"referentiel:read", "referentiel:write"})
      */
     private $grpCompetences;
 

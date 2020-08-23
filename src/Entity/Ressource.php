@@ -4,9 +4,13 @@ namespace App\Entity;
 
 use App\Repository\RessourceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ORM\Entity(repositoryClass=RessourceRepository::class)
+ * @ApiResource
  */
 class Ressource
 {
@@ -14,21 +18,27 @@ class Ressource
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"brief:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"brief:read"})
+     *
+     *
      */
     private $Titre;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
+     * @Groups({"brief:read"})
      */
     private $url;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
+     * @Groups({"brief:read"})
      */
     private $PieceJointe;
 

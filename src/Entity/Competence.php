@@ -55,31 +55,37 @@ class Competence
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"competence:read"})
+     * @Groups({"niveau:read"})
+     * @Groups("briefbygroupe:collection:get")
+     * @Groups("getbriefall:collection:get")
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups({"competence:read", "competence:write"})
+     * @Groups({"niveau:read"})
+     * @Groups("briefbygroupe:collection:get")
+     * @Groups("getbriefall:collection:get")
      */
     private $libelle;
 
     /**
+     * @ORM\Column(type="string", length=250)
+     *  @Groups({"competence:read"})
+     * @Groups({"niveau:read"})
+     * @Groups("briefbygroupe:collection:get")
+     * @Groups("getbriefall:collection:get")
+     */
+    private $descriptif;
+
+    /**
      * @ORM\ManyToMany(targetEntity=GroupeCompetence::class, mappedBy="competences")
+     *
      */
     private $groupeCompetences;
 
-    // /**
-    //  * @ORM\ManyToOne(targetEntity=Niveau::class, inversedBy="competences")
-    //  * @ApiSubresource
-    //  * @Groups({"competence:read"})
-    //  */
-    // private $niveau;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $descriptif;
 
     /**
      * @ORM\OneToMany(targetEntity=Niveau::class, mappedBy="competence")

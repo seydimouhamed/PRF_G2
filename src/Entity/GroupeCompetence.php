@@ -87,14 +87,11 @@ class GroupeCompetence
 
     /**
      * @ORM\ManyToMany(targetEntity=Referentiel::class, mappedBy="grpCompetences")
-     * @ApiSubresource
-     * @Groups({"grpcompetence:read"})
      */
     private $referentiels;
 
     /**
      * @ORM\ManyToMany(targetEntity=Competence::class, inversedBy="groupeCompetences")
-     * @ApiSubresource
      * @Groups({"grpcompetence:read"})
      */
     private $competences;

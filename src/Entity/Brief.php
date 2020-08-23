@@ -3,12 +3,59 @@
 namespace App\Entity;
 
 use App\Repository\BriefRepository;
+use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ORM\Entity(repositoryClass=BriefRepository::class)
+ * @ApiResource(
+ *      routePrefix="/formateurs",
+ *     collectionOperations={
+ *                      "get_bief"={
+ *                                         "method"="GET",
+ *                                        "path"="/briefs",
+ *                                         "route_name"="get_brief_all",
+ *
+ *                                   },
+ *                      "get_brief_one_groupe"={
+                                                    "method"="GET",
+ *                                                  "path"="/promo/{id}/groupe/{id1}/briefs",
+ *                                                  "route_name"="get_brief_by_one_groupe",
+ *
+ *
+ *                                          },
+ *                      "get_brief_one_promo"={
+ *                                               "methode"="GET",
+ *                                               "path"="/promos/{id}/briefs",
+ *                                               "route_name"="get_brief_by_one_promo",
+ *                                           },
+ *                      "get_brief_one_formateur"={
+                                                    "method"="GET",
+ *                                                  "path"="/{id}/briefs/broullons",
+ *                                                  "route_name"="get_brief_by_one_formateur",
+ *                                              },
+ *                      "get_one_brief_one_promo"={
+                                                        "method"="GET",
+ *                                                      "path"="/promo/{id}/briefs/{id1}",
+ *                                                      "route_name"="get_on_brief_on_promo"
+ *                                                  },
+ *                      "get_brief_valide_assigner_one_formateur"={
+ *                                                                  "method"="GET",
+ *                                                                  "path"="/{id}/briefs/valide",
+ *                                                                  "route_name"="get_brief_valide_assigner_on_formateur"
+ *                                                              },
+ *     },
+ *     attributes={   "normalization_context"={"groups"={"brief:read"}},
+ *                     "denormalization_context"={"groups"={"brief:write"}},}
+ *
+ * )
+ * @ApiFilter(SearchFilter::class, properties={"tag.libelle"})
  */
 class Brief
 {
@@ -16,77 +63,110 @@ class Brief
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"brief:read"})
+     * @Groups({"groupe:read"})
+     * @Groups("formateur:read")
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
+     *
+
      */
     private $Titre;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
+     *
      */
     private $contexte;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"brief:read","brief:write"})
+     *
+
      */
     private $DatePoste;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
+
      */
     private $DateLimite;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
      */
     private $ListeLivrable;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
      */
     private $DescriptionRapide;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
      */
     private $ModalitePedagogique;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
      */
     private $CricterePerformance;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
      */
     private $ModaliteDevaluation;
 
     /**
      * @ORM\Column(type="blob")
+     * @Groups({"brief:read","brief:write"})
      */
     private $ImageExemplaire;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"brief:read","brief:write"})
+     * @Groups({"groupe:read"})
      */
     private $langue;
 
     /**
      * @ORM\OneToMany(targetEntity=Ressource::class, mappedBy="brief")
+     * @Groups({"brief:read"})
      */
     private $ressources;
 
     /**
      * @ORM\OneToMany(targetEntity=Niveau::class, mappedBy="brief")
+     * @Groups({"brief:read"})
      */
     private $niveau;
 
     /**
      * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="briefs")
      * @ORM\JoinColumn(nullable=false)
+     *
      */
     private $referentiel;
 
@@ -97,6 +177,9 @@ class Brief
 
     /**
      * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="briefs", cascade = { "persist" })
+     * @Groups({"brief:read"})
+     *
+     *
      */
     private $groupe;
 
@@ -108,11 +191,13 @@ class Brief
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="briefs")
+     * @Groups({"brief:read"})
      */
     private $tag;
 
     /**
      * @ORM\ManyToMany(targetEntity=LivrableAttendus::class, inversedBy="briefs", cascade = { "persist" })
+     * @Groups({"brief:read"})
      */
     private $LivrableAttendus;
 
@@ -120,6 +205,11 @@ class Brief
      * @ORM\OneToMany(targetEntity=LivrablePartiels::class, mappedBy="brief")
      */
     private $LivrablePartiels;
+
+    /**
+     * @ORM\Column(type="string", length=80)
+     */
+    private $StatutBrief;
 
     public function __construct()
     {
@@ -247,7 +337,16 @@ class Brief
 
     public function getImageExemplaire()
     {
-        return $this->ImageExemplaire;
+      //  return $this->ImageExemplaire;
+          $data = stream_get_contents($this->ImageExemplaire);
+          if(!$this->ImageExemplaire){
+
+              fclose($this->ImageExemplaire);
+          }
+
+
+        return base64_encode($data);
+
     }
 
     public function setImageExemplaire($ImageExemplaire): self
@@ -486,6 +585,18 @@ class Brief
                 $livrablePartiel->setBrief(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getStatutBrief(): ?string
+    {
+        return $this->StatutBrief;
+    }
+
+    public function setStatutBrief(string $StatutBrief): self
+    {
+        $this->StatutBrief = $StatutBrief;
 
         return $this;
     }
