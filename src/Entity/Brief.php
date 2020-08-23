@@ -21,12 +21,14 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *                                         "method"="GET",
  *                                        "path"="/briefs",
  *                                         "route_name"="get_brief_all",
+ *                                         "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *
  *                                   },
  *                      "get_brief_one_groupe"={
-                                                    "method"="GET",
+ *                                                  "method"="GET",
  *                                                  "path"="/promo/{id}/groupe/{id1}/briefs",
  *                                                  "route_name"="get_brief_by_one_groupe",
+ *                                                   "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *
  *
  *                                          },
@@ -34,21 +36,29 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *                                               "methode"="GET",
  *                                               "path"="/promos/{id}/briefs",
  *                                               "route_name"="get_brief_by_one_promo",
+ *                                                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
  *                                           },
  *                      "get_brief_one_formateur"={
-                                                    "method"="GET",
+ *                                                   "method"="GET",
  *                                                  "path"="/{id}/briefs/broullons",
  *                                                  "route_name"="get_brief_by_one_formateur",
+ *                                                  "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *
  *                                              },
  *                      "get_one_brief_one_promo"={
-                                                        "method"="GET",
+ *                                                       "method"="GET",
  *                                                      "path"="/promo/{id}/briefs/{id1}",
- *                                                      "route_name"="get_on_brief_on_promo"
+ *                                                      "route_name"="get_on_brief_on_promo",
+ *                                                       "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *
+ *
  *                                                  },
  *                      "get_brief_valide_assigner_one_formateur"={
  *                                                                  "method"="GET",
  *                                                                  "path"="/{id}/briefs/valide",
- *                                                                  "route_name"="get_brief_valide_assigner_on_formateur"
+ *                                                                  "route_name"="get_brief_valide_assigner_on_formateur",
+ *                                                                   "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *
  *                                                              },
  *     },
  *     attributes={   "normalization_context"={"groups"={"brief:read"}},

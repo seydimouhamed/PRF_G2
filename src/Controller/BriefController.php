@@ -128,8 +128,19 @@ class BriefController extends AbstractController
      *          "__api_resource_class"=Brief::class,
      *          "__api_collection_operation_name"="get_brief_one_promo"
      *     }
+     * ),
+     *       @Route(
+     *     name="get_brief_by_one_promo_for_apprenant",
+     *     path="/api/apprenants/promos/{id}/briefs",
+     *     methods={"GET"},
+     *     defaults={
+     *          "__controller"="App\Controller\BriefController::getBriefByPromo",
+     *          "__api_resource_class"=Brief::class,
+     *          "__api_collection_operation_name"="get_brief_one_promo_for_apprenant"
+     *     }
      * )
      */
+
     public function getBriefByPromo(PromotionRepository $promotionRepository,int $id){
         $promo=$promotionRepository->find($id);
         if(isset($promo)){
