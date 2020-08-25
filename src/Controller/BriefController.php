@@ -2,31 +2,27 @@
 
 namespace App\Controller;
 
+use App\Entity\Apprenant;
 use App\Entity\Brief;
 use App\Entity\Competence;
 use App\Entity\Formateur;
 use App\Entity\Groupes;
+use App\Entity\Livrable;
 use App\Entity\LivrableAttendus;
-use App\Entity\LivrablePartiels;
 use App\Entity\Niveau;
 use App\Entity\Promotion;
-use App\Entity\Referentiel;
 use App\Entity\Ressource;
 use App\Entity\Tag;
 use App\Repository\BriefRepository;
 use App\Repository\GroupesRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
-use PhpOffice\PhpSpreadsheet\IOFactory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use function App\Entity\getId;
 
 class BriefController extends AbstractController
 {
@@ -36,12 +32,7 @@ class BriefController extends AbstractController
     private $repoGroupe;
     private $serializer;
 
-    public function __construct(
-        SerializerInterface $serializer,
-        ValidatorInterface $validator,
-        GroupesRepository $repoGroupe,
-        BriefRepository $repo,
-        EntityManagerInterface $em)
+    public function __construct(SerializerInterface $serializer,ValidatorInterface $validator,GroupesRepository $repoGroupe,BriefRepository $repo,EntityManagerInterface $em)
     {
         $this->serializer=$serializer;
         $this->validator=$validator;
@@ -62,13 +53,96 @@ class BriefController extends AbstractController
      *     }
      * )
      */
-    public function get_all_brief($id,$id1,$id2)
+    public function get_all_brief($id1,$id2)
     {
         $promo = $this->em->getRepository(Promotion::class)->find($id1);
-        $brief=[];
-        $brief[]=['Promotion'=>$promo->getId(), " Description "=>$promo->getDescription(), 'briefs'=>$promo->getBriefs()[$id2]];
-        //dd($brief);
-        return $this->json($brief,200);
+        $b = $this->em->getRepository(Brief::class)->find($id2);
+        if (isset($promo)) {
+            $brief=$promo->getBriefs();
+            foreach ($brief as $value) {
+                if ($b == $value) {
+                    return $this->json($b, 200);
+                }
+            }
+            return $this->json("Cet brief n'existe pas dans cette promo", 401);
+        }
+        return $this->json("Cette promo n'existe pas",401);
+    }
+
+    /**
+     * @Route(
+     *     name="add_livrable",
+     *     path="/api/apprenants/{id}/groupe/{id1}/livrables",
+     *     methods={"POST"},
+     *     defaults={
+     *          "__controller"="App\Controller\BriefController::addLivrable",
+     *          "__api_resource_class"=Brief::class,
+     *          "__api_collection_operation_name"="addLivrable"
+     *     }
+     * )
+     */
+
+    public function addLivrable(EntityManagerInterface $em, Request $request, $id1,$id)
+    {
+        $group = $this->em->getRepository(Groupes::class)->find($id1);
+        $a = $this->em->getRepository(Apprenant::class)->find($id);
+        //recupéré tout les données de la requete
+        $livrables = $request->request->all();
+        $livrable = $this->serializer->denormalize($livrables,"App\Entity\Livrable",true);
+        //$liv=json_decode($request->getContent(),true);
+        if (isset($group)){
+            $apprenant=$group->getApprenants();
+            foreach ($apprenant as $v){
+                if ($v==$a){
+                    $livrable->setApprenant($a);
+                    $em->persist($livrable);
+                    $em->flush();
+                    return $this->json("success",201);
+                }
+            }
+            return $this->json("Cet apprenant n'est pas dans ce groupe",201);
+        }
+        return $this->json("Ce groupe n'existe pas",201);
+    }
+
+    /**
+     * @Route(
+     *     name="get_livrables",
+     *     path="/api/apprenants/{id}/promo/{id1}/briefs/{id2}",
+     *     methods={"GET"},
+     *     defaults={
+     *          "__controller"="App\Controller\BriefController::get_livrables_partiels",
+     *          "__api_resource_class"=Brief::class,
+     *          "__api_collection_operation_name"="get"
+     *     }
+     * )
+     */
+    public function get_livrables_partiels($id,$id1,$id2)
+    {
+        $promo = $this->em->getRepository(Promotion::class)->find($id1);
+        $b = $this->em->getRepository(Brief::class)->find($id2);
+        $a = $this->em->getRepository(Apprenant::class)->find($id);
+        if (isset($promo)) {
+            $tab=[];
+            $groupe=$promo->getGroupes();
+            $brief=$promo->getBriefs();
+            foreach ($groupe as $valu){
+                $apprenants=$valu->getApprenants();
+                foreach ($brief as $va){
+                    if ($va==$b) {
+                        foreach ($apprenants as $v){
+                            if ($v==$a){
+                                $tab[] = ["Apprenant"=>$a];
+                                return $this->json($tab, 200);
+                            }
+                        }
+                    }
+                    //return $this->json("Cet apprenant n'existe pas dans les groupes de cette promo", 401);
+                }
+            }
+            return $this->json("Ce brief n'est pas assigné à cette promo", 401);
+        }
+        return $this->json("Cette promo n'existe pas",401);
     }
 
     /**
@@ -86,10 +160,7 @@ class BriefController extends AbstractController
     public function archiver_Cloturer_Brief($id,$id1, Request $request, EntityManagerInterface $em)
     {
         $promo = $em->getRepository(Promotion::class)->find($id);
-        $brief = $promo->getBriefs()[$id1];
-        $niveau = $brief->getNiveau();
-        $ressource = $brief->getRessources();
-        $liv = $brief->getLivrablePartiels();
+        $b = $this->em->getRepository(Brief::class)->find($id1);
         $livrables = $this->em->getRepository(LivrableAttendus::class)->findAll();
         $tag = $this->em->getRepository(Tag::class)->findAll();
         $groupe = $this->em->getRepository(Groupes::class)->findAll();
@@ -97,108 +168,120 @@ class BriefController extends AbstractController
 
         $action=$reponse['action'];
 
-        if($action=="archiver"){
-            $brief->setArchivage(true);
-            for($k=0;$k<count($niveau);$k++){
-                $brief->removeNiveau($niveau[$k]);
-            }
-            for($re=0;$re<=count($ressource);$re++){
-                $brief->removeRessource($ressource[$re]);
-            }
-            for($s=0;$s<count($livrables);$s++){
-                $livrables[$s]->removeBrief($brief);
-                $brief->removeLivrableAttendu($livrables[$s]);
-                $em->persist($livrables[$s]);
-            }
-            for($a=0;$a<count($tag);$a++){
-                    $tag[$a]->removeBrief($brief);
-                    $brief->removeTag($tag[$a]);
-                    $em->persist($tag[$a]);
-                }
-            for($m=0;$m<count($liv);$m++){
-                $brief->removeLivrablePartiel($liv[$m]);
-            }
-            for($o=0;$o<count($groupe);$o++){
-                $groupe[$o]->removeBrief($brief);
-                $brief->removeGroupe($groupe[$o]);
-                $em->persist($groupe[$o]);
-            }
-            $promo->removeBrief($brief);
-            $brief->removePromo($promo);
-            $em->persist($promo);
-        }
-        if($action=="cloturer"){
-            $brief->setEtat('cloturé');
-        }
-        if ($action=="ajouter_niveau"){
-            $competence = $this->em->getRepository(Competence::class)->findAll();
-            for($j=1;$j<=3;$j++)
-            {
-                $niveau=new Niveau();
-                $niveau->setLibelle('niveau '.$j);
-                $niveau->setCritereEvaluation('competentence '.$j.'critere_evaluation '.$j);
-                $niveau->setGroupeAction('competentence '.$j.'groupe action '.$j);
-                $niveau->setCompetence($competence[$j]);
-                $niveau->setBrief($brief);
-                $em->persist($niveau);
-            }
-        }
-        if ($action=="supprimer_niveau"){
-            for($k=0;$k<count($niveau);$k++){
-                $brief->removeNiveau($niveau[$k]);
-            }
-        }
-        if ($action=="ajouter_ressource"){
-            for($y=0;$y<2;$y++){
-                $ressource=new Ressource();
-                $ressource->setTitre('titre'.$y)
-                    ->setUrl('url'.$y)
-                    ->setBrief($brief);
-                $em->persist($ressource);
-            }
-        }
-        if ($action=="supprimer_ressource"){
-            for($r=0;$r<count($ressource);$r++){
-                $brief->removeRessource($ressource[$r]);
-            }
-        }
-        if ($action=="ajouter_livrable_attendus"){
-            for ($l=1;$l<=3;$l++) {
-                $livrables[$l]->addBrief($brief);
-                $brief->addLivrableAttendu($livrables[$l]);
-                $em->persist($livrables[$l]);
-            }
-        }
-        if ($action=="supprimer_livrable_attendus"){
-            for($s=0;$s<count($livrables);$s++){
-                $livrables[$s]->removeBrief($brief);
-                $brief->removeLivrableAttendu($livrables[$s]);
-                $em->persist($livrables[$s]);
-            }
-        }
-        if ($action=="ajouter_tag"){
-            for ($t=1;$t<=3;$t++) {
-                $tag[$t]->addBrief($brief);
-                $brief->addTag($tag[$t]);
-                $em->persist($livrables[$t]);
-            }
-        }
-        if ($action=="supprimer_tag"){
-            for($a=0;$a<count($tag);$a++){
-                $tag[$a]->removeBrief($brief);
-                $brief->removeTag($tag[$a]);
-                $em->persist($tag[$a]);
-            }
-        }
-        if ($action=="deassigner"){
-                $promo->removeBrief($brief);
-                $brief->removePromo($promo);
-                $em->persist($promo);
-        }
+        if(isset($promo)){
+            $brief = $promo->getBriefs();
+            foreach ($brief as $value) {
+                if ($b == $value) {
+                    $niveau = $value->getNiveau();
+                    $ressource = $value->getRessources();
+                    $liv = $value->getLivrablePartiels();
+                    if($action=="archiver"){
+                        $value->setArchivage(true);
+                        for($k=0;$k<count($niveau);$k++){
+                            $value->removeNiveau($niveau[$k]);
+                        }
+                        for($re=0;$re<=count($ressource);$re++){
+                            $value->removeRessource($ressource[$re]);
+                        }
+                        for($s=0;$s<count($livrables);$s++){
+                            $livrables[$s]->removeBrief($value);
+                            $value->removeLivrableAttendu($livrables[$s]);
+                            $em->persist($livrables[$s]);
+                        }
+                        for($a=0;$a<count($tag);$a++){
+                            $tag[$a]->removeBrief($value);
+                            $value->removeTag($tag[$a]);
+                            $em->persist($tag[$a]);
+                        }
+                        for($m=0;$m<count($liv);$m++){
+                            $value->removeLivrablePartiel($liv[$m]);
+                        }
+                        for($o=0;$o<count($groupe);$o++){
+                            $groupe[$o]->removeBrief($value);
+                            $value->removeGroupe($groupe[$o]);
+                            $em->persist($groupe[$o]);
+                        }
+                        $promo->removeBrief($value);
+                        $value->removePromo($promo);
+                        $em->persist($promo);
+                    }
+                    if($action=="cloturer"){
+                        $value->setEtat('cloturé');
+                    }
+                    if ($action=="ajouter_niveau"){
+                        $competence = $this->em->getRepository(Competence::class)->findAll();
+                        for($j=1;$j<=3;$j++)
+                        {
+                            $niveau=new Niveau();
+                            $niveau->setLibelle('niveau '.$j);
+                            $niveau->setCritereEvaluation('competentence '.$j.'critere_evaluation '.$j);
+                            $niveau->setGroupeAction('competentence '.$j.'groupe action '.$j);
+                            $niveau->setCompetence($competence[$j]);
+                            $niveau->setBrief($value);
+                            $em->persist($niveau);
+                        }
+                    }
+                    if ($action=="supprimer_niveau"){
+                        for($k=0;$k<count($niveau);$k++){
+                            $value->removeNiveau($niveau[$k]);
+                        }
+                    }
+                    if ($action=="ajouter_ressource"){
+                        for($y=0;$y<2;$y++){
+                            $ressource=new Ressource();
+                            $ressource->setTitre('titre'.$y)
+                                ->setUrl('url'.$y)
+                                ->setBrief($value);
+                            $em->persist($ressource);
+                        }
+                    }
+                    if ($action=="supprimer_ressource"){
+                        for($r=0;$r<count($ressource);$r++){
+                            $value->removeRessource($ressource[$r]);
+                        }
+                    }
+                    if ($action=="ajouter_livrable_attendus"){
+                        for ($l=1;$l<=3;$l++) {
+                            $livrables[$l]->addBrief($value);
+                            $value->addLivrableAttendu($livrables[$l]);
+                            $em->persist($livrables[$l]);
+                        }
+                    }
+                    if ($action=="supprimer_livrable_attendus"){
+                        for($s=0;$s<count($livrables);$s++){
+                            $livrables[$s]->removeBrief($value);
+                            $value->removeLivrableAttendu($livrables[$s]);
+                            $em->persist($livrables[$s]);
+                        }
+                    }
+                    if ($action=="ajouter_tag"){
+                        for ($t=1;$t<=3;$t++) {
+                            $tag[$t]->addBrief($value);
+                            $value->addTag($tag[$t]);
+                            $em->persist($livrables[$t]);
+                        }
+                    }
+                    if ($action=="supprimer_tag"){
+                        for($a=0;$a<count($tag);$a++){
+                            $tag[$a]->removeBrief($value);
+                            $value->removeTag($tag[$a]);
+                            $em->persist($tag[$a]);
+                        }
+                    }
+                    if ($action=="deassigner"){
+                        $promo->removeBrief($value);
+                        $value->removePromo($promo);
+                        $em->persist($promo);
+                    }
 
-        $em->persist($brief);
-        $em->flush();
-        return $this->json("success",200);
+                    $em->persist($b);
+                    $em->flush();
+                    return $this->json("success",200);
+                }
+            }
+            return $this->json("Cet brief n'existe pas dans cette promo", 401);
+        }
+        return $this->json("Cette promo n'existe pas",401);
     }
 
     /**
@@ -216,55 +299,66 @@ class BriefController extends AbstractController
     public function assigner_deassigner_Brief($id,$id1, Request $request, EntityManagerInterface $em)
     {
         $promo = $em->getRepository(Promotion::class)->find($id);
-        $briefs = $promo->getBriefs()[$id1];
-        $brief = $em->getRepository(Brief::class)->find($id1);
+        $b = $em->getRepository(Brief::class)->find($id1);
         $groupe = $this->em->getRepository(Groupes::class)->findAll();
         $reponse=json_decode($request->getContent(),true);
 
         $action=$reponse['action'];
-
-        if($action=="desassigner_des_groupe"){
-            for($o=0;$o<3;$o++){
-                $groupe[$o]->removeBrief($brief);
-                $brief->removeGroupe($groupe[$o]);
-                $em->persist($groupe[$o]);
+        if(isset($promo)) {
+            $brief = $promo->getBriefs();
+            if (isset($b)) {
+                if ($action == "assigner_promo") {
+                    $promo->addBrief($b);
+                    $b->addPromo($promo);
+                    $em->persist($promo);
+                    $em->persist($b);
+                }
+                if ($action == "assigner_un_groupe") {
+                    for ($g = 0; $g < 1; $g++) {
+                        $groupe[$g]->addBrief($b);
+                        $b->addGroupe($groupe[$g]);
+                        $em->persist($groupe[$g]);
+                    }
+                }
+                if ($action == "assigner_des_groupe") {
+                    for ($g = 0; $g < 3; $g++) {
+                        $groupe[$g]->addBrief($b);
+                        $b->addGroupe($groupe[$g]);
+                        $em->persist($groupe[$g]);
+                    }
+                }
+                $em->persist($b);
+                $em->flush();
+                foreach ($brief as $value) {
+                    if ($b == $value) {
+                        if($action=="desassigner_des_groupe"){
+                            for($o=0;$o<3;$o++){
+                                $groupe[$o]->removeBrief($value);
+                                $value->removeGroupe($groupe[$o]);
+                                $em->persist($groupe[$o]);
+                            }
+                        }
+                        if($action=="desassigner_un_groupe"){
+                            for($o=0;$o<1;$o++){
+                                $groupe[$o]->removeBrief($value);
+                                $value->removeGroupe($groupe[$o]);
+                                $em->persist($groupe[$o]);
+                            }
+                        }
+                        if($action=="desassigner_promo"){
+                            $promo->removeBrief($value);
+                            $value->removePromo($promo);
+                            $em->persist($promo);
+                        }
+                        $em->persist($value);
+                        $em->flush();
+                        return $this->json("success",200);
+                    }
+                }
             }
+            return $this->json("Cet brief n'existe pas", 401);
         }
-        if($action=="desassigner_un_groupe"){
-            for($o=0;$o<1;$o++){
-                $groupe[$o]->removeBrief($brief);
-                $brief->removeGroupe($groupe[$o]);
-                $em->persist($groupe[$o]);
-            }
-        }
-        if($action=="desassigner_promo"){
-            $promo->removeBrief($briefs);
-            $briefs->removePromo($promo);
-            $em->persist($promo);
-            $em->persist($briefs);
-        }
-        if ($action=="assigner_promo"){
-            $promo->addBrief($brief);
-            $brief->addPromo($promo);
-            $em->persist($promo);
-        }
-        if ($action=="assigner_un_groupe"){
-            for($g=0;$g<1;$g++){
-                $groupe[$g]->addBrief($brief);
-                $brief->addGroupe($groupe[$g]);
-                $em->persist($groupe[$g]);
-            }
-        }
-        if ($action=="assigner_des_groupe"){
-            for($g=0;$g<3;$g++){
-                $groupe[$g]->addBrief($brief);
-                $brief->addGroupe($groupe[$g]);
-                $em->persist($groupe[$g]);
-            }
-        }
-        $em->persist($brief);
-        $em->flush();
-        return $this->json("success",200);
+        return $this->json("Cette promo n'existe pas",401);
     }
 
     /**
@@ -305,7 +399,7 @@ class BriefController extends AbstractController
 
     public function addbrief(EntityManagerInterface $em, Request $request)
     {
-        $fake = Factory::create('fr-FR');
+
         $group = $this->em->getRepository(Groupes::class)->findAll();
         $promo = $this->em->getRepository(Promotion::class)->findAll();
         $tag = $this->em->getRepository(Tag::class)->findAll();
@@ -342,17 +436,6 @@ class BriefController extends AbstractController
                 ->setUrl('url'.$y)
                 ->setBrief($brief);
             $em->persist($ressource);
-        }
-        for($s=1;$s<=3;$s++)
-        {
-            $liv=new LivrablePartiels();
-            $liv->setLibelle('LivrablePartiel'.$s)
-                ->setDescription('Description'.$s)
-                ->setDateCreation(new \DateTime())
-                ->setDelai(new \DateTime())
-                ->setBrief($brief);
-
-            $em->persist($liv);
         }
         for ($g=1;$g<=3;$g++)
         {

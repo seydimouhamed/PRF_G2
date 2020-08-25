@@ -7,3 +7,6 @@ archiver_Cloturer_Brief:
 assigner_deassigner_Brief:
    path: /api/formateurs/promo/{id}/briefs/{id1}/assignation
    controller: 'App\Controller\BriefController::assigner_deassigner_Brief'
+get_livrables_partiels:
+   path: /api/apprenants/{id}/promo/{id1}/briefs/{id2}
+   controller: 'App\Controller\BriefController::get_livrables_partiels'

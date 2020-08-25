@@ -150,8 +150,6 @@ class Brief
 
     /**
      * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="briefs", cascade = { "persist" })
-     * @ApiSubresource()
-     * @Groups({"brief:read","brief:write"})
      */
     private $groupe;
 
@@ -176,13 +174,6 @@ class Brief
      * @Groups({"brief:read","brief:write"})
      */
     private $LivrableAttendus;
-
-    /**
-     * @ORM\OneToMany(targetEntity=LivrablePartiels::class, mappedBy="brief")
-     * @ApiSubresource()
-     * @Groups({"brief:read","brief:write"})
-     */
-    private $LivrablePartiels;
 
     public function getUid()
     {
@@ -538,37 +529,6 @@ class Brief
     {
         if ($this->LivrableAttendus->contains($livrableAttendu)) {
             $this->LivrableAttendus->removeElement($livrableAttendu);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|LivrablePartiels[]
-     */
-    public function getLivrablePartiels(): Collection
-    {
-        return $this->LivrablePartiels;
-    }
-
-    public function addLivrablePartiel(LivrablePartiels $livrablePartiel): self
-    {
-        if (!$this->LivrablePartiels->contains($livrablePartiel)) {
-            $this->LivrablePartiels[] = $livrablePartiel;
-            $livrablePartiel->setBrief($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLivrablePartiel(LivrablePartiels $livrablePartiel): self
-    {
-        if ($this->LivrablePartiels->contains($livrablePartiel)) {
-            $this->LivrablePartiels->removeElement($livrablePartiel);
-            // set the owning side to null (unless already changed)
-            if ($livrablePartiel->getBrief() === $this) {
-                $livrablePartiel->setBrief(null);
-            }
         }
 
         return $this;

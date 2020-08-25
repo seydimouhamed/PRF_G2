@@ -58,13 +58,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Apprenant extends User
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="string", length=30)
      * @Groups({"apprenant:read"})
      * @Groups({"groupe:read"})
@@ -108,15 +101,25 @@ class Apprenant extends User
      */
     private $statut;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=LivrablePartiels::class, inversedBy="apprenants")
+     * @Groups({"apprenant:read"})
+     */
+    private $livrablesPartiels;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Livrable::class, mappedBy="apprenant")
+     */
+    private $livrable;
+
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
+        $this->livrablesPartiels = new ArrayCollection();
+        $this->livrableAtendus = new ArrayCollection();
+        $this->livrableAttendus = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getGenre(): ?string
     {
@@ -200,6 +203,63 @@ class Apprenant extends User
     public function setStatut(string $statut): self
     {
         $this->statut = $statut;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LivrablePartiels[]
+     */
+    public function getLivrablesPartiels(): Collection
+    {
+        return $this->livrablesPartiels;
+    }
+
+    public function addLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    {
+        if (!$this->livrablesPartiels->contains($livrablesPartiel)) {
+            $this->livrablesPartiels[] = $livrablesPartiel;
+        }
+
+        return $this;
+    }
+
+    public function removeLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    {
+        if ($this->livrablesPartiels->contains($livrablesPartiel)) {
+            $this->livrablesPartiels->removeElement($livrablesPartiel);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Livrable[]
+     */
+    public function getLivrable(): Collection
+    {
+        return $this->livrable;
+    }
+
+    public function addLivrable(Livrable $livrable): self
+    {
+        if (!$this->livrable->contains($livrable)) {
+            $this->livrable[] = $livrable;
+            $livrable->setApprenant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivrable(Livrable $livrable): self
+    {
+        if ($this->livrable->contains($livrable)) {
+            $this->livrable->removeElement($livrable);
+            // set the owning side to null (unless already changed)
+            if ($livrable->getApprenant() === $this) {
+                $livrable->setApprenant(null);
+            }
+        }
 
         return $this;
     }

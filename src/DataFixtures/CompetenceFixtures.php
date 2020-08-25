@@ -3,6 +3,9 @@
 namespace App\DataFixtures;
 
 use App\Entity\Brief;
+use App\Entity\Commentaires;
+use App\Entity\FilDiscussion;
+use App\Entity\Livrable;
 use App\Entity\LivrableAttendus;
 use App\Entity\LivrablePartiels;
 use App\Entity\Ressource;
@@ -125,7 +128,7 @@ public function getDependencies()
       $tab_formateurs=[];
       foreach($formateurs as $for)
       {
-          $tab_formateur[]=$for;
+          $tab_formateurs[]=$for;
       }
 
 
@@ -147,7 +150,7 @@ public function getDependencies()
 
             for($j=1;$j<=2;$j++)
             {
-               $group->addFormateur($fake->unique()->randomElement($tab_formateur));
+               $group->addFormateur($fake->unique()->randomElement($tab_formateurs));
             }
 
             $tab_group[] = $group;
@@ -187,13 +190,13 @@ public function getDependencies()
     
                 for($j=1;$j<=2;$j++)
                 {
-                    $group_princ->addFormateur($fake->unique()->randomElement($tab_formateur));
+                    $group_princ->addFormateur($fake->unique()->randomElement($tab_formateurs));
                 }
             $promo->addGroupe($group_princ);
             for($k=1;$k<=2;$k++)
             {
                 $promo->addGroupe($fake->randomElement($tab_group));
-                $promo->addFormateur($fake->unique()->randomElement($tab_formateur));
+                $promo->addFormateur($fake->unique()->randomElement($tab_formateurs));
             }
 
           //$tab_promo[]=$promo;
@@ -246,10 +249,10 @@ public function getDependencies()
                   ->setCricterePerformance('cricterePerformance'.$h)
                   ->setModalitePedagogique('MoodalitePedagogique'.$h)
                   ->setModaliteDevaluation('ModaliteEvaluation'.$h)
-                  ->setListeLivrable('lien'.$h)
+                  ->setListeLivrable($fake->randomElement(['trello','github','figma']))
                   ->setArchivage(false)
                   ->setEtat($fake->randomElement(['brouillon','validé','assigné']))
-                  ->setFormateur($fake->randomElement($tab_formateur))
+                  ->setFormateur($fake->randomElement($tab_formateurs))
                   ->setReferentiel($fake->randomElement($tab_referentiel));
               $group_princ->addBrief($brief);
               $brief->addGroupe($group_princ);
@@ -265,11 +268,19 @@ public function getDependencies()
               }
             $tag->addBrief($brief);
               for($x=0;$x<2;$x++){
+
                   $livrable_attendu=new LivrableAttendus();
                   $livrable_attendu->setLibelle('libelle'.$i)
                                     ->addBrief($brief);
-
                   $manager->persist($livrable_attendu);
+                  for($l=0;$l<2;$l++){
+                      $livrable = new Livrable();
+                      $livrable->setUrl("https://github.com/seydimouhamed/PRF_G2")
+                              ->setLivrableAttendu($livrable_attendu)
+                              ->setApprenant($fake->unique()->randomElement($tab_apprenant));
+                      $livrable_attendu->addLivrable($livrable);
+                      $manager->persist($livrable,$livrable_attendu);
+                  }
 
               }
               $promo->addBrief($brief);
@@ -290,16 +301,35 @@ public function getDependencies()
                   $niveau->setBrief($brief);
                   $manager->persist($niveau);
               }
+
               for($s=1;$s<=3;$s++)
               {
                   $liv=new LivrablePartiels();
                   $liv->setLibelle('LivrablePartiel'.$s)
                       ->setDescription('Description'.$s)
                       ->setDateCreation(new \DateTime())
+                      ->setStatut($fake->randomElement(['rendu','validé','invalidé']))
                       ->setDelai(new \DateTime())
-                      ->setBrief($brief);
+                      ->addApprenant($fake->unique()->randomElement($tab_apprenant))
+                      ->addNiveau($niveau);
+                  $niveau->addLivrablesPartiel($liv);
+                  $manager->persist($liv,$niveau);
 
-                  $manager->persist($liv);
+                  for ($d=0;$d<1;$d++)
+                  {
+                      $discussion=new FilDiscussion();
+                      $discussion->setLivrables($liv)
+                                  ->setLibelle("Discussion".$s);
+                      $liv->addFilDiscussion($discussion);
+                      $manager->persist($discussion,$liv);
+                      $commentaire=new Commentaires();
+                      $commentaire->setFilDiscussion($discussion);
+                      $commentaire->addFormateur($fake->randomElement($tab_formateurs))
+                          ->setCommentaire($fake->text);
+                      $discussion->addCommentaire($commentaire);
+                      $manager->persist($commentaire,$discussion);
+
+                  }
               }
 
               $brief->addLivrableAttendu($livrable_attendu);

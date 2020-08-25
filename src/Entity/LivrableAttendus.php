@@ -39,9 +39,17 @@ class LivrableAttendus
      */
     private $briefs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Livrable::class, mappedBy="livrableAttendu")
+     * @Groups({"livrableAttendus:read","brief:read"})
+     */
+    private $livrables;
+
     public function __construct()
     {
         $this->briefs = new ArrayCollection();
+        $this->apprenants = new ArrayCollection();
+        $this->livrables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -84,6 +92,37 @@ class LivrableAttendus
         if ($this->briefs->contains($brief)) {
             $this->briefs->removeElement($brief);
             $brief->removeLivrableAttendu($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Livrable[]
+     */
+    public function getLivrables(): Collection
+    {
+        return $this->livrables;
+    }
+
+    public function addLivrable(Livrable $livrable): self
+    {
+        if (!$this->livrables->contains($livrable)) {
+            $this->livrables[] = $livrable;
+            $livrable->setLivrableAttendu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLivrable(Livrable $livrable): self
+    {
+        if ($this->livrables->contains($livrable)) {
+            $this->livrables->removeElement($livrable);
+            // set the owning side to null (unless already changed)
+            if ($livrable->getLivrableAttendu() === $this) {
+                $livrable->setLivrableAttendu(null);
+            }
         }
 
         return $this;

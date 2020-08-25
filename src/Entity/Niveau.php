@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *       normalizationContext={"groups"={"niveau:read","brief:read"}},
+ *       normalizationContext={"groups"={"niveau:read","brief:read","livrablePartiel:read"}},
  * )
  * @ORM\Entity(repositoryClass=NiveauRepository::class)
  */
@@ -22,25 +22,25 @@ class Niveau
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"niveau:read","competence:read","brief:read"})
+     * @Groups({"niveau:read","competence:read","brief:read","livrablePartiel:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"niveau:read","competence:read","brief:read"})
+     * @Groups({"niveau:read","competence:read","brief:read","livrablePartiel:read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read","brief:read"})
+     * @Groups({"niveau:read", "competence:read","brief:read","livrablePartiel:read"})
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read","brief:read"})
+     * @Groups({"niveau:read", "competence:read","brief:read","livrablePartiel:read"})
      */
     private $groupeAction;
 
@@ -55,6 +55,11 @@ class Niveau
      */
     private $brief;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=LivrablePartiels::class, inversedBy="niveaux")
+     */
+    private $livrablesPartiels;
+
     // /**
     //  * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
     //  */
@@ -63,6 +68,7 @@ class Niveau
     public function __construct()
     {
        // $this->competences = new ArrayCollection();
+       $this->livrablesPartiels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -126,6 +132,32 @@ class Niveau
     public function setBrief(?Brief $brief): self
     {
         $this->brief = $brief;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|LivrablePartiels[]
+     */
+    public function getLivrablesPartiels(): Collection
+    {
+        return $this->livrablesPartiels;
+    }
+
+    public function addLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    {
+        if (!$this->livrablesPartiels->contains($livrablesPartiel)) {
+            $this->livrablesPartiels[] = $livrablesPartiel;
+        }
+
+        return $this;
+    }
+
+    public function removeLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    {
+        if ($this->livrablesPartiels->contains($livrablesPartiel)) {
+            $this->livrablesPartiels->removeElement($livrablesPartiel);
+        }
 
         return $this;
     }

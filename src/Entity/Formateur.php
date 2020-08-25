@@ -51,14 +51,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 class Formateur extends User
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     * @Groups({"formateur:read","brief:read"})
-     */
-    private $id;
-
-    /**
      * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="formateurs")
      */
     private $groupes;
@@ -73,28 +65,17 @@ class Formateur extends User
      */
     private $briefs;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Commentaires::class, mappedBy="formateurs")
+     */
+    private $commentaires;
+
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
         $this->promotions = new ArrayCollection();
         $this->briefs = new ArrayCollection();
-    }
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
+        $this->commentaires = new ArrayCollection();
     }
 
     /**
@@ -177,6 +158,34 @@ class Formateur extends User
             if ($brief->getFormateur() === $this) {
                 $brief->setFormateur(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentaires[]
+     */
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaires $commentaire): self
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires[] = $commentaire;
+            $commentaire->addFormateur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaires $commentaire): self
+    {
+        if ($this->commentaires->contains($commentaire)) {
+            $this->commentaires->removeElement($commentaire);
+            $commentaire->removeFormateur($this);
         }
 
         return $this;
