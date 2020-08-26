@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-<<<<<<< HEAD
-=======
 use DateTime;
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
 use App\Entity\User;
 use App\Entity\Groupes;
 use App\Entity\Apprenant;
@@ -48,7 +45,7 @@ class PromotionController extends AbstractController
         EntityManagerInterface $em,
         UserPasswordEncoderInterface $encoder,
         TokenStorageInterface $tokenStorage
-)
+    )
     {
         $this->repo=$repo;
         $this->serializer=$serializer;
@@ -75,14 +72,10 @@ class PromotionController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         //recupéré tout les données de la requete
         //$promo=json_decode($request->getContent(),true);
-<<<<<<< HEAD
-         $promo=$request->request->all();
-=======
         $promo=$request->request->all();
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
         //recupération  recupération imga promo!
         //@$avatar = $request->files->get("avatar");
-        
+
         $promo = $this->serializer->denormalize($promo,"App\Entity\Promotion",true);
         // if($avatar)
         // {
@@ -99,33 +92,6 @@ class PromotionController extends AbstractController
             $errors = $this->serializer->serialize($errors,"json");
             return new JsonResponse($errors,Response::HTTP_BAD_REQUEST,[],true);
         }
-<<<<<<< HEAD
-       //creation dun groupe pour la promo
-       
-       $group= new Groupes();
-      // $date = date('Y-m-d');
-       $group->setNom('Groupe Générale')
-             ->setDateCreation(new \DateTime())
-             ->setStatut('ouvert')
-             ->setType('groupe principale')
-             ->setPromotion($promo);
-        //----------------------------------------------------
-        //DEBUT RECUPERATION DES DONNEES DU FICHIERS EXCELS
-        //-----------------------------------------------------
-        
-        $doc = $request->files->get("document");
-
-        $file= IOFactory::identify($doc);
-        
-        $reader= IOFactory::createReader($file);
-
-        $spreadsheet=$reader->load($doc);
-        
-        $tab_apprenants= $spreadsheet->getActivesheet()->toArray();
-
-        $attr=$tab_apprenants[0];
-$tabrjz=[];
-=======
         //creation dun groupe pour la promo
 
         $group= new Groupes();
@@ -151,7 +117,6 @@ $tabrjz=[];
 
         $attr=$tab_apprenants[0];
         $tabrjz=[];
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
         for($i=1;$i<count($tab_apprenants);$i++)
         {
             $apprenant=new Apprenant();
@@ -160,17 +125,10 @@ $tabrjz=[];
                 $data=$tab_apprenants[$i][$k];
                 if($attr[$k]=="Password")
                 {
-<<<<<<< HEAD
-                     $apprenant->setPassword($this->encoder->encodePassword($apprenant,$data));
-                }else
-                {
-                $apprenant->{"set".$attr[$k]}($data);
-=======
                     $apprenant->setPassword($this->encoder->encodePassword($apprenant,$data));
                 }else
                 {
                     $apprenant->{"set".$attr[$k]}($data);
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
                 }
             }
             $apprenant->setArchivage(0);
@@ -182,17 +140,6 @@ $tabrjz=[];
         //------------------------------------------------------
         //FIN RECUPERATION DES DONNEES DU FICHIERS EXCELS
         //-----------------------------------------------------
-<<<<<<< HEAD
-             $em->persist($group);
-             $promo->addGroupe($group);
-            //$promo->setArchivage(false);
-      
-              $em->persist($promo);
-             $em->flush();
-        
-        return $this->json("success",201);
-     }
-=======
         $em->persist($group);
         $promo->addGroupe($group);
         //$promo->setArchivage(false);
@@ -202,7 +149,6 @@ $tabrjz=[];
 
         return $this->json("success",201);
     }
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
 
 
     /**
@@ -260,7 +206,7 @@ $tabrjz=[];
         $gc=[];
         foreach($promos as $promo)
         {
-            
+
             $group_ref_detail['referentiel']=$promo->getReferentiel();
             //get id promo
             $idPromo = $promo->getID();
@@ -271,11 +217,11 @@ $tabrjz=[];
             {
                 if($apprenant->getStatut()=="attente")
                 {
-                     $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
+                    $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
                 }
             }
 
-           $gc[]= $group_ref_detail;
+            $gc[]= $group_ref_detail;
 
         }
 
@@ -300,23 +246,6 @@ $tabrjz=[];
         $promo= $this->repo->find($id);
 
         $gc=[];
-<<<<<<< HEAD
-            
-            $group_ref_detail['referentiel']=$promo->getReferentiel();
-            //get id promo
-            $idPromo = $promo->getID();
-            //recupération du groupe principal
-            $group_ref_detail['apprenants']=[];
-            $groupe=$this->repoGroupe->findBy(['promotion'=>$idPromo,'type'=>"groupe principale"], ['id' => 'DESC'])[0];
-           
-            foreach($groupe->getApprenants() as $apprenant)
-            {
-                if($apprenant->getStatut()=="attente")
-                {
-                    if($idPromo==$id){
-                     $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
-                    }
-=======
 
         $group_ref_detail['referentiel']=$promo->getReferentiel();
         //get id promo
@@ -331,21 +260,14 @@ $tabrjz=[];
             {
                 if($idPromo==$id){
                     $group_ref_detail['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
                 }
             }
         }
 
 
-<<<<<<< HEAD
-        
-
-
-=======
 
 
 
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
         return $this->json($group_ref_detail,200);
     }
 
@@ -365,7 +287,7 @@ $tabrjz=[];
      */
     public function getPromoidPrincipal($id)
     {
-       $p_princs = $this->getGroupesPrincipale($id);
+        $p_princs = $this->getGroupesPrincipale($id);
 
         return $this->json($p_princs ,200);
     }
@@ -386,7 +308,7 @@ $tabrjz=[];
     public function getPromoidreferentiel($id)
     {
         //getreferentielpromo($id);
-      // $p_princs = $this->getGroupesPrincipale($id);
+        // $p_princs = $this->getGroupesPrincipale($id);
 
         return $this->json($this->getreferentielpromo($id) ,200);
     }
@@ -412,15 +334,9 @@ $tabrjz=[];
         $data["referentiel"] = $promo->getReferentiel();
         $data['formateurs'] =[];
         foreach($promo->getFormateurs() as $form){
-<<<<<<< HEAD
-           $data['formateurs'][]=$form->getFisrtName()." ".$form->getLastName();
-        }
-          
-=======
             $data['formateurs'][]=$form->getFisrtName()." ".$form->getLastName();
         }
 
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
 
         return $this->json($data ,200);
     }
@@ -440,33 +356,6 @@ $tabrjz=[];
      */
     public  function getpromogroupeapprenant($id,$id1)
     {
-<<<<<<< HEAD
-         $promo= $this->em->getRepository(Promotion::class)->find($id);
-         $groupe=$this->repoGroupe->findBy(['promotion'=>$id,"id"=>$id1], ['id' => 'DESC'])[0];
- 
-
-         $tab['referentiels']=$promo->getReferentiel();
-         $tab['formateurs']=[];
-         foreach($promo->getFormateurs() as $form){
-            $tab['formateurs'][]=$form->getFisrtName()." ".$form->getLastName();
-         }
-         $tab['groupe']=$groupe;
-         $tab['groupe']=["id"=>$groupe->getID(),
-                        "nom"=> $groupe->getNom(),
-                        "dateCreation"=> $groupe->getDateCreation(),
-                        "statut"=>$groupe->getStatut(),
-                        "type"=> $groupe->getType()];
-         foreach($groupe->getApprenants() as $apprenant)
-         {
-             $tab['groupe']['apprenants'][]=$apprenant->getFisrtName()." ".$apprenant->getLastName();
-         }
-
-         return $this->json($tab ,200);
-
-    }
-
-
-=======
         $promo= $this->em->getRepository(Promotion::class)->find($id);
         $groupe=$this->repoGroupe->findBy(['promotion'=>$id,"id"=>$id1], ['id' => 'DESC'])[0];
 
@@ -492,16 +381,15 @@ $tabrjz=[];
     }
 
 
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
     private function getGroupesPrincipale($id=null)
     {
         $promos=null;
-          $promos= $this->repo->findAll();
+        $promos= $this->repo->findAll();
         $promo_princ=[];
-        
+
         foreach($promos as $promo)
         {
-            
+
             $group_ref_detail['referentiel']=$promo->getReferentiel();
 
             foreach($promo->getGroupes() as $promo_det)
@@ -511,7 +399,7 @@ $tabrjz=[];
                     if($promo->getID()==$id)
                     {
                         $group_ref_detail['groupes']=$promo_det;
-                            return $group_ref_detail;
+                        return $group_ref_detail;
                     }
                     $group_ref_detail['groupes']=$promo_det;
                 }
@@ -525,17 +413,17 @@ $tabrjz=[];
             return null;
         }else
         {
-          return $promo_princ;
+            return $promo_princ;
         }
-    
+
     }
 
     private function getreferentielpromo($id=null)
     {
-          $promos= $this->repo->find($id);
+        $promos= $this->repo->find($id);
         $promo_ref=$promos->getReferentiel();
 
-            return $promo_ref;
+        return $promo_ref;
 
     }
     /**
@@ -647,8 +535,8 @@ $tabrjz=[];
 
         $username=$reponse['username'];
         $userId=$userRepository->findOneBy(["username"=>$username])
-           ->setArchivage(false);
-       $this->em->persist($userId);
+            ->setArchivage(false);
+        $this->em->persist($userId);
         $this->em->flush();
         return $this->json(true,200);
 
@@ -665,54 +553,14 @@ $tabrjz=[];
      *          "__api_item_operation_name"="modifier_Promo"
      *     }
      *     ),
-    */
+     */
     public function ModifierPromo(Request $request,EntityManagerInterface $entityManager,int $id){
-<<<<<<< HEAD
-       $reponse=json_decode($request->getContent(),true);
-=======
         $reponse=json_decode($request->getContent(),true);
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
         $libele=['langue','titre','description','lieu','fabrique','status','referentiel'];
         $dateLib=['dateFinPrvisoire','dateFinReelle','dateDebut'];
         $refern="referentiel";
         $referentiel=['libelle','presentation','programme','critereAdmission','critereEvaluation'];
         $promo = $entityManager->getRepository(promotion::class)->find($id);
-<<<<<<< HEAD
-             for($i=0;$i<count($reponse);$i++){
-
-                if(isset($reponse[$libele[$i]])){
-
-                  $promo->{"set".ucfirst($libele[$i])}($reponse[$libele[$i]]);
-            for($a=0;$a<count($dateLib);$a++){
-
-                if(isset($reponse[$dateLib[$a]])){
-
-                    $promo->{"set".ucfirst($dateLib[$a])}(\DateTime::createFromFormat('Y-m-d',$reponse[$dateLib[$a]]));
-                }
-
-            }
-
-                for($b=0;$b<count($referentiel);$b++){
-
-                    if(isset($reponse['referentiel'])){
-
-                        $promo->getReferentiel()->{"set".ucfirst($referentiel[$b])}($reponse[$referentiel[$b]]);
-
-
-                    }
-
-                }
-
-
-    }
-
-
-                   $entityManager->persist($promo);
-                   $entityManager->flush();
-}
-
-     
-=======
         for($i=0;$i<count($reponse);$i++){
 
             if(isset($reponse[$libele[$i]])){
@@ -745,7 +593,6 @@ $tabrjz=[];
             $entityManager->persist($promo);
             $entityManager->flush();
         }
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4
 
 
 

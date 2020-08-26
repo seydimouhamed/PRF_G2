@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\BriefRepository;
@@ -13,19 +12,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *     collectionOperations={
- *            "addbrief"={
- *               "method"="POST",
- *               "path"="/formateurs/briefs",
- *                 "security_message"="Acces non autorisé",
- *          },
- *          "get"={
- *               "method"="GET",
- *               "path"="/formateurs/{id}/promo/{id1}/briefs/{id2}",
- *                 "security_message"="Acces non autorisé",
- *                  "defaults"={"id"=null},
- *          }
- *     },
  *     normalizationContext={"groups"={"brief:read"}},
  *     denormalizationContext={"groups"={"brief:write"}}
  * )
@@ -115,7 +101,8 @@ class Brief
 
 
     /**
-     * @ORM\Column(type="boolean", options={"default" : false})
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : false})
+     * @Groups({"brief:read"})
      */
     private $archivage;
 
@@ -125,13 +112,6 @@ class Brief
      * @Groups({"brief:read","brief:write"})
      */
     private $ressources;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Niveau::class, mappedBy="brief")
-     * @ApiSubresource()
-     * @Groups({"brief:read","brief:write"})
-     */
-    private $niveau;
 
     /**
      * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="briefs")
@@ -175,6 +155,11 @@ class Brief
      */
     private $LivrableAttendus;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Niveau::class, mappedBy="brief")
+     */
+    private $niveaux;
+
     public function getUid()
     {
         return (string) $this->uid;
@@ -189,6 +174,7 @@ class Brief
         $this->tag = new ArrayCollection();
         $this->LivrableAttendus = new ArrayCollection();
         $this->LivrablePartiels = new ArrayCollection();
+        $this->niveaux = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -306,11 +292,8 @@ class Brief
 
     public function getImageExemplaire()
     {
-        /*$data = stream_get_contents($this->ImageExemplaire);
-        fclose($this->ImageExemplaire);
-
-        return base64_encode($data);*/
-        return $this->ImageExemplaire;
+        return base64_encode(stream_get_contents($this->ImageExemplaire));
+        //return $this->ImageExemplaire;
     }
 
     public function setImageExemplaire($ImageExemplaire): self
@@ -369,37 +352,6 @@ class Brief
             // set the owning side to null (unless already changed)
             if ($ressource->getBrief() === $this) {
                 $ressource->setBrief(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Niveau[]
-     */
-    public function getNiveau(): Collection
-    {
-        return $this->niveau;
-    }
-
-    public function addNiveau(Niveau $niveau): self
-    {
-        if (!$this->niveau->contains($niveau)) {
-            $this->niveau[] = $niveau;
-            $niveau->setBrief($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNiveau(Niveau $niveau): self
-    {
-        if ($this->niveau->contains($niveau)) {
-            $this->niveau->removeElement($niveau);
-            // set the owning side to null (unless already changed)
-            if ($niveau->getBrief() === $this) {
-                $niveau->setBrief(null);
             }
         }
 
@@ -542,6 +494,34 @@ class Brief
     public function setArchivage(?bool $archivage): self
     {
         $this->archivage = $archivage;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Niveau[]
+     */
+    public function getNiveaux(): Collection
+    {
+        return $this->niveaux;
+    }
+
+    public function addNiveau(Niveau $niveau): self
+    {
+        if (!$this->niveaux->contains($niveau)) {
+            $this->niveaux[] = $niveau;
+            $niveau->addBrief($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNiveau(Niveau $niveau): self
+    {
+        if ($this->niveaux->contains($niveau)) {
+            $this->niveaux->removeElement($niveau);
+            $niveau->removeBrief($this);
+        }
 
         return $this;
     }

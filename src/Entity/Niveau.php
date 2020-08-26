@@ -50,15 +50,14 @@ class Niveau
     private $competence;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Brief::class, inversedBy="niveau")
-     *
-     */
-    private $brief;
-
-    /**
      * @ORM\ManyToMany(targetEntity=LivrablePartiels::class, inversedBy="niveaux")
      */
     private $livrablesPartiels;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Brief::class, inversedBy="niveaux")
+     */
+    private $brief;
 
     // /**
     //  * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
@@ -69,6 +68,7 @@ class Niveau
     {
        // $this->competences = new ArrayCollection();
        $this->livrablesPartiels = new ArrayCollection();
+       $this->brief = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,18 +124,6 @@ class Niveau
         return $this;
     }
 
-    public function getBrief(): ?Brief
-    {
-        return $this->brief;
-    }
-
-    public function setBrief(?Brief $brief): self
-    {
-        $this->brief = $brief;
-
-        return $this;
-    }
-
     /**
      * @return Collection|LivrablePartiels[]
      */
@@ -157,6 +145,32 @@ class Niveau
     {
         if ($this->livrablesPartiels->contains($livrablesPartiel)) {
             $this->livrablesPartiels->removeElement($livrablesPartiel);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Brief[]
+     */
+    public function getBrief(): Collection
+    {
+        return $this->brief;
+    }
+
+    public function addBrief(Brief $brief): self
+    {
+        if (!$this->brief->contains($brief)) {
+            $this->brief[] = $brief;
+        }
+
+        return $this;
+    }
+
+    public function removeBrief(Brief $brief): self
+    {
+        if ($this->brief->contains($brief)) {
+            $this->brief->removeElement($brief);
         }
 
         return $this;

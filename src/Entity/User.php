@@ -120,7 +120,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="blob", nullable=true)
-     * 
      *  @Groups({"user:read", "user:write", "profil:read"})
      *  @Groups({"groupe:read"})
      *  @Groups({"promo:read"})

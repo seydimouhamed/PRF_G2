@@ -27,8 +27,4 @@ class GroupeTagController extends AbstractController
 
         return $this->json($groupeTag ,200);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 0b1883a6ad45fb46ede9530cbc7901f1f89668e4

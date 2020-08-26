@@ -298,7 +298,8 @@ public function getDependencies()
                   $niveau->setCritereEvaluation('competentence '.$i.'critere_evaluation '.$j);
                   $niveau->setGroupeAction('competentence '.$i.'groupe action '.$j);
                   $niveau->setCompetence($competence);
-                  $niveau->setBrief($brief);
+                  $niveau->addBrief($brief);
+                  $brief->addNiveau($niveau);
                   $manager->persist($niveau);
               }
 

@@ -16,6 +16,7 @@ use App\Entity\Tag;
 use App\Repository\BriefRepository;
 use App\Repository\GroupesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Faker\Factory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,22 +52,29 @@ class BriefController extends AbstractController
      *          "__api_resource_class"=Brief::class,
      *          "__api_collection_operation_name"="get"
      *     }
-     * )
+     *  )
      */
-    public function get_all_brief($id1,$id2)
+    public function get_all_brief($id,$id1,$id2)
     {
+        $for = $this->em->getRepository(Formateur::class)->find($id);
         $promo = $this->em->getRepository(Promotion::class)->find($id1);
         $b = $this->em->getRepository(Brief::class)->find($id2);
-        if (isset($promo)) {
-            $brief=$promo->getBriefs();
-            foreach ($brief as $value) {
-                if ($b == $value) {
-                    return $this->json($b, 200);
+        if (isset($for)){
+            $pro=$for->getPromotions();
+            foreach ($pro as $val){
+                if ($promo==$val) {
+                    $brief=$promo->getBriefs();
+                    foreach ($brief as $value) {
+                        if ($b == $value) {
+                            return $this->json($b, 200);
+                        }
+                    }
+                    return $this->json("Cet brief n'existe pas dans cette promo", 401);
                 }
+                return $this->json("Cette promo n'est pas créé par ce formateur",401);
             }
-            return $this->json("Cet brief n'existe pas dans cette promo", 401);
         }
-        return $this->json("Cette promo n'existe pas",401);
+        return $this->json("Cet formateur n'existe pas",401);
     }
 
     /**
@@ -301,11 +309,11 @@ class BriefController extends AbstractController
         $promo = $em->getRepository(Promotion::class)->find($id);
         $b = $em->getRepository(Brief::class)->find($id1);
         $groupe = $this->em->getRepository(Groupes::class)->findAll();
+        $fake = Factory::create('fr-FR');
         $reponse=json_decode($request->getContent(),true);
 
         $action=$reponse['action'];
         if(isset($promo)) {
-            $brief = $promo->getBriefs();
             if (isset($b)) {
                 if ($action == "assigner_promo") {
                     $promo->addBrief($b);
@@ -314,36 +322,25 @@ class BriefController extends AbstractController
                     $em->persist($b);
                 }
                 if ($action == "assigner_un_groupe") {
-                    for ($g = 0; $g < 1; $g++) {
-                        $groupe[$g]->addBrief($b);
-                        $b->addGroupe($groupe[$g]);
-                        $em->persist($groupe[$g]);
-                    }
+                        $b->addGroupe($fake->unique()->randomElement($groupe));
                 }
                 if ($action == "assigner_des_groupe") {
-                    for ($g = 0; $g < 3; $g++) {
-                        $groupe[$g]->addBrief($b);
-                        $b->addGroupe($groupe[$g]);
-                        $em->persist($groupe[$g]);
+                    for ($i=0; $i<3;$i++){
+                        $b->addGroupe($fake->unique()->randomElement($groupe));
                     }
                 }
                 $em->persist($b);
                 $em->flush();
+
+                $brief = $promo->getBriefs();
                 foreach ($brief as $value) {
                     if ($b == $value) {
-                        if($action=="desassigner_des_groupe"){
-                            for($o=0;$o<3;$o++){
-                                $groupe[$o]->removeBrief($value);
-                                $value->removeGroupe($groupe[$o]);
-                                $em->persist($groupe[$o]);
-                            }
-                        }
                         if($action=="desassigner_un_groupe"){
-                            for($o=0;$o<1;$o++){
-                                $groupe[$o]->removeBrief($value);
-                                $value->removeGroupe($groupe[$o]);
-                                $em->persist($groupe[$o]);
+                            foreach ($groupe as $g){
+                                $g->removeBrief($value);
+                                $value->removeGroupe($g);
                             }
+                            $em->persist($g);
                         }
                         if($action=="desassigner_promo"){
                             $promo->removeBrief($value);
@@ -404,6 +401,7 @@ class BriefController extends AbstractController
         $promo = $this->em->getRepository(Promotion::class)->findAll();
         $tag = $this->em->getRepository(Tag::class)->findAll();
         $livrables = $this->em->getRepository(LivrableAttendus::class)->findAll();
+        $niveau = $this->em->getRepository(Niveau::class)->findAll();
         //recupéré tout les données de la requete
         $brief = $request->request->all();
         $brief = $this->serializer->denormalize($brief,"App\Entity\Brief",true);
@@ -422,13 +420,9 @@ class BriefController extends AbstractController
         $competence = $this->em->getRepository(Competence::class)->findAll();
         for($j=1;$j<=3;$j++)
         {
-            $niveau=new Niveau();
-            $niveau->setLibelle('niveau '.$j);
-            $niveau->setCritereEvaluation('competentence '.$j.'critere_evaluation '.$j);
-            $niveau->setGroupeAction('competentence '.$j.'groupe action '.$j);
-            $niveau->setCompetence($competence[$j]);
-            $niveau->setBrief($brief);
-            $em->persist($niveau);
+            $niveau[$j]->addBrief($brief);
+            $brief->addNiveau($niveau[$j]);
+            $em->persist($niveau[$j]);
         }
         for($y=0;$y<2;$y++){
             $ressource=new Ressource();

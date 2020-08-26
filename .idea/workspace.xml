@@ -20,26 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="616230c9-1139-4e5d-948f-37ed1360cdad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822135819.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822150415.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822162209.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822165237.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822170740.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822172828.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822174433.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822174717.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822174845.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822184408.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822191209.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822193000.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822194434.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200822195041.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/Commentaires.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/FilDiscussion.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Entity/Livrable.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Repository/CommentairesRepository.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Repository/FilDiscussionRepository.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Repository/LivrableRepository.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200825231221.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200825231309.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/migrations/Version20200825234143.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2" beforeDir="false" afterPath="$PROJECT_DIR$/PRF_G2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" afterDir="false" />
@@ -145,17 +128,15 @@
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/brief/index.html.twig" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/referentiel/index.html.twig" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/user/index.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/routes.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/routes.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Controller/BriefController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BriefController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/GroupeTagController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GroupeTagController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/PromotionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PromotionController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ReferentielController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ReferentielController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Apprenant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Apprenant.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Brief.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Brief.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/CommunityManager.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/CommunityManager.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Formateur.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Formateur.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Groupes.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Groupes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/LivrableAttendus.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/LivrableAttendus.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/LivrablePartiels.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/LivrablePartiels.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Niveau.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Niveau.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -369,7 +350,14 @@
       <workItem from="1598091612550" duration="35377000" />
       <workItem from="1598132187717" duration="955000" />
       <workItem from="1598181589529" duration="11932000" />
-      <workItem from="1598303455514" duration="1140000" />
+      <workItem from="1598303455514" duration="9495000" />
+      <workItem from="1598360010889" duration="1992000" />
+      <workItem from="1598364097532" duration="6382000" />
+      <workItem from="1598372595298" duration="2379000" />
+      <workItem from="1598390479510" duration="7720000" />
+      <workItem from="1598399944896" duration="65000" />
+      <workItem from="1598402256224" duration="1838000" />
+      <workItem from="1598433275513" duration="1255000" />
     </task>
     <servers />
   </component>
@@ -437,7 +425,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="php">
           <url>file://$PROJECT_DIR$/src/Controller/BriefController.php</url>
-          <line>412</line>
+          <line>410</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
