@@ -4,13 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Chat;
 use App\Entity\Apprenant;
+use App\Entity\Promotion;
 use App\Controller\ChatController;
 use App\Repository\ChatRepository;
 use App\Repository\UserRepository;
 use App\Repository\PromotionRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -44,7 +45,6 @@ class ChatController extends AbstractController
     public function getChat(ChatRepository $chaRepo, PromotionRepository $promoRepo, int $id, int $id2, EntityManagerInterface $em)
     {
         
-        $chat= $chaRepo->findAll();
         $promo= $promoRepo->find($id);
         $apprenant=$em->getRepository(Apprenant::class)->find($id2);
 
@@ -66,23 +66,6 @@ class ChatController extends AbstractController
             }
         }
        return $this->json("cette promotion n'existe pas !!",400);
-
-
-
-         //$tabChat=[];
-        /*for ($i=0; $i < count($promo->getGroupes()); $i++) { 
-            
-            for ($j=0; $j < count($promo->getGroupes()[$i]->getApprenants()) ; $j++) { 
-
-
-                    $tabChat[]=$promo->getGroupes()[$i]->getApprenants($id2)[$j]->getChats($chat);
-
-                //$tab[]=['apprenant'] ;
-            }
-            
-        }
-
-        return $this->json($tabChat,200);*/
        
     }
 
@@ -98,59 +81,44 @@ class ChatController extends AbstractController
     *     }
     * )
     */
-    public function addChat(Request $request, SerializerInterface $serializer, EntityManagerInterface $em)
+    public function addChat(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, $id, $id2)
     {
         $content= $request->request->all();
         $chat= $serializer->denormalize($content,"App\Entity\Chat",true);
-        
+        $promo= $em->getRepository(Promotion::class)->find($id);
+        $groupe =$promo->getGroupes();
+        $apprenant=$em->getRepository(Apprenant::class)->find($id2);
+
         $pj = $request->files->get("pieceJointes");
         if(!$pj)
         {
-            
             return new JsonResponse("veuillez mettre une images",Response::HTTP_BAD_REQUEST,[],true);
         }
             $photoBlob = fopen($pj->getRealPath(),"rb");
             
              $chat->setPieceJointes($photoBlob);
+                                  
+             if(isset($promo)){
+                 foreach ($groupe as $valu){
+                     $apprenants=$valu->getApprenants();
+         
+                     foreach ($apprenants as $value) {
+                         if($value==$apprenant){
+                             $chat->setApprenant($value);
+     
+                             $em->persist($chat);
+                             $em->flush();
+                     
+     
+         
+                             return $this->json("succes", 200);
+                         }
+                     }
+                     
+                 }
+                 return $this->json("cet apprenant n'appartient pas a ce promo" ,400);
+             }
+            return $this->json("cette promotion n'existe pas !!",400);
 
-
-        $em->persist($chat);
-        $em->flush();
-
-        return $this->json($chat,201);
-
-
-       /* $promo= $promoRepo->find($id);
-        $apprenant=$em->getRepository(Apprenant::class)->find($id2);
-
-        $groupe =$promo->getGroupes();
-        $tabChat=[];
-                
-        if(isset($promo)){
-            foreach ($groupe as $valu){
-                $apprenants=$valu->getApprenants();
-    
-                foreach ($apprenants as $value) {
-                    if($value==$apprenant){
-                        $value->addChat();
-
-
-
-                        $em->persister();
-                        $em->flush();
-                
-
-    
-                        return $this->json("succes", 200);
-                    }
-                }
-                return $this->json("cet apprenant n'appartient pas a ce promo" ,400);
-            }
-        }
-       return $this->json("cette promotion n'existe pas !!",400);
-       */
-
-            
-        //return $this->json("success",201);
     }
 }

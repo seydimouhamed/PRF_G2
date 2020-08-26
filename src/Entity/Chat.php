@@ -8,12 +8,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 
-
 /**
  * @ApiResource(
  * 
  *          collectionOperations={
- *              "envoieComment"={
+ *              "getcommentaire"={
+ *              "method"="GET",
+ *               "path"="/users/promo/{id}/apprenant/{id2}/chats",
+ *               "route_name"="getcomment"
+ *              },
+ *          "envoieComment"={
  *              "method"="POST",
  *               "path"="/users/promo/{id}/apprenant/{id2}/chats",
  *               "route_name"="envoyerUncommentaire"

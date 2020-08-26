@@ -1,5 +1,5 @@
 api_platform:
-    title: 'Suivi Etudiant DEMO'
+    title: 'Suivi Etudiant DEMO FA'
     description: 'Demo pour s entrainer avec api platform'
     version: '1.0.0'
     mapping:
