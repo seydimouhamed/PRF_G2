@@ -26,16 +26,5 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class CommunityManager extends User
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     * @Groups({"cm:read"})
-     */
-    private $id;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 }

@@ -25,19 +25,23 @@ class Tag
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"tag:read","grptag:read"})
+     * @Groups({"tag:read","grptag:read","brief:read"})
+     *
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:write", "grptag:read"})
+     * @Groups({"tag:read","tag:write", "grptag:read","brief:read"})
+     *
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"tag:read","tag:write", "grptag:read"})
+     * @Groups({"tag:read","tag:write", "grptag:read","brief:read"})
+     *
      */
     private $description;
 

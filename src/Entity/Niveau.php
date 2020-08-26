@@ -22,47 +22,49 @@ class Niveau
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"niveau:read","competence:read"})
+     * @Groups({"niveau:read", "competence:read","brief:read"})
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"niveau:read","competence:read"})
+     * @Groups({"niveau:read", "competence:read","brief:read"})
+     *
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"niveau:read", "competence:read","brief:read"})
+     *
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"niveau:read", "competence:read","brief:read"})
+     *
      */
     private $groupeAction;
 
     /**
      * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="niveaux")
+     * @Groups({"niveau:read", "competence:read","brief:read"})
+     *
+     * @ApiSubresource
      */
     private $competence;
+    public function __construct()
+    {
+         $this->competences = new ArrayCollection();
+    }
 
     /**
      * @ORM\ManyToOne(targetEntity=Brief::class, inversedBy="niveau")
      */
     private $brief;
 
-    // /**
-    //  * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
-    //  */
-    // private $competences;
-
-    public function __construct()
-    {
-       // $this->competences = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {

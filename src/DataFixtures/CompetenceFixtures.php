@@ -155,10 +155,10 @@ public function getDependencies()
         }
 
       $tab_promo=[];
-      for($i=0 ; $i<=3 ; $i++)
+      for($i=1 ; $i<=3 ; $i++)
       {
-          for($oo=0;$oo<5;$oo++){
-
+          for($oo=1;$oo<=5;$oo++){
+              $photos = fopen($fake->imageUrl($width = 640, $height = 480),'rb');
               $promo=new Promotion();
               $promo->setDescription($fake->text)
                   ->setFabrique($fake->randomElement(['Sonatel Académie','Simplon']))
@@ -166,6 +166,7 @@ public function getDependencies()
                   ->setLieu('lieu'.$oo)
                   ->setStatus($fake->randomElement(['encours','ferme','attente']))
                   ->setReferentiel($fake->randomElement($tab_referentiel))
+                  ->setAvatar($photos)
                   ->setTitre('promo '.$oo);
               $manager->persist($promo);
           }
@@ -175,6 +176,7 @@ public function getDependencies()
                 $group_princ=new Groupes();
                 $group_princ->setNom("groupe principale promo ".$i)
                             ->setStatut($fake->randomElement(['encours','ferme','attente']))
+                            ->setPromotion($promo)
                             ->setType('groupe principale');
                             $manager->persist($group_princ);
             
@@ -230,21 +232,21 @@ public function getDependencies()
           }
           $manager->flush();
             /////////////////////////
-          $photo = $fake->imageUrl($width = 640, $height = 480);
-          for($h=0;$h<3;$h++){
 
+          for($h=0;$h<3;$h++){
+              $photo = fopen($fake->imageUrl($width = 640, $height = 480),'rb');
               $brief=new Brief();
 
-              $brief->setTitre('titre'.$i)
-                  ->setContexte('context'.$i)
+              $brief->setTitre('titre'.$h)
+                  ->setContexte('context'.$h)
                   ->setDatePoste(new \DateTime())
                   ->setDateLimite(new \DateTime())
                   ->setLangue('francais')
-                  ->setDescriptionRapide('description'.$i)
-                  ->setCricterePerformance('cricterePerformance'.$i)
-                  ->setModalitePedagogique('MoodalitePedagogique'.$i)
-                  ->setModaliteDevaluation('ModaliteEvaluation'.$i)
-                  ->setListeLivrable('lien'.$i)
+                  ->setDescriptionRapide('description'.$h)
+                  ->setCricterePerformance('cricterePerformance'.$h)
+                  ->setModalitePedagogique('MoodalitePedagogique'.$h)
+                  ->setModaliteDevaluation('ModaliteEvaluation'.$h)
+                  ->setListeLivrable('lien'.$h)
                   ->setImageExemplaire($photo)
                   ->setFormateur($fake->randomElement($tab_formateur))
                   ->setReferentiel($fake->randomElement($tab_referentiel));
@@ -263,7 +265,7 @@ public function getDependencies()
             $tag->addBrief($brief);
               for($x=0;$x<2;$x++){
                   $livrable_attendu=new LivrableAttendus();
-                  $livrable_attendu->setLibelle('libelle'.$i)
+                  $livrable_attendu->setLibelle('libelle'.$x)
                                     ->addBrief($brief);
 
                   $manager->persist($livrable_attendu);
@@ -272,8 +274,8 @@ public function getDependencies()
               $promo->addBrief($brief);
               for($y=0;$y<2;$y++){
                   $ressource=new Ressource();
-                  $ressource->setTitre('titre'.$i)
-                            ->setUrl('url'.$i)
+                  $ressource->setTitre('titre'.$y)
+                            ->setUrl('url'.$y)
                             ->setBrief($brief);
                   $manager->persist($ressource);
               }
@@ -281,8 +283,8 @@ public function getDependencies()
               {
                   $niveau=new Niveau();
                   $niveau->setLibelle('niveau '.$j);
-                  $niveau->setCritereEvaluation('competentence '.$i.'critere_evaluation '.$j);
-                  $niveau->setGroupeAction('competentence '.$i.'groupe action '.$j);
+                  $niveau->setCritereEvaluation('competentence '.$j.'critere_evaluation '.$j);
+                  $niveau->setGroupeAction('competentence '.$j.'groupe action '.$j);
                   $niveau->setCompetence($competence);
                   $niveau->setBrief($brief);
                   $manager->persist($niveau);
@@ -291,7 +293,7 @@ public function getDependencies()
 
               $brief->addLivrableAttendu($livrable_attendu);
 
-              $manager->persist($brief,$group_princ,$tag);
+              $manager->persist($brief,$group_princ,$tag,$promo);
           }
       }
 

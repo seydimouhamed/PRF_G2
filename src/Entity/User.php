@@ -255,10 +255,12 @@ class User implements UserInterface
 
     public function getPhoto()
     {
-        //  $data = stream_get_contents($this->photo);
-        //  fclose($this->photo);
+         // $data = stream_get_contents($this->photo);
+       /* if(!$this->photo){
+            fclose($this->photo);
+        }*/
 
-        // return base64_encode($data);
+      //  return base64_encode($data);
         return $this->photo;
     }
 

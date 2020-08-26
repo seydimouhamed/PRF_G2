@@ -50,13 +50,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Formateur extends User
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     * @Groups("formateur:read")
-     */
-    private $id;
 
     /**
      * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="formateurs")
@@ -70,6 +63,7 @@ class Formateur extends User
 
     /**
      * @ORM\OneToMany(targetEntity=Brief::class, mappedBy="formateur")
+     * @Groups("formateur:read")
      */
     private $briefs;
 
@@ -80,22 +74,6 @@ class Formateur extends User
         $this->briefs = new ArrayCollection();
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @return  self
-     */ 
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
 
     /**
      * @return Collection|Groupes[]
