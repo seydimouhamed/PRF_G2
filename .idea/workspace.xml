@@ -20,9 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="616230c9-1139-4e5d-948f-37ed1360cdad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200825231221.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200825231309.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/migrations/Version20200825234143.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2" beforeDir="false" afterPath="$PROJECT_DIR$/PRF_G2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" afterDir="false" />
@@ -128,15 +125,6 @@
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/brief/index.html.twig" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/referentiel/index.html.twig" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/user/index.html.twig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/packages/security.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config/packages/security.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/BriefController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BriefController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/GroupeTagController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/GroupeTagController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/PromotionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/PromotionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Controller/ReferentielController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ReferentielController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Brief.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Brief.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/Niveau.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Niveau.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entity/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/User.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -357,7 +345,9 @@
       <workItem from="1598390479510" duration="7720000" />
       <workItem from="1598399944896" duration="65000" />
       <workItem from="1598402256224" duration="1838000" />
-      <workItem from="1598433275513" duration="1255000" />
+      <workItem from="1598433275513" duration="1578000" />
+      <workItem from="1598436157321" duration="665000" />
+      <workItem from="1598437959532" duration="1211000" />
     </task>
     <servers />
   </component>
@@ -385,9 +375,10 @@
     </state>
     <state x="555" y="214" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.27.1920.1053@0.27.1920.1053" timestamp="1597954465691" />
     <state x="555" y="215" width="800" height="673" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.28.1920.1052@0.28.1920.1052" timestamp="1596827272502" />
-    <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl" timestamp="1597322043946">
-      <screen x="0" y="28" width="1920" height="1052" />
+    <state x="743" y="311" width="424" height="480" key="FileChooserDialogImpl" timestamp="1598436152600">
+      <screen x="0" y="27" width="1920" height="1053" />
     </state>
+    <state x="743" y="311" key="FileChooserDialogImpl/0.27.1920.1053@0.27.1920.1053" timestamp="1598436152600" />
     <state x="743" y="312" width="424" height="480" key="FileChooserDialogImpl/0.28.1920.1052@0.28.1920.1052" timestamp="1597322043946" />
     <state width="263" height="500" key="HiddenNamespacesPopup" timestamp="1596827400069">
       <screen x="0" y="28" width="1920" height="1052" />
