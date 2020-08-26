@@ -1,0 +1,12 @@
+
+<<<<<<< Updated upstream
+=php:S125"Remove this commented out code.(ËÒ…Ôıÿÿÿÿ8¢›’†¾.
+s	php:S3776"TRefactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.(‚—˜Ëøÿÿÿÿ8äâä…¾.
+O	php:S1068"5Remove this unused "$profilrepository" private field.(üú¦î8äâä…¾.
+8php:S125"Remove this commented out code.(‹ê¿8äâä…¾.
+=======
+u	php:S3776"TRefactor this function to reduce its Cognitive Complexity from 18 to the 15 allowed.(‚—˜Ëøÿÿÿÿ8äâä…¾.
+:php:S125F"Remove this commented out code.(‹ê¿8äâä…¾.
+Q	php:S1068"5Remove this unused "$profilrepository" private field.(üú¦î8äâä…¾.
+?php:S125["Remove this commented out code.(ËÒ…Ôıÿÿÿÿ8¢›’†¾.
+>>>>>>> Stashed changes

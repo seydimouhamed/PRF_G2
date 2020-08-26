@@ -1,0 +1,39 @@
+
+<<<<<<< Updated upstream
+L	php:S1066Ù"/Merge this if statement with the enclosing one.(âûˆ±8„à´¨¾.
+v	php:S3776­"TRefactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed.(ìşß˜üÿÿÿÿ8„à´¨¾.
+n	php:S1192d"RDefine a constant instead of duplicating this literal "groupe principale" 4 times.(„±Š‚8„à´¨¾.
+?php:S125F"Remove this commented out code.(«óËûÿÿÿÿ8„à´¨¾.
+:php:S125J"Remove this commented out code.(Ú°à¬8„à´¨¾.
+:php:S125X"Remove this commented out code.(¹˜¿†8„à´¨¾.
+?php:S125`"Remove this commented out code.(†Üğ³ûÿÿÿÿ8„à´¨¾.
+;php:S125"Remove this commented out code.(«¡¢°8„à´¨¾.
+;php:S125‹"Remove this commented out code.(…Š™8„à´¨¾.
+;php:S125¸"Remove this commented out code.(áæîÕ8„à´¨¾.
+;php:S125»"Remove this commented out code.(µ©öÖ8„à´¨¾.
+:php:S125¾"Remove this commented out code.(ñ°³r8„à´¨¾.
+@php:S125À"Remove this commented out code.(ƒ¯ê“úÿÿÿÿ8„à´¨¾.
+@php:S125˜"Remove this commented out code.(˜‘ÆÄşÿÿÿÿ8„à´¨¾.
+„	php:S1488ì"bImmediately return this expression instead of assigning it to the temporary variable "$promo_ref".(üô½¡ÿÿÿÿÿ8„à´¨¾.
+F	php:S1481†")Remove this unused "$tab" local variable.(ËûòÓ8„à´¨¾.
+g	php:S1117Z"FRename "$em" which has the same name as the field declared at line 32.(¨ƒïŸÿÿÿÿÿ8„à´¨¾.
+=======
+:php:S125O"Remove this commented out code.(Ú°à¬8äåä…¾.
+;php:S125À"Remove this commented out code.(µ©öÖ8Ú™’†¾.
+;php:S125“"Remove this commented out code.(«¡¢°8Ú™’†¾.
+L	php:S1066Ş"/Merge this if statement with the enclosing one.(âûˆ±8Ú™’†¾.
+n	php:S1192i"RDefine a constant instead of duplicating this literal "groupe principale" 4 times.(„±Š‚8äåä…¾.
+;php:S125"Remove this commented out code.(…Š™8Ú™’†¾.
+@php:S125Å"Remove this commented out code.(ƒ¯ê“úÿÿÿÿ8Ú™’†¾.
+@php:S125"Remove this commented out code.(˜‘ÆÄşÿÿÿÿ8äåä…¾.
+g	php:S1117_"FRename "$em" which has the same name as the field declared at line 35.(¨ƒïŸÿÿÿÿÿ8äåä…¾.
+?php:S125K"Remove this commented out code.(«óËûÿÿÿÿ8äåä…¾.
+;php:S125½"Remove this commented out code.(áæîÕ8Ú™’†¾.
+F	php:S1481‹")Remove this unused "$tab" local variable.(ËûòÓ8äåä…¾.
+@php:S125ò"Remove this commented out code.(ÚÆŠşÿÿÿÿ8¥Å¸–¾.
+„	php:S1488ñ"bImmediately return this expression instead of assigning it to the temporary variable "$promo_ref".(üô½¡ÿÿÿÿÿ8äåä…¾.
+q	php:S3776²"TRefactor this function to reduce its Cognitive Complexity from 28 to the 15 allowed.(ş£ñ8¥Å¸–¾.
+:php:S125]"Remove this commented out code.(¹˜¿†8äåä…¾.
+:php:S125Ã"Remove this commented out code.(ñ°³r8Ú™’†¾.
+?php:S125e"Remove this commented out code.(†Üğ³ûÿÿÿÿ8äåä…¾.
+>>>>>>> Stashed changes
