@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\LivrablePartielsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=LivrablePartielsRepository::class)
@@ -14,26 +15,31 @@ class LivrablePartiels
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo"})
      */
     private $delai;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo"})
      */
     private $dateCreation;
 

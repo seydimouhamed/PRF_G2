@@ -57,7 +57,8 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"user:read","profil:read","promo:read"})
+     * @Groups({"user:read","profil:read","promo:read","getBriefByPromo","getBriefBrouillonFormateur"
+     * ,"getOnBriefOnePromo"})
      * 
      */
     private $id;
@@ -68,6 +69,8 @@ class User implements UserInterface
      * @Groups({"user:read", "user:write","profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp","getBriefByOneGroupe","getBriefByPromo","getBriefBrouillonFormateur"
+     * ,"getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $username;
@@ -94,6 +97,8 @@ class User implements UserInterface
      * @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp","getBriefByOneGroupe","getBriefByPromo","getBriefBrouillonFormateur"
+     * ,"getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $fisrtName;
@@ -104,6 +109,8 @@ class User implements UserInterface
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp","getBriefByOneGroupe","getBriefByPromo","getBriefBrouillonFormateur"
+     * ,"getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $lastName;
@@ -113,6 +120,9 @@ class User implements UserInterface
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupeApp","getBriefByOneGroupe","getBriefByPromo"
+     * ,"getBriefBrouillonFormateur"
+     * ,"getOnBriefOnePromo"})
      * @Assert\Email
      * @Assert\Unique
      */
@@ -124,6 +134,9 @@ class User implements UserInterface
      *  @Groups({"user:read", "user:write", "profil:read"})
      *  @Groups({"groupe:read"})
      *  @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp","getBriefByOneGroupe","getBriefByPromo","getBriefBrouillonFormateur"
+     * ,"getOnBriefOnePromo"})
+     *
      */
     private $photo;
 

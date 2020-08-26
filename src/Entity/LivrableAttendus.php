@@ -24,16 +24,16 @@ class LivrableAttendus
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"brief:read"})
      * @Groups({"livrableAttendu:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"brief:read"})
      * @Groups({"livrableAttendu:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $libelle;

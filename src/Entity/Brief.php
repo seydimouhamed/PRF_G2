@@ -61,8 +61,7 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
  *
  *                                                              },
  *     },
- *     attributes={   "normalization_context"={"groups"={"brief:read"}},
- *                     "denormalization_context"={"groups"={"brief:write"}},}
+ *
  *
  * )
  * @ApiFilter(SearchFilter::class, properties={"tag.libelle"})
@@ -73,33 +72,37 @@ class Brief
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"brief:read"})
-     * @Groups({"groupe:read"})
-     * @Groups("formateur:read")
+     * @Groups({"getAllBrief"})
+
      *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
+     * @Groups({"getAllBrief"})
      *
 
      */
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *@Groups({"getAllBrief"})
+     */
+    private $langue;
+
+
     private $Titre;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
-     *
+     *@Groups({"getAllBrief"})
      */
     private $contexte;
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"brief:read","brief:write"})
+     *@Groups({"getAllBrief"})
      *
 
      */
@@ -107,117 +110,108 @@ class Brief
 
     /**
      * @ORM\Column(type="date")
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
+     *@Groups({"getAllBrief"})
 
      */
     private $DateLimite;
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
+     *@Groups({"getAllBrief"})
      */
     private $ListeLivrable;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
+     *@Groups({"getAllBrief"})
      */
     private $DescriptionRapide;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
+     *@Groups({"getAllBrief"})
      */
     private $ModalitePedagogique;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
+     *@Groups({"getAllBrief"})
      */
     private $CricterePerformance;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
+     *@Groups({"getAllBrief"})
      */
     private $ModaliteDevaluation;
 
     /**
      * @ORM\Column(type="blob")
-     * @Groups({"brief:read","brief:write"})
+     *@Groups({"getAllBrief"})
      */
     private $ImageExemplaire;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"brief:read","brief:write"})
-     * @Groups({"groupe:read"})
-     */
-    private $langue;
 
     /**
      * @ORM\OneToMany(targetEntity=Ressource::class, mappedBy="brief")
-     * @Groups({"brief:read"})
+     *@Groups({"getAllBrief"})
      */
     private $ressources;
 
     /**
      * @ORM\OneToMany(targetEntity=Niveau::class, mappedBy="brief")
-     * @Groups({"brief:read"})
+     * @Groups({"getAllBrief"})
+     *
      */
     private $niveau;
 
     /**
      * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="briefs")
      * @ORM\JoinColumn(nullable=false)
-     *
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      */
     private $referentiel;
 
     /**
      * @ORM\ManyToMany(targetEntity=Promotion::class, inversedBy="briefs", cascade = { "persist" })
+     * @Groups({"getBriefByOneGroupe"})
+     *
      */
     private $promo;
 
     /**
      * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="briefs", cascade = { "persist" })
-     * @Groups({"brief:read"})
-     *
-     *
      */
     private $groupe;
 
     /**
      * @ORM\ManyToOne(targetEntity=Formateur::class, inversedBy="briefs")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      */
     private $formateur;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="briefs")
-     * @Groups({"brief:read"})
+     *@Groups({"getAllBrief","getBriefByOneGroupe"})
      */
     private $tag;
 
     /**
      * @ORM\ManyToMany(targetEntity=LivrableAttendus::class, inversedBy="briefs", cascade = { "persist" })
-     * @Groups({"brief:read"})
+     *@Groups({"getAllBrief","getBriefByOneGroupe"})
      */
     private $LivrableAttendus;
 
     /**
      * @ORM\OneToMany(targetEntity=LivrablePartiels::class, mappedBy="brief")
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo"})
      */
     private $LivrablePartiels;
 
     /**
      * @ORM\Column(type="string", length=80)
+     * @Groups({"getAllBrief","getBriefByOneGroupe"})
      */
     private $StatutBrief;
 

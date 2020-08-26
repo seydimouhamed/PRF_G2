@@ -33,6 +33,7 @@ class ProfilSortie
      * @Groups({"apprenant:read", "profilSortie:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
      * @Assert\NotBlank
      */
     private $libele;

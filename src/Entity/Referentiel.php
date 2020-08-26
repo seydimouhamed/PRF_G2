@@ -70,6 +70,7 @@ class Referentiel
      * @ORM\Column(type="integer")
      * @Groups({"referentiel:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupe"})
 
      */
     private $id;
@@ -78,6 +79,7 @@ class Referentiel
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
 
      *
      */
@@ -87,6 +89,7 @@ class Referentiel
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      */
     private $presentation;
 
@@ -94,6 +97,7 @@ class Referentiel
      * @ORM\Column(type="string", length=255)
      * @Groups({"referentiel:read", "referentiel:write"})
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      */
     private $programme;
 
@@ -101,6 +105,7 @@ class Referentiel
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      */
     private $critereAdmission;
 
@@ -108,6 +113,7 @@ class Referentiel
      * @ORM\Column(type="text")
      * @Groups({"referentiel:read", "referentiel:write"})
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      */
     private $critereEvaluation;
 

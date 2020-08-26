@@ -22,37 +22,43 @@ class Niveau
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"niveau:read", "competence:read","brief:read"})
+     * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"niveau:read", "competence:read","brief:read"})
+     * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read","brief:read"})
+     * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read","brief:read"})
+     * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $groupeAction;
 
     /**
      * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="niveaux")
-     * @Groups({"niveau:read", "competence:read","brief:read"})
+     * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"getAllBrief"})
      *
      * @ApiSubresource
+     * @Groups({"getAllBrief"})
      */
     private $competence;
     public function __construct()

@@ -65,7 +65,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
-     * @Groups("briefbygroupe:collection:get")
+     * @Groups({"getBriefByOneGroupe"})
      */
     private $genre;
 
@@ -75,7 +75,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
-     * @Groups("briefbygroupe:collection:get")
+     *@Groups({"getBriefByOneGroupeApp"})
      */
     private $adresse;
 
@@ -85,13 +85,13 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write", "promo:read"})
-     * @Groups("briefbygroupe:collection:get")
+     * @Groups({"getBriefByOneGroupeApp"})
      */
     private $telephone;
 
     /**
      * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
-     * @Groups("briefbygroupe:collection:get")
+     * @Groups({"getBriefByOneGroupeApp"})
      *  @ApiSubresource()
      */
     private $profilSortie;
@@ -104,6 +104,7 @@ class Apprenant extends User
     /**
      * @ORM\Column(type="string", length=50,options={"default" : "attente"})
      * @Groups({"apprenant:read", "apprenant:write", "groupe:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
      */
     private $statut;
 

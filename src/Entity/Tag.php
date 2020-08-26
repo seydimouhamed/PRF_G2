@@ -26,6 +26,7 @@ class Tag
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"tag:read","grptag:read","brief:read"})
+     * @Groups({"getAllBrief"})
      *
      *
      */
@@ -34,6 +35,7 @@ class Tag
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"tag:read","tag:write", "grptag:read","brief:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $libelle;
@@ -41,6 +43,7 @@ class Tag
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"tag:read","tag:write", "grptag:read","brief:read"})
+     * @Groups({"getAllBrief"})
      *
      */
     private $description;

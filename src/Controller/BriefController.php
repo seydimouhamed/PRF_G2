@@ -8,8 +8,11 @@ use App\Repository\FormateurRepository;
 use App\Repository\GroupesRepository;
 use App\Repository\PromotionRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class BriefController extends AbstractController
 {
@@ -26,7 +29,7 @@ class BriefController extends AbstractController
      *     }
      * )
      */
-    public function getAllBriefs(BriefRepository $briefRepository,Request $request)
+    public function getAllBriefs(BriefRepository $briefRepository,Request $request,SerializerInterface $serializer)
     {
         $page = (int) $request->query->get('page', 1);
         $limit=2;
@@ -37,17 +40,11 @@ class BriefController extends AbstractController
             if(isset($bief[$i])){
 
 
-                $tab[]=["brief"=>["id"=> $iValue->getId(),"langue"=> $iValue->getLangue(),"Titre:"=> $iValue->getTitre(),"Contexte"=> $iValue->getContexte(),
-                    "Formateur"=> ["Username"=>$iValue->getFormateur()->getUsername(),"Firstname"=>$iValue->getFormateur()->getFisrtName(),"Email"=>$iValue->getFormateur()->getEmail(),
-                        "Photo"=>$iValue->getFormateur()->getPhoto()],
-                    "DatePoste"=> $iValue->getDatePoste(),"DateLimite"=> $iValue->getDateLimite(),
-                    "LivrableAttendu"=> $iValue->getLivrableAttendus(),"ModalitePedagogique"=> $iValue->getModalitePedagogique(),
-                    "CricterePerformance"=> $iValue->getCricterePerformance(),"ModaliteEvaluation"=> $iValue->getModaliteDevaluation(),
-                    "Image"=> $iValue->getImageExemplaire(),"Niveau"=> $iValue->getNiveau(),"Tag"=> $iValue->getTag(),"Ressources"=> $iValue->getRessources()]];
+                $tab[]= $serializer->normalize($iValue, 'json',['groups' => 'getAllBrief']);
 
             }
         }
-        return $this->json($tab, 200);
+        return new JsonResponse($tab, Response::HTTP_OK);
 
     }
 
@@ -63,10 +60,11 @@ class BriefController extends AbstractController
      *     }
      * )
      */
-    public function getBriefByOneGroupe(PromotionRepository $promotionRepository,GroupesRepository $groupesRepository,int $id,int $id1){
+    public function getBriefByOneGroupe(PromotionRepository $promotionRepository,GroupesRepository $groupesRepository,int $id,int $id1,SerializerInterface $serializer){
 
             $promo=$promotionRepository->find($id);
             $groupe=$groupesRepository->find($id1);
+            $tableau=[];
 
 
         foreach ($promo->getGroupes() as $pValue) {
@@ -77,32 +75,20 @@ class BriefController extends AbstractController
                         $biefBygroupe = $pValue->getBriefs();
                         for ($b = 0, $bMax = count($pValue->getBriefs()); $b < $bMax; $b++) {
 
-                            $tab[]=["Groupes"=>["Id"=> $pValue->getId(),"Nom Grroupe"=> $pValue->getNom()],"Brief"=>["id"=>$biefBygroupe[$b]->getId(), "langue"=>$biefBygroupe[$b]->getLangue(),
-                                "Titre:"=>$biefBygroupe[$b]->getTitre(),"Contexte"=>$biefBygroupe[$b]->getContexte(),
-                                "Formateur"=>["Id"=>$biefBygroupe[$b]->getFormateur()->getId(),"Username"=>$biefBygroupe[$b]->getFormateur()->getUsername(),"FisrtName"=>$biefBygroupe[$b]->getFormateur()->getFisrtName()],
-                                "Email"=>$biefBygroupe[$b]->getFormateur()->getEmail(),
-                                "DatePoste"=>$biefBygroupe[$b]->getDatePoste(),"DateLimite"=>$biefBygroupe[$b]->getDateLimite(),
-                                "ModalitePedagogique"=>$biefBygroupe[$b]->getModalitePedagogique(), "CricterePerformance"=>$biefBygroupe[$b]->getCricterePerformance(),"
-                                 ModaliteEvaluation"=>$biefBygroupe[$b]->getModaliteDevaluation(),"Referentiel"=>$biefBygroupe[$b]->getReferentiel(),
-                                "Niveau"=>$biefBygroupe[$b]->getNiveau(),"Livrable Attendus"=>$biefBygroupe[$b]->getLivrableAttendus(),
-                                "Tag"=>$biefBygroupe[$b]->getTag(),"Ressources"=>$biefBygroupe[$b]->getRessources(),
-                                "Livrable partiel"=>$biefBygroupe[$b]->getLivrablePartiels(),"ImageExemplaire"=>$biefBygroupe[$b]->getImageExemplaire()]];
+                            $tableau[]=$serializer->normalize([$pValue],
+                                'json',['groups' => ['getBriefByOneGroupe', 'getAllBrief']]);
 
                             foreach ($biefBygroupe[$b]->getGroupe() as $gValue) {
 
-                                if($gValue->getStatut()=="encours"){
+                                if($gValue->getStatut()==="encours"){
 
-                                    $tab[]=["Groupes"=>["Nom Groupe"=> $gValue->getNom(),
-                                        "Apprenants"=> $gValue->getApprenants()]];
 
-                                    foreach ($biefBygroupe[$b]->getPromo() as $prValue) {
-                                        $tab[] = ["promo" => ["Id" => $prValue->getId(), "Titre" => $prValue->getTitre(),
-                                            "Description" => $prValue->getDescription(),
-                                            "Fabrique" => $prValue->getFabrique()]];
-                                    }
+                                    array_push($tableau, $serializer->normalize($gValue, 'json',['groups' => 'getBriefByOneGroupeApp']));
+
+
                                 }
                                 else{
-                                    $tab[]="Le groupe : ". $gValue->getNom()." est fermé";
+                                    array_push($tableau,"Le groupe : ". $gValue->getNom()." est fermé");
                                 }
                             }
 
@@ -115,7 +101,7 @@ class BriefController extends AbstractController
 
         }
 
-        return $this->json($tab  , 200);
+        return new JsonResponse($tableau, Response::HTTP_OK);
         //dd($ta);
     }
     /**
@@ -141,42 +127,33 @@ class BriefController extends AbstractController
      * )
      */
 
-    public function getBriefByPromo(PromotionRepository $promotionRepository,int $id){
+    public function getBriefByPromo(PromotionRepository $promotionRepository,int $id,SerializerInterface $serializer){
         $promo=$promotionRepository->find($id);
         if(isset($promo)){
             $briefPromo=$promo->getBriefs();
-            for($b=0, $bMax = count($promo->getBriefs()); $b< $bMax; $b++){
 
-                $tab[]=["Promo"=>["Id"=>$promo->getId(),"Titre"=>$promo->getTitre(),"Description"=>$promo->getDescription(),"Fabrique"=>$promo->getFabrique()],"Brief"=>["id"=>$briefPromo[$b]->getId(),
-                    "langue"=>$briefPromo[$b]->getLangue(),"Titre:"=>$briefPromo[$b]->getTitre(),"Contexte"=>$briefPromo[$b]->getContexte(),
-                    "Formateur"=>["Id"=>$briefPromo[$b]->getFormateur()->getId(),"Username"=>$briefPromo[$b]->getFormateur()->getUsername(),"FirstName"=>$briefPromo[$b]->getFormateur()->getFisrtName(),
-                        "Email"=>$briefPromo[$b]->getFormateur()->getEmail()], "DatePoste"=>$briefPromo[$b]->getDatePoste(),"DateLimite"=>$briefPromo[$b]->getDateLimite(),
-                    "ModalitePedagogique"=>$briefPromo[$b]->getModalitePedagogique(), "CricterePerformance"=>$briefPromo[$b]->getCricterePerformance(),"
-                                     ModaliteEvaluation"=>$briefPromo[$b]->getModaliteDevaluation()],"Referentiel"=>$briefPromo[$b]->getReferentiel(),
-                    "Niveau"=>$briefPromo[$b]->getNiveau(),"Livrable Attendus"=>$briefPromo[$b]->getLivrableAttendus(),
-                    "Tag"=>$briefPromo[$b]->getTag(),"Ressources"=>$briefPromo[$b]->getRessources(),"Livrable partiel"=>$briefPromo[$b]->getLivrablePartiels(),"ImageExemplaire"=>$briefPromo[$b]->getImageExemplaire()];
+
+                $tableau[]=$serializer->normalize([$promo],
+                    'json',['groups' => ["getBriefByPromo", 'getAllBrief']]);
+
+            for($b=0, $bMax = count($promo->getBriefs()); $b< $bMax; $b++){
 
                 foreach ($briefPromo[$b]->getGroupe() as $gValue) {
 
                     if($gValue->getStatut()=="encours"){
 
-                        $tab[]=["Groupes"=>["Nom Groupe"=> $gValue->getNom(),"Apprenants"=> $gValue->getApprenants()]];
+                        array_push($tableau, $serializer->normalize($gValue, 'json',['groups' => 'getBriefByOneGroupeApp']));
 
-                        foreach ($briefPromo[$b]->getPromo() as $prValue) {
-
-                            $tab[] = ["promo" => ["Id" => $prValue->getId(), "Titre" => $prValue->getTitre(), "Description" => $prValue->getDescription(),
-                                "Fabrique" => $prValue->getFabrique()]];
-                        }
                     }
                     else{
-                        $tab[]="Le groupe : ". $gValue->getNom()." est fermé";
+                        array_push($tableau,"Le groupe : ". $gValue->getNom()." est fermé");
                     }
 
                 }
             }
 
         }
-        return $this->json($tab  , 200);
+        return new JsonResponse($tableau, Response::HTTP_OK);
     }
 
     /**
@@ -191,25 +168,23 @@ class BriefController extends AbstractController
      *     }
      * )
      */
-    public function getBriefBrouillonFormateur(FormateurRepository $formateurRepository,int $id){
+    public function getBriefBrouillonFormateur(FormateurRepository $formateurRepository,int $id,SerializerInterface $serializer){
         $formateur=$formateurRepository->find($id);
 
         foreach ($formateur->getBriefs() as $bValue) {
 
             if($bValue->getStatutBrief()=="brouillon"){
-                $tab[]=["Formateur"=>["Id"=>$formateur->getId(),"Username"=>$formateur->getUsername(),"Firstname"=>$formateur->getFisrtName(),
-                    "Email"=>$formateur->getEmail(),"photo"=>$formateur->getPhoto()],
-                    "Brief"=>["Id"=> $bValue->getId(),"Titre"=> $bValue->getTitre(),
-                        "Contexte"=> $bValue->getContexte(),"Niveau"=> $bValue->getNiveau(),
-                        "Livrable Attendu"=> $bValue->getLivrableAttendus(),"Tag"=> $bValue->getTag(),
-                        "Ressources"=> $bValue->getRessources()]];
+                $tableau[]=$serializer->normalize([$formateur,$bValue],
+                    'json',['groups' => ['getAllBrief',"getBriefBrouillonFormateur"]]);
+
             }else{
-                $tab[]="Vous n'avez pas de brief(s) brouillon(s)";
+
+                array_push($tableau,"Vous n'avez pas de brief(s) brouillon(s)");
             }
 
         }
 
-        return $this->json($tab,200);
+        return new JsonResponse($tableau, Response::HTTP_OK);
 
     }
 
@@ -225,7 +200,7 @@ class BriefController extends AbstractController
      *     }
      * )
      */
-    public function getOnBriefOnePromo(PromotionRepository $promotionRepository,BriefRepository $briefRepository,int $id,int $id1){
+    public function getOnBriefOnePromo(PromotionRepository $promotionRepository,BriefRepository $briefRepository,int $id,int $id1,SerializerInterface $serializer){
         $promo=$promotionRepository->find($id);
         $brief=$briefRepository->find($id1);
 
@@ -236,44 +211,33 @@ class BriefController extends AbstractController
                 if($promo->getBriefs()[$f]->getId()==$brief->getId()){
 
                     $briefPromo=$promo->getBriefs();
-                    $tab[]=["Promo"=>["Id"=>$promo->getId(),"Titre"=>$promo->getTitre(),"Description"=>$promo->getDescription()],
-                        "Brief"=>["id"=>$briefPromo[$f]->getId(), "langue"=>$briefPromo[$f]->getLangue(),"Titre:"=>$briefPromo[$f]->getTitre(),"Contexte"=>$briefPromo[$f]->getContexte(),
-                            "Formateur"=>["Id"=>$briefPromo[$f]->getFormateur()->getId(),"Username"=>$briefPromo[$f]->getFormateur()->getUsername(),"Firstname"=>$briefPromo[$f]->getFormateur()->getFisrtName(),
-                                "Email"=>$briefPromo[$f]->getFormateur()->getEmail(),"photo"=>$briefPromo[$f]->getFormateur()->getPhoto()],
-                            "DatePoste"=>$briefPromo[$f]->getDatePoste(),"DateLimite"=>$briefPromo[$f]->getDateLimite(),
-                            "ModalitePedagogique"=>$briefPromo[$f]->getModalitePedagogique(), "CricterePerformance"=>$briefPromo[$f]->getCricterePerformance(),"
-                                     ModaliteEvaluation"=>$briefPromo[$f]->getModaliteDevaluation()],"Referentiel"=>$briefPromo[$f]->getReferentiel(),
-                        "Niveau"=>$briefPromo[$f]->getNiveau(),"Livrable Attendus"=>$briefPromo[$f]->getLivrableAttendus(),
-                        "Tag"=>$briefPromo[$f]->getTag(),"Ressources"=>$briefPromo[$f]->getRessources(),"Livrable partiel"=>$briefPromo[$f]->getLivrablePartiels(),
-                        "ImageExemplaire"=>$briefPromo[$f]->getImageExemplaire()];
+                    $tableau[]=$serializer->normalize([$promo,$briefPromo[$f]],
+                        'json',['groups' => ['getAllBrief',"getOnBriefOnePromo"]]);
                 }
                 else{
 
-                    $tab[]="Ce brief n'est pas dans ce promo";
+
+                    array_push($tableau,"Ce brief n'est pas dans ce promo");
                 }
 
                 foreach ($briefPromo[$f]->getGroupe() as $gValue) {
 
                     if($gValue->getStatut()=="encours"){
 
-                        $tab[]=["Groupes"=>["Nom Groupe"=> $gValue->getNom(),"Apprenants"=> $gValue->getApprenants()]];
 
-                        foreach ($briefPromo[$f]->getPromo() as $prValue) {
 
-                            $tab[] = ["promo" => ["Id" => $prValue->getId(), "Titre" => $prValue->getTitre(),
-                                "Description" => $prValue->getDescription(),
-                                "Fabrique" => $prValue->getFabrique()]];
-                        }
+                        array_push($tableau, $serializer->normalize($gValue, 'json',['groups' => 'getBriefByOneGroupeApp']));
 
                     }
                     else{
-                        $tab[]="Le groupe : ". $gValue->getNom()." est fermé";
+
+                        array_push($tableau,"Le groupe : ". $gValue->getNom()." est fermé");
                     }
 
                 }
             }
 
-        return $this->json($tab, 200);
+        return new JsonResponse($tableau, Response::HTTP_OK);
     }
 
     /**
@@ -288,7 +252,7 @@ class BriefController extends AbstractController
      *     }
      * )
      */
-    public function getBriefFormateurValiderOuAssigner(FormateurRepository $formateurRepository,int $id){
+    public function getBriefFormateurValiderOuAssigner(FormateurRepository $formateurRepository,int $id,SerializerInterface $serializer){
 
         $formateur=$formateurRepository->find($id);
 
@@ -296,19 +260,16 @@ class BriefController extends AbstractController
 
             if($bValue->getStatutBrief()=="valider" || $bValue->getStatutBrief()=="assigner"){
 
-                $tab[]=["Formateur"=>["Id"=>$formateur->getId(),"Username"=>$formateur->getUsername(),"Firstname"=>$formateur->getFisrtName(),
-                    "Email"=>$formateur->getEmail(),"photo"=>$formateur->getPhoto()],
-                    "Brief"=>["Id"=> $bValue->getId(),"Titre"=> $bValue->getTitre(),
-                        "Contexte"=> $bValue->getContexte(),"Niveau"=> $bValue->getNiveau(),
-                        "Livrable Attendu"=> $bValue->getLivrableAttendus(),"Tag"=> $bValue->getTag(),
-                        "Ressources"=> $bValue->getRessources()]];
+                $tableau[]=$serializer->normalize([$formateur,$bValue],
+                    'json',['groups' => ['getAllBrief',"getBriefBrouillonFormateur"]]);
             }else{
-                $tab[]="Vous n'avez pas de brief(s) Valider ou Assigner";
+
+                array_push($tableau,"Vous n'avez pas de brief(s) Valider ou Assigner");
             }
 
         }
 
-        return $this->json($tab,200);
+        return new JsonResponse($tableau, Response::HTTP_OK);
 
     }
     }

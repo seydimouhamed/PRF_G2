@@ -56,8 +56,7 @@ class Competence
      * @ORM\Column(type="integer")
      * @Groups({"competence:read"})
      * @Groups({"niveau:read"})
-     * @Groups("briefbygroupe:collection:get")
-     * @Groups("getbriefall:collection:get")
+     * @Groups({"getAllBrief"})
      *
      */
     private $id;
@@ -66,8 +65,8 @@ class Competence
      * @ORM\Column(type="string", length=100)
      * @Groups({"competence:read", "competence:write"})
      * @Groups({"niveau:read"})
-     * @Groups("briefbygroupe:collection:get")
-     * @Groups("getbriefall:collection:get")
+     * @Groups({"getAllBrief"})
+     *
      */
     private $libelle;
 
@@ -75,8 +74,8 @@ class Competence
      * @ORM\Column(type="string", length=250)
      *  @Groups({"competence:read"})
      * @Groups({"niveau:read"})
-     * @Groups("briefbygroupe:collection:get")
-     * @Groups("getbriefall:collection:get")
+     * @Groups({"getAllBrief"})
+     *
      */
     private $descriptif;
 

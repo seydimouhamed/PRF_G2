@@ -81,6 +81,8 @@ class Promotion
      * @ORM\Column(type="integer")
      * @Groups({"promo:read"})
      * @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
+     *
      *
      */
     protected $id;
@@ -88,7 +90,8 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
-     *  * @Groups({"groupe:read"})
+     *  @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $langue;
@@ -96,7 +99,8 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
-     *  * @Groups({"groupe:read"})
+     *  @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $titre;
@@ -104,7 +108,8 @@ class Promotion
     /**
      * @ORM\Column(type="text")
      * @Groups({"promo:read", "promo:write"})
-     *  * @Groups({"groupe:read"})
+     *  @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $description;
@@ -112,6 +117,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByPromo","getOnBriefOnePromo"})
      *  * @Groups({"groupe:read"})
      */
     private $lieu;
@@ -119,6 +125,7 @@ class Promotion
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $dateDebut;
@@ -126,6 +133,7 @@ class Promotion
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $dateFinPrvisoire;
@@ -133,6 +141,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $fabrique;
@@ -140,6 +149,7 @@ class Promotion
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $dateFinReelle;
@@ -147,6 +157,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getBriefByPromo","getOnBriefOnePromo"})
      * @Assert\NotBlank
      */
     private $status;
@@ -163,6 +174,7 @@ class Promotion
     /**
      * @ORM\Column(type="blob", nullable=true)
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByPromo","getOnBriefOnePromo"})
      */
     private $avatar;
 
@@ -183,6 +195,7 @@ class Promotion
 
     /**
      * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="promo", cascade = { "persist" })
+     * @Groups({"getBriefByPromo"})
      */
     private $briefs;
 

@@ -18,27 +18,26 @@ class Ressource
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"brief:read"})
+     * @Groups({"getAllBrief"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"brief:read"})
-     *
+     *@Groups({"getAllBrief"})
      *
      */
     private $Titre;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
-     * @Groups({"brief:read"})
+     * @Groups({"getAllBrief"})
      */
     private $url;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
-     * @Groups({"brief:read"})
+     * @Groups({"getAllBrief"})
      */
     private $PieceJointe;
 

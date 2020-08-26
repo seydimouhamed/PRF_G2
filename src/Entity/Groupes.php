@@ -24,6 +24,7 @@ class Groupes
      * @ORM\Column(type="integer")
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByOneGroupeApp"})
      */
     private $id;
 
@@ -31,12 +32,14 @@ class Groupes
      * @ORM\Column(type="string", length=100)
      * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByOneGroupeApp"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"groupe:read", "groupe:write","promo:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByOneGroupeApp"})
      */
     private $dateCreation;
 
@@ -44,18 +47,21 @@ class Groupes
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByOneGroupeApp"})
      */
     private $statut;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"groupe:read", "groupe:write","promo:read"})
+     * @Groups({"getBriefByOneGroupe","getBriefByOneGroupeApp"})
      */
     private $type;
 
     /**
      * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes", cascade = { "persist" })
      *  * @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
      *
      */
     private $promotion;
@@ -65,6 +71,8 @@ class Groupes
      * @ApiSubresource()
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     *
      */
     private $apprenants;
 
@@ -78,6 +86,7 @@ class Groupes
     /**
      * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="groupe", cascade = { "persist" })
      * @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupe"})
      */
     private $briefs;
 
