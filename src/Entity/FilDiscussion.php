@@ -26,21 +26,15 @@ class FilDiscussion
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=LivrablePartiels::class, inversedBy="filDiscussions")
-     */
-    private $livrables;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"fil:read","livrablePartiel:read"})
-     */
-    private $libelle;
-
-    /**
      * @ORM\OneToMany(targetEntity=Commentaires::class, mappedBy="filDiscussion")
      * @Groups({"fil:read","livrablePartiel:read"})
      */
     private $commentaires;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $libelle;
 
     public function __construct()
     {
@@ -50,19 +44,6 @@ class FilDiscussion
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-
-    public function getLibelle(): ?string
-    {
-        return $this->libelle;
-    }
-
-    public function setLibelle(string $libelle): self
-    {
-        $this->libelle = $libelle;
-
-        return $this;
     }
 
     /**
@@ -83,27 +64,14 @@ class FilDiscussion
         return $this;
     }
 
-    public function removeCommentaire(Commentaires $commentaire): self
+    public function getLibelle(): ?string
     {
-        if ($this->commentaires->contains($commentaire)) {
-            $this->commentaires->removeElement($commentaire);
-            // set the owning side to null (unless already changed)
-            if ($commentaire->getFilDiscussion() === $this) {
-                $commentaire->setFilDiscussion(null);
-            }
-        }
-
-        return $this;
+        return $this->libelle;
     }
 
-    public function getLivrables(): ?LivrablePartiels
+    public function setLibelle(string $libelle): self
     {
-        return $this->livrables;
-    }
-
-    public function setLivrables(?LivrablePartiels $livrables): self
-    {
-        $this->livrables = $livrables;
+        $this->libelle = $libelle;
 
         return $this;
     }

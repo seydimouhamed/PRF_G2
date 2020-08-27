@@ -40,16 +40,16 @@ class LivrableAttendus
     private $briefs;
 
     /**
-     * @ORM\OneToMany(targetEntity=Livrable::class, mappedBy="livrableAttendu")
-     * @Groups({"livrableAttendus:read","brief:read"})
+     * @ORM\OneToMany(targetEntity=LivrableAttenduApprenant::class, mappedBy="livrableAttendu")
      */
-    private $livrables;
+    private $livrableAttenduApprenants;
 
     public function __construct()
     {
         $this->briefs = new ArrayCollection();
         $this->apprenants = new ArrayCollection();
         $this->livrables = new ArrayCollection();
+        $this->livrableAttenduApprenants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -87,41 +87,31 @@ class LivrableAttendus
         return $this;
     }
 
-    public function removeBrief(Brief $brief): self
-    {
-        if ($this->briefs->contains($brief)) {
-            $this->briefs->removeElement($brief);
-            $brief->removeLivrableAttendu($this);
-        }
-
-        return $this;
-    }
-
     /**
-     * @return Collection|Livrable[]
+     * @return Collection|LivrableAttenduApprenant[]
      */
-    public function getLivrables(): Collection
+    public function getLivrableAttenduApprenants(): Collection
     {
-        return $this->livrables;
+        return $this->livrableAttenduApprenants;
     }
 
-    public function addLivrable(Livrable $livrable): self
+    public function addLivrableAttenduApprenant(LivrableAttenduApprenant $livrableAttenduApprenant): self
     {
-        if (!$this->livrables->contains($livrable)) {
-            $this->livrables[] = $livrable;
-            $livrable->setLivrableAttendu($this);
+        if (!$this->livrableAttenduApprenants->contains($livrableAttenduApprenant)) {
+            $this->livrableAttenduApprenants[] = $livrableAttenduApprenant;
+            $livrableAttenduApprenant->setLivrableAttendu($this);
         }
 
         return $this;
     }
 
-    public function removeLivrable(Livrable $livrable): self
+    public function removeLivrableAttenduApprenant(LivrableAttenduApprenant $livrableAttenduApprenant): self
     {
-        if ($this->livrables->contains($livrable)) {
-            $this->livrables->removeElement($livrable);
+        if ($this->livrableAttenduApprenants->contains($livrableAttenduApprenant)) {
+            $this->livrableAttenduApprenants->removeElement($livrableAttenduApprenant);
             // set the owning side to null (unless already changed)
-            if ($livrable->getLivrableAttendu() === $this) {
-                $livrable->setLivrableAttendu(null);
+            if ($livrableAttenduApprenant->getLivrableAttendu() === $this) {
+                $livrableAttenduApprenant->setLivrableAttendu(null);
             }
         }
 

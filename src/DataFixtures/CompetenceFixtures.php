@@ -6,7 +6,9 @@ use App\Entity\Brief;
 use App\Entity\Commentaires;
 use App\Entity\FilDiscussion;
 use App\Entity\Livrable;
+use App\Entity\LivrableAttenduApprenant;
 use App\Entity\LivrableAttendus;
+use App\Entity\LivrablePartielApprenant;
 use App\Entity\LivrablePartiels;
 use App\Entity\Ressource;
 use App\Repository\TagRepository;
@@ -32,6 +34,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Faker\Provider\DateTime;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use function App\Entity\setLibelle;
 
 class CompetenceFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -274,12 +277,11 @@ public function getDependencies()
                                     ->addBrief($brief);
                   $manager->persist($livrable_attendu);
                   for($l=0;$l<2;$l++){
-                      $livrable = new Livrable();
+                      $livrable = new LivrableAttenduApprenant();
                       $livrable->setUrl("https://github.com/seydimouhamed/PRF_G2")
                               ->setLivrableAttendu($livrable_attendu)
                               ->setApprenant($fake->unique()->randomElement($tab_apprenant));
-                      $livrable_attendu->addLivrable($livrable);
-                      $manager->persist($livrable,$livrable_attendu);
+                      $manager->persist($livrable);
                   }
 
               }
@@ -311,26 +313,32 @@ public function getDependencies()
                       ->setDateCreation(new \DateTime())
                       ->setStatut($fake->randomElement(['rendu','validé','invalidé']))
                       ->setDelai(new \DateTime())
-                      ->addApprenant($fake->unique()->randomElement($tab_apprenant))
                       ->addNiveau($niveau);
                   $niveau->addLivrablesPartiel($liv);
                   $manager->persist($liv,$niveau);
+              }
+              $t=[];
+              for ($d=0;$d<2;$d++)
+              {
+                  $discussion=new FilDiscussion();
+                  $discussion->setLibelle("discussion".$d);
+                  $t[]=$discussion;
+                  $manager->persist($discussion);
+                  $commentaire=new Commentaires();
+                  $commentaire->setFilDiscussion($discussion);
+                  $commentaire->addFormateur($fake->randomElement($tab_formateurs))
+                      ->setCommentaire($fake->text);
+                  $discussion->addCommentaire($commentaire);
+                  $manager->persist($commentaire,$discussion);
 
-                  for ($d=0;$d<1;$d++)
-                  {
-                      $discussion=new FilDiscussion();
-                      $discussion->setLivrables($liv)
-                                  ->setLibelle("Discussion".$s);
-                      $liv->addFilDiscussion($discussion);
-                      $manager->persist($discussion,$liv);
-                      $commentaire=new Commentaires();
-                      $commentaire->setFilDiscussion($discussion);
-                      $commentaire->addFormateur($fake->randomElement($tab_formateurs))
-                          ->setCommentaire($fake->text);
-                      $discussion->addCommentaire($commentaire);
-                      $manager->persist($commentaire,$discussion);
+                      $livrables = new LivrablePartielApprenant();
+                      $livrables->setDelais(new \DateTime())
+                          ->setEtat($fake->randomElement(['validé','invalidé']))
+                          ->setLivrablePartiel($liv)
+                          ->setFil($fake->unique()->randomElement($t))
+                          ->setApprenant($fake->unique()->randomElement($tab_apprenant));
+                      $manager->persist($livrables);
 
-                  }
               }
 
               $brief->addLivrableAttendu($livrable_attendu);

@@ -8,7 +8,9 @@ use App\Entity\Competence;
 use App\Entity\Formateur;
 use App\Entity\Groupes;
 use App\Entity\Livrable;
+use App\Entity\LivrableAttenduApprenant;
 use App\Entity\LivrableAttendus;
+use App\Entity\LivrablePartielApprenant;
 use App\Entity\Niveau;
 use App\Entity\Promotion;
 use App\Entity\Ressource;
@@ -92,25 +94,31 @@ class BriefController extends AbstractController
 
     public function addLivrable(EntityManagerInterface $em, Request $request, $id1,$id)
     {
-        $group = $this->em->getRepository(Groupes::class)->find($id1);
         $a = $this->em->getRepository(Apprenant::class)->find($id);
+        $gr = $this->em->getRepository(Groupes::class)->find($id1);
+        $liva = $this->em->getRepository(LivrableAttendus::class)->findAll();
+        $fake = Factory::create('fr-FR');
         //recupéré tout les données de la requete
         $livrables = $request->request->all();
-        $livrable = $this->serializer->denormalize($livrables,"App\Entity\Livrable",true);
+        $livrable = $this->serializer->denormalize($livrables,"App\Entity\LivrableAttenduApprenant",true);
         //$liv=json_decode($request->getContent(),true);
-        if (isset($group)){
-            $apprenant=$group->getApprenants();
-            foreach ($apprenant as $v){
-                if ($v==$a){
-                    $livrable->setApprenant($a);
+        if (isset($a)){
+            $ap=[];
+            $groupe=$a->getGroupes();
+            foreach ($groupe as $g) {
+                if ($g==$gr) {
+                    $ab=$gr->getApprenants();
+                    for ($i=0;$i<count($ab); $i++){
+                        $livrable->setApprenant($ab[$i]);
+                        $livrable->setLivrableAttendu($fake->randomElement($liva));
+                    }
                     $em->persist($livrable);
                     $em->flush();
                     return $this->json("success",201);
                 }
             }
-            return $this->json("Cet apprenant n'est pas dans ce groupe",201);
         }
-        return $this->json("Ce groupe n'existe pas",201);
+        return $this->json("Cet apprenant n'existe pas",201);
     }
 
     /**
@@ -131,7 +139,7 @@ class BriefController extends AbstractController
         $b = $this->em->getRepository(Brief::class)->find($id2);
         $a = $this->em->getRepository(Apprenant::class)->find($id);
         if (isset($promo)) {
-            $tab=[];
+            $t=[];
             $groupe=$promo->getGroupes();
             $brief=$promo->getBriefs();
             foreach ($groupe as $valu){
@@ -140,8 +148,12 @@ class BriefController extends AbstractController
                     if ($va==$b) {
                         foreach ($apprenants as $v){
                             if ($v==$a){
-                                $tab[] = ["Apprenant"=>$a];
-                                return $this->json($tab, 200);
+                                $tab = $a->getLivrablePartielApprenants();
+                                foreach ($tab as $key => $ta)
+                                {
+                                    $t[]=$ta->getLivrablePartiel();
+                                    return $this->json($t, 200);
+                                }
                             }
                         }
                     }

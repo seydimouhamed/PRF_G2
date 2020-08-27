@@ -59,26 +59,22 @@ class LivrablePartiels
 
     /**
      * @ORM\ManyToMany(targetEntity=Niveau::class, mappedBy="livrablesPartiels")
-     * @Groups({"livrablePartiel:read","apprenant:read"})
+     * @Groups({"livrablePartiel:read"})
      */
     private $niveaux;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Apprenant::class, mappedBy="livrablesPartiels")
-     */
-    private $apprenants;
-
-    /**
-     * @ORM\OneToMany(targetEntity=FilDiscussion::class, mappedBy="livrables")
+     * @ORM\OneToMany(targetEntity=LivrablePartielApprenant::class, mappedBy="livrablePartiel")
      * @Groups({"livrablePartiel:read"})
      */
-    private $filDiscussions;
+    private $livrablePartielApprenants;
 
     public function __construct()
     {
         $this->niveaux = new ArrayCollection();
         $this->apprenants = new ArrayCollection();
         $this->filDiscussions = new ArrayCollection();
+        $this->livrablePartielApprenants = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -175,61 +171,34 @@ class LivrablePartiels
     }
 
     /**
-     * @return Collection|Apprenant[]
+     * @return Collection|LivrablePartielApprenant[]
      */
-    public function getApprenants(): Collection
+    public function getLivrablePartielApprenants(): Collection
     {
-        return $this->apprenants;
+        return $this->livrablePartielApprenants;
     }
 
-    public function addApprenant(Apprenant $apprenant): self
+    public function addLivrablePartielApprenant(LivrablePartielApprenant $livrablePartielApprenant): self
     {
-        if (!$this->apprenants->contains($apprenant)) {
-            $this->apprenants[] = $apprenant;
-            $apprenant->addLivrablesPartiel($this);
+        if (!$this->livrablePartielApprenants->contains($livrablePartielApprenant)) {
+            $this->livrablePartielApprenants[] = $livrablePartielApprenant;
+            $livrablePartielApprenant->setLivrablePartiel($this);
         }
 
         return $this;
     }
 
-    public function removeApprenant(Apprenant $apprenant): self
+    public function removeLivrablePartielApprenant(LivrablePartielApprenant $livrablePartielApprenant): self
     {
-        if ($this->apprenants->contains($apprenant)) {
-            $this->apprenants->removeElement($apprenant);
-            $apprenant->removeLivrablesPartiel($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|FilDiscussion[]
-     */
-    public function getFilDiscussions(): Collection
-    {
-        return $this->filDiscussions;
-    }
-
-    public function addFilDiscussion(FilDiscussion $filDiscussion): self
-    {
-        if (!$this->filDiscussions->contains($filDiscussion)) {
-            $this->filDiscussions[] = $filDiscussion;
-            $filDiscussion->setLivrables($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFilDiscussion(FilDiscussion $filDiscussion): self
-    {
-        if ($this->filDiscussions->contains($filDiscussion)) {
-            $this->filDiscussions->removeElement($filDiscussion);
+        if ($this->livrablePartielApprenants->contains($livrablePartielApprenant)) {
+            $this->livrablePartielApprenants->removeElement($livrablePartielApprenant);
             // set the owning side to null (unless already changed)
-            if ($filDiscussion->getLivrables() === $this) {
-                $filDiscussion->setLivrables(null);
+            if ($livrablePartielApprenant->getLivrablePartiel() === $this) {
+                $livrablePartielApprenant->setLivrablePartiel(null);
             }
         }
 
         return $this;
     }
+
 }

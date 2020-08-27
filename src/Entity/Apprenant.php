@@ -102,15 +102,14 @@ class Apprenant extends User
     private $statut;
 
     /**
-     * @ORM\ManyToMany(targetEntity=LivrablePartiels::class, inversedBy="apprenants")
-     * @Groups({"apprenant:read"})
+     * @ORM\OneToMany(targetEntity=LivrablePartielApprenant::class, mappedBy="apprenant")
      */
-    private $livrablesPartiels;
+    private $livrablePartielApprenants;
 
     /**
-     * @ORM\OneToMany(targetEntity=Livrable::class, mappedBy="apprenant")
+     * @ORM\OneToMany(targetEntity=LivrableAttenduApprenant::class, mappedBy="apprenant")
      */
-    private $livrable;
+    private $livrableAttenduApprenants;
 
     public function __construct()
     {
@@ -118,6 +117,8 @@ class Apprenant extends User
         $this->livrablesPartiels = new ArrayCollection();
         $this->livrableAtendus = new ArrayCollection();
         $this->livrableAttendus = new ArrayCollection();
+        $this->livrablePartielApprenants = new ArrayCollection();
+        $this->livrableAttenduApprenants = new ArrayCollection();
     }
 
 
@@ -208,56 +209,61 @@ class Apprenant extends User
     }
 
     /**
-     * @return Collection|LivrablePartiels[]
+     * @return Collection|LivrablePartielApprenant[]
      */
-    public function getLivrablesPartiels(): Collection
+    public function getLivrablePartielApprenants(): Collection
     {
-        return $this->livrablesPartiels;
+        return $this->livrablePartielApprenants;
     }
 
-    public function addLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    public function addLivrablePartielApprenant(LivrablePartielApprenant $livrablePartielApprenant): self
     {
-        if (!$this->livrablesPartiels->contains($livrablesPartiel)) {
-            $this->livrablesPartiels[] = $livrablesPartiel;
+        if (!$this->livrablePartielApprenants->contains($livrablePartielApprenant)) {
+            $this->livrablePartielApprenants[] = $livrablePartielApprenant;
+            $livrablePartielApprenant->setApprenant($this);
         }
 
         return $this;
     }
 
-    public function removeLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    public function removeLivrablePartielApprenant(LivrablePartielApprenant $livrablePartielApprenant): self
     {
-        if ($this->livrablesPartiels->contains($livrablesPartiel)) {
-            $this->livrablesPartiels->removeElement($livrablesPartiel);
+        if ($this->livrablePartielApprenants->contains($livrablePartielApprenant)) {
+            $this->livrablePartielApprenants->removeElement($livrablePartielApprenant);
+            // set the owning side to null (unless already changed)
+            if ($livrablePartielApprenant->getApprenant() === $this) {
+                $livrablePartielApprenant->setApprenant(null);
+            }
         }
 
         return $this;
     }
 
     /**
-     * @return Collection|Livrable[]
+     * @return Collection|LivrableAttenduApprenant[]
      */
-    public function getLivrable(): Collection
+    public function getLivrableAttenduApprenants(): Collection
     {
-        return $this->livrable;
+        return $this->livrableAttenduApprenants;
     }
 
-    public function addLivrable(Livrable $livrable): self
+    public function addLivrableAttenduApprenant(LivrableAttenduApprenant $livrableAttenduApprenant): self
     {
-        if (!$this->livrable->contains($livrable)) {
-            $this->livrable[] = $livrable;
-            $livrable->setApprenant($this);
+        if (!$this->livrableAttenduApprenants->contains($livrableAttenduApprenant)) {
+            $this->livrableAttenduApprenants[] = $livrableAttenduApprenant;
+            $livrableAttenduApprenant->setApprenant($this);
         }
 
         return $this;
     }
 
-    public function removeLivrable(Livrable $livrable): self
+    public function removeLivrableAttenduApprenant(LivrableAttenduApprenant $livrableAttenduApprenant): self
     {
-        if ($this->livrable->contains($livrable)) {
-            $this->livrable->removeElement($livrable);
+        if ($this->livrableAttenduApprenants->contains($livrableAttenduApprenant)) {
+            $this->livrableAttenduApprenants->removeElement($livrableAttenduApprenant);
             // set the owning side to null (unless already changed)
-            if ($livrable->getApprenant() === $this) {
-                $livrable->setApprenant(null);
+            if ($livrableAttenduApprenant->getApprenant() === $this) {
+                $livrableAttenduApprenant->setApprenant(null);
             }
         }
 
