@@ -20,6 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="616230c9-1139-4e5d-948f-37ed1360cdad" name="Default Changelist" comment="">
+<<<<<<< HEAD
       <change afterPath="$PROJECT_DIR$/migrations/Version20200826142440.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/migrations/Version20200826142521.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/migrations/Version20200826144437.php" afterDir="false" />
@@ -34,6 +35,8 @@
       <change afterPath="$PROJECT_DIR$/src/Entity/LivrablePartielApprenant.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Repository/LivrableAttenduApprenantRepository.php" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/Repository/LivrablePartielApprenantRepository.php" afterDir="false" />
+=======
+>>>>>>> 87d86c5bf22dba6c7fba4e58ee47bfb2010e7ec2
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2" beforeDir="false" afterPath="$PROJECT_DIR$/PRF_G2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/PRF_G2/.idea/php.xml" afterDir="false" />
@@ -139,6 +142,7 @@
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/brief/index.html.twig" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/referentiel/index.html.twig" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/PRF_G2/templates/user/index.html.twig" beforeDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/src/Controller/BriefController.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/BriefController.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/DataFixtures/CompetenceFixtures.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/Apprenant.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/Apprenant.php" afterDir="false" />
@@ -146,6 +150,8 @@
       <change beforePath="$PROJECT_DIR$/src/Entity/Livrable.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/LivrableAttendus.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/LivrableAttendus.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entity/LivrablePartiels.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entity/LivrablePartiels.php" afterDir="false" />
+=======
+>>>>>>> 87d86c5bf22dba6c7fba4e58ee47bfb2010e7ec2
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -368,9 +374,13 @@
       <workItem from="1598402256224" duration="1838000" />
       <workItem from="1598433275513" duration="1578000" />
       <workItem from="1598436157321" duration="665000" />
+<<<<<<< HEAD
       <workItem from="1598437959532" duration="1944000" />
       <workItem from="1598442915749" duration="3453000" />
       <workItem from="1598446646213" duration="13748000" />
+=======
+      <workItem from="1598437959532" duration="1211000" />
+>>>>>>> 87d86c5bf22dba6c7fba4e58ee47bfb2010e7ec2
     </task>
     <servers />
   </component>
