@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\RessourceRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -45,8 +44,15 @@ class Ressource
 
     /**
      * @ORM\ManyToOne(targetEntity=Brief::class, inversedBy="ressources")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $brief;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Groups({"ressource:read","brief:read"})
+     */
+    private $type;
 
     public function getId(): ?int
     {
@@ -97,6 +103,18 @@ class Ressource
     public function setBrief(?Brief $brief): self
     {
         $this->brief = $brief;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

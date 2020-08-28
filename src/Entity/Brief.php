@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use App\Repository\BriefRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BriefRepository;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource(
- *     normalizationContext={"groups"={"brief:read"}},
+ *@ApiResource(
+ *     normalizationContext={"groups"={"brief:read","BriefMaPromo:read"}},
  *     denormalizationContext={"groups"={"brief:write"}}
  * )
  * @ORM\Entity(repositoryClass=BriefRepository::class)
@@ -82,7 +82,7 @@ class Brief
     private $ModaliteDevaluation;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="blob",nullable=true)
      * @Groups({"brief:read","brief:write"})
      */
     private $ImageExemplaire;
@@ -94,19 +94,6 @@ class Brief
     private $langue;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"brief:read","brief:write"})
-     */
-    private $etat;
-
-
-    /**
-     * @ORM\Column(type="boolean", nullable=true, options={"default" : false})
-     * @Groups({"brief:read"})
-     */
-    private $archivage;
-
-    /**
      * @ORM\OneToMany(targetEntity=Ressource::class, mappedBy="brief")
      * @ApiSubresource()
      * @Groups({"brief:read","brief:write"})
@@ -114,24 +101,19 @@ class Brief
     private $ressources;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="briefs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToMany(targetEntity=Niveau::class, inversedBy="brief")
      * @ApiSubresource()
      * @Groups({"brief:read","brief:write"})
      */
-    private $referentiel;
+    private $niveau;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Promotion::class, inversedBy="briefs", cascade = { "persist" })
+     * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="briefs")
      * @ApiSubresource()
-     * @Groups({"brief:write"})
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"brief:read","brief:write"})
      */
-    private $promo;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="briefs", cascade = { "persist" })
-     */
-    private $groupe;
+    private $referentiel;
 
     /**
      * @ORM\ManyToOne(targetEntity=Formateur::class, inversedBy="briefs")
@@ -144,21 +126,38 @@ class Brief
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="briefs")
      * @ApiSubresource()
-     * @Groups({"brief:read","brief:write"})
+     * @Groups({"brief:read"})
      */
     private $tag;
 
     /**
-     * @ORM\ManyToMany(targetEntity=LivrableAttendus::class, inversedBy="briefs", cascade = { "persist" })
+     * @ORM\ManyToMany(targetEntity=LivrableAttendus::class, inversedBy="briefs")
      * @ApiSubresource()
-     * @Groups({"brief:read","brief:write"})
+     * @Groups({"brief:read"})
      */
     private $LivrableAttendus;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Niveau::class, mappedBy="brief")
+     * @ORM\Column(type="boolean", nullable=true, options={"default" : false})
+     * @Groups({"brief:read"})
      */
-    private $niveaux;
+    private $archivage;
+
+    /**
+     * @ORM\Column(type="string", length=30)
+     * @Groups({"brief:read","brief:write"})
+     */
+    private $etat;
+
+    /**
+     * @ORM\OneToMany(targetEntity=BriefMaPromo::class, mappedBy="brief")
+     */
+    private $briefMaPromos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=EtatbriefGroupe::class, mappedBy="briefs")
+     */
+    private $etatbriefGroupes;
 
     public function getUid()
     {
@@ -172,9 +171,11 @@ class Brief
         $this->promo = new ArrayCollection();
         $this->groupe = new ArrayCollection();
         $this->tag = new ArrayCollection();
+
         $this->LivrableAttendus = new ArrayCollection();
-        $this->LivrablePartiels = new ArrayCollection();
-        $this->niveaux = new ArrayCollection();
+
+        $this->briefMaPromos = new ArrayCollection();
+        $this->etatbriefGroupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -292,6 +293,7 @@ class Brief
 
     public function getImageExemplaire()
     {
+
         return base64_encode(stream_get_contents($this->ImageExemplaire));
         //return $this->ImageExemplaire;
     }
@@ -311,18 +313,6 @@ class Brief
     public function setLangue(string $langue): self
     {
         $this->langue = $langue;
-
-        return $this;
-    }
-
-    public function getEtat(): ?string
-    {
-        return $this->etat;
-    }
-
-    public function setEtat(string $etat): self
-    {
-        $this->etat = $etat;
 
         return $this;
     }
@@ -358,6 +348,38 @@ class Brief
         return $this;
     }
 
+    /**
+     * @return Collection|Niveau[]
+     */
+    public function getNiveau(): Collection
+    {
+        return $this->niveau;
+    }
+
+    public function addNiveau(Niveau $niveau): self
+    {
+        if (!$this->niveau->contains($niveau)) {
+            $this->niveau[] = $niveau;
+        }
+
+        return $this;
+
+        
+    }
+
+    public function removeNiveau(Niveau $niveau): self
+    {
+        if ($this->niveau->contains($niveau)) {
+            $this->niveau->removeElement($niveau);
+            // set the owning side to null (unless already changed)
+            if ($niveau->getBrief() === $this) {
+                $niveau->setBrief(null);
+            }
+        }
+
+        return $this;
+    }
+
     public function getReferentiel(): ?Referentiel
     {
         return $this->referentiel;
@@ -366,58 +388,6 @@ class Brief
     public function setReferentiel(?Referentiel $referentiel): self
     {
         $this->referentiel = $referentiel;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Promotion[]
-     */
-    public function getPromo(): Collection
-    {
-        return $this->promo;
-    }
-
-    public function addPromo(Promotion $promo): self
-    {
-        if (!$this->promo->contains($promo)) {
-            $this->promo[] = $promo;
-        }
-
-        return $this;
-    }
-
-    public function removePromo(Promotion $promo): self
-    {
-        if ($this->promo->contains($promo)) {
-            $this->promo->removeElement($promo);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Groupes[]
-     */
-    public function getGroupe(): Collection
-    {
-        return $this->groupe;
-    }
-
-    public function addGroupe(Groupes $groupe): self
-    {
-        if (!$this->groupe->contains($groupe)) {
-            $this->groupe[] = $groupe;
-        }
-
-        return $this;
-    }
-
-    public function removeGroupe(Groupes $groupe): self
-    {
-        if ($this->groupe->contains($groupe)) {
-            $this->groupe->removeElement($groupe);
-        }
 
         return $this;
     }
@@ -491,39 +461,84 @@ class Brief
         return $this->archivage;
     }
 
-    public function setArchivage(?bool $archivage): self
+    public function setArchivage(bool $archivage): self
     {
         $this->archivage = $archivage;
 
         return $this;
     }
 
+    public function getEtat(): ?string
+    {
+        return $this->etat;
+    }
+
+    public function setEtat(string $etat): self
+    {
+        $this->etat = $etat;
+
+        return $this;
+    }
+
     /**
-     * @return Collection|Niveau[]
+     * @return Collection|BriefMaPromo[]
      */
-    public function getNiveaux(): Collection
+    public function getBriefMaPromos(): Collection
     {
-        return $this->niveaux;
+        return $this->briefMaPromos;
     }
 
-    public function addNiveau(Niveau $niveau): self
+    public function addBriefMaPromo(BriefMaPromo $briefMaPromo): self
     {
-        if (!$this->niveaux->contains($niveau)) {
-            $this->niveaux[] = $niveau;
-            $niveau->addBrief($this);
+        if (!$this->briefMaPromos->contains($briefMaPromo)) {
+            $this->briefMaPromos[] = $briefMaPromo;
+            $briefMaPromo->setBrief($this);
         }
 
         return $this;
     }
 
-    public function removeNiveau(Niveau $niveau): self
+    public function removeBriefMaPromo(BriefMaPromo $briefMaPromo): self
     {
-        if ($this->niveaux->contains($niveau)) {
-            $this->niveaux->removeElement($niveau);
-            $niveau->removeBrief($this);
+        if ($this->briefMaPromos->contains($briefMaPromo)) {
+            $this->briefMaPromos->removeElement($briefMaPromo);
+            // set the owning side to null (unless already changed)
+            if ($briefMaPromo->getBrief() === $this) {
+                $briefMaPromo->setBrief(null);
+            }
         }
 
         return $this;
     }
 
+    /**
+     * @return Collection|EtatbriefGroupe[]
+     */
+    public function getEtatbriefGroupes(): Collection
+    {
+        return $this->etatbriefGroupes;
+    }
+
+    public function addEtatbriefGroupe(EtatbriefGroupe $etatbriefGroupe): self
+    {
+        if (!$this->etatbriefGroupes->contains($etatbriefGroupe)) {
+            $this->etatbriefGroupes[] = $etatbriefGroupe;
+            $etatbriefGroupe->setBriefs($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEtatbriefGroupe(EtatbriefGroupe $etatbriefGroupe): self
+    {
+        if ($this->etatbriefGroupes->contains($etatbriefGroupe)) {
+            $this->etatbriefGroupes->removeElement($etatbriefGroupe);
+            // set the owning side to null (unless already changed)
+            if ($etatbriefGroupe->getBriefs() === $this) {
+                $etatbriefGroupe->setBriefs(null);
+            }
+        }
+
+        return $this;
+    }
 }

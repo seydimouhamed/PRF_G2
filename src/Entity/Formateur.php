@@ -42,7 +42,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *                  "security_message"="Acces non autorisé",
  *          },
  *      },
- *       normalizationContext={"groups"={"user:read","formateur:read","brief:read"}},
+ *       normalizationContext={"groups"={"user:read","formateur:read"}},
  *       denormalizationContext={"groups"={"user:write","formateur:write"}},
  *       attributes={"pagination_enabled"=true, "pagination_items_per_page"=2}
  * )
@@ -50,6 +50,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class Formateur extends User
 {
+
     /**
      * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="formateurs")
      */
@@ -66,7 +67,7 @@ class Formateur extends User
     private $briefs;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Commentaires::class, mappedBy="formateurs")
+     * @ORM\OneToMany(targetEntity=Commentaire::class, mappedBy="formateur")
      */
     private $commentaires;
 
@@ -164,28 +165,31 @@ class Formateur extends User
     }
 
     /**
-     * @return Collection|Commentaires[]
+     * @return Collection|Commentaire[]
      */
     public function getCommentaires(): Collection
     {
         return $this->commentaires;
     }
 
-    public function addCommentaire(Commentaires $commentaire): self
+    public function addCommentaire(Commentaire $commentaire): self
     {
         if (!$this->commentaires->contains($commentaire)) {
             $this->commentaires[] = $commentaire;
-            $commentaire->addFormateur($this);
+            $commentaire->setFormateur($this);
         }
 
         return $this;
     }
 
-    public function removeCommentaire(Commentaires $commentaire): self
+    public function removeCommentaire(Commentaire $commentaire): self
     {
         if ($this->commentaires->contains($commentaire)) {
             $this->commentaires->removeElement($commentaire);
-            $commentaire->removeFormateur($this);
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getFormateur() === $this) {
+                $commentaire->setFormateur(null);
+            }
         }
 
         return $this;

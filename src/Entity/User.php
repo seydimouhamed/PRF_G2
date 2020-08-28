@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
@@ -120,6 +122,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="blob", nullable=true)
+     * 
      *  @Groups({"user:read", "user:write", "profil:read"})
      *  @Groups({"groupe:read"})
      *  @Groups({"promo:read"})
@@ -140,6 +143,16 @@ class User implements UserInterface
      * @Groups({"promo:read"})
      */
     private $archivage;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Chat::class, mappedBy="user")
+     */
+    private $chats;
+
+    public function __construct()
+    {
+        $this->chats = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -254,11 +267,16 @@ class User implements UserInterface
 
     public function getPhoto()
     {
-        //  $data = stream_get_contents($this->photo);
-        //  fclose($this->photo);
+        if($this->photo)
+        {
+            $data = stream_get_contents($this->photo);
+            fclose($this->photo);
 
-        // return base64_encode($data);
-        return $this->photo;
+            return base64_encode($data);
+        }else 
+        {
+            return null;
+        }
     }
 
     public function setPhoto($photo): self
@@ -310,5 +328,41 @@ class User implements UserInterface
         $this->archivage = $archivage;
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Chat[]
+     */
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): self
+    {
+        if (!$this->chats->contains($chat)) {
+            $this->chats[] = $chat;
+            $chat->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): self
+    {
+        if ($this->chats->contains($chat)) {
+            $this->chats->removeElement($chat);
+            // set the owning side to null (unless already changed)
+            if ($chat->getUser() === $this) {
+                $chat->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInfoUser()
+    {
+        return ["id"=>$this->getId(),"prenom"=>$this->getFisrtName(),"nom"=>$this->getLastName(),"email"=>$this->getEmail()];
     }
 }

@@ -22,7 +22,7 @@ class Niveau
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"niveau:read","competence:read","brief:read","livrablePartiel:read"})
+     * @Groups({"niveau:read"})
      */
     private $id;
 
@@ -34,30 +34,31 @@ class Niveau
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read","brief:read","livrablePartiel:read"})
+     * @Groups({"niveau:read"})
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"niveau:read", "competence:read","brief:read","livrablePartiel:read"})
+     * @Groups({"niveau:read"})
      */
     private $groupeAction;
 
     /**
      * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="niveaux")
+     * @Groups({"niveau:read"})
      */
     private $competence;
 
     /**
-     * @ORM\ManyToMany(targetEntity=LivrablePartiels::class, inversedBy="niveaux")
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="niveau")
      */
-    private $livrablesPartiels;
+    private $briefs;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, inversedBy="niveaux")
+     * @ORM\ManyToMany(targetEntity=LivrablePartiels::class, mappedBy="niveau")
      */
-    private $brief;
+    private $livrablePartiels;
 
     // /**
     //  * @ORM\OneToMany(targetEntity=Competence::class, mappedBy="niveau")
@@ -67,8 +68,7 @@ class Niveau
     public function __construct()
     {
        // $this->competences = new ArrayCollection();
-       $this->livrablesPartiels = new ArrayCollection();
-       $this->brief = new ArrayCollection();
+       $this->livrablePartiels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -124,53 +124,57 @@ class Niveau
         return $this;
     }
 
+     /**
+     * @return Collection|Brief[]
+     */
+    public function getBriefs(): Collection
+    {
+        return $this->briefs;
+    }
+
+    public function addBrief(Brief $briefs): self
+    {
+        if (!$this->briefs->contains($briefs)) {
+            $this->briefs[] = $briefs;
+            $briefs->addNiveau($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrief(Brief $briefs): self
+    {
+        if ($this->briefs->contains($briefs)) {
+            $this->briefs->removeElement($briefs);
+            $briefs->removeNiveau($this);
+        }
+
+        return $this;
+    }
+
     /**
      * @return Collection|LivrablePartiels[]
      */
-    public function getLivrablesPartiels(): Collection
+    public function getLivrablePartiels(): Collection
     {
-        return $this->livrablesPartiels;
+        return $this->livrablePartiels;
     }
 
-    public function addLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    public function addLivrablePartiel(LivrablePartiels $livrablePartiel): self
     {
-        if (!$this->livrablesPartiels->contains($livrablesPartiel)) {
-            $this->livrablesPartiels[] = $livrablesPartiel;
+        if (!$this->livrablePartiels->contains($livrablePartiel)) {
+            $this->livrablePartiels[] = $livrablePartiel;
+            $livrablePartiel->addNiveau($this);
         }
 
         return $this;
     }
 
-    public function removeLivrablesPartiel(LivrablePartiels $livrablesPartiel): self
+    public function removeLivrablePartiel(LivrablePartiels $livrablePartiel): self
     {
-        if ($this->livrablesPartiels->contains($livrablesPartiel)) {
-            $this->livrablesPartiels->removeElement($livrablesPartiel);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Brief[]
-     */
-    public function getBrief(): Collection
-    {
-        return $this->brief;
-    }
-
-    public function addBrief(Brief $brief): self
-    {
-        if (!$this->brief->contains($brief)) {
-            $this->brief[] = $brief;
-        }
-
-        return $this;
-    }
-
-    public function removeBrief(Brief $brief): self
-    {
-        if ($this->brief->contains($brief)) {
-            $this->brief->removeElement($brief);
+        if ($this->livrablePartiels->contains($livrablePartiel)) {
+            $this->livrablePartiels->removeElement($livrablePartiel);
+            $livrablePartiel->removeNiveau($this);
         }
 
         return $this;

@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
+ *          routePrefix="/admin",
  *      itemOperations={
  *           "get_cm_id"={ 
  *               "method"="GET", 

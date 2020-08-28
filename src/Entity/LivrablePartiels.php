@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use App\Repository\LivrablePartielsRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
+use App\Repository\LivrablePartielsRepository;
 use Symfony\Component\Serializer\Annotation\Groups;
 
-/**
+/**  
  * @ApiResource(
  *     normalizationContext={"groups"={"apprenant:read","livrablePartiel:read"}},
  *     denormalizationContext={"groups"={"livrablePartiel:write"}}
@@ -51,29 +51,52 @@ class LivrablePartiels
      */
     private $dateCreation;
 
+
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=50)
      * @Groups({"livrablePartiel:read","apprenant:read"})
      */
-    private $statut;
+    private $etat;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Niveau::class, mappedBy="livrablesPartiels")
+     * @ORM\Column(type="string", length=50)
+     * @Groups({"livrablePartiel:read","apprenant:read"})
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"livrablePartiel:read","apprenant:read"})
+     */
+    private $nbreRendu;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"livrablePartiel:read","apprenant:read"})
+     */
+    private $nbreCorriger;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=BriefMaPromo::class, inversedBy="livrablePartiels"))
      * @Groups({"livrablePartiel:read"})
      */
-    private $niveaux;
+    private $briefMaPromo;
 
     /**
-     * @ORM\OneToMany(targetEntity=LivrablePartielApprenant::class, mappedBy="livrablePartiel")
+     * @ORM\ManyToMany(targetEntity=Niveau::class, inversedBy="livrablePartiels"))
+     * @Groups({"livrablePartiel:read"})
+     */
+    private $niveau;
+
+    /**
+     * @ORM\OneToMany(targetEntity=LivrablePartielApprenant::class, mappedBy="livrablePartiel"))
      * @Groups({"livrablePartiel:read"})
      */
     private $livrablePartielApprenants;
 
     public function __construct()
     {
-        $this->niveaux = new ArrayCollection();
-        $this->apprenants = new ArrayCollection();
-        $this->filDiscussions = new ArrayCollection();
+        $this->niveau = new ArrayCollection();
         $this->livrablePartielApprenants = new ArrayCollection();
     }
 
@@ -130,14 +153,62 @@ class LivrablePartiels
         return $this;
     }
 
-    public function getStatut(): ?string
+    public function getEtat(): ?string
     {
-        return $this->statut;
+        return $this->etat;
     }
 
-    public function setStatut(string $statut): self
+    public function setEtat(string $etat): self
     {
-        $this->statut = $statut;
+        $this->etat = $etat;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getNbreRendu(): ?int
+    {
+        return $this->nbreRendu;
+    }
+
+    public function setNbreRendu(?int $nbreRendu): self
+    {
+        $this->nbreRendu = $nbreRendu;
+
+        return $this;
+    }
+
+    public function getNbreCorriger(): ?int
+    {
+        return $this->nbreCorriger;
+    }
+
+    public function setNbreCorriger(?int $nbreCorriger): self
+    {
+        $this->nbreCorriger = $nbreCorriger;
+
+        return $this;
+    }
+
+    public function getBriefMaPromo(): ?BriefMaPromo
+    {
+        return $this->briefMaPromo;
+    }
+
+    public function setBriefMaPromo(?BriefMaPromo $briefMaPromo): self
+    {
+        $this->briefMaPromo = $briefMaPromo;
 
         return $this;
     }
@@ -145,16 +216,15 @@ class LivrablePartiels
     /**
      * @return Collection|Niveau[]
      */
-    public function getNiveaux(): Collection
+    public function getNiveau(): Collection
     {
-        return $this->niveaux;
+        return $this->niveau;
     }
 
     public function addNiveau(Niveau $niveau): self
     {
-        if (!$this->niveaux->contains($niveau)) {
-            $this->niveaux[] = $niveau;
-            $niveau->addLivrablesPartiel($this);
+        if (!$this->niveau->contains($niveau)) {
+            $this->niveau[] = $niveau;
         }
 
         return $this;
@@ -162,9 +232,8 @@ class LivrablePartiels
 
     public function removeNiveau(Niveau $niveau): self
     {
-        if ($this->niveaux->contains($niveau)) {
-            $this->niveaux->removeElement($niveau);
-            $niveau->removeLivrablesPartiel($this);
+        if ($this->niveau->contains($niveau)) {
+            $this->niveau->removeElement($niveau);
         }
 
         return $this;
@@ -200,5 +269,4 @@ class LivrablePartiels
 
         return $this;
     }
-
 }

@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(routePrefix="/admin",
- *       normalizationContext={"groups"={"groupe:read","brief:read"}},
+ *       normalizationContext={"groups"={"groupe:read"}},
  *       denormalizationContext={"groups"={"groupe:write"}})
  * @ORM\Entity(repositoryClass=GroupesRepository::class)
  */
@@ -22,39 +22,39 @@ class Groupes
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"groupe:read","brief:read"})
+     * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"groupe:read", "groupe:write","brief:read"})
+     * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="date", nullable=true)
-     * @Groups({"groupe:read", "groupe:write","promo:read","brief:read"})
+     * @Groups({"groupe:read", "groupe:write","promo:read"})
      */
     private $dateCreation;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"groupe:read", "groupe:write","brief:read"})
+     * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
      */
     private $statut;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"groupe:read", "groupe:write","promo:read","brief:read"})
+     * @Groups({"groupe:read", "groupe:write","promo:read"})
      */
     private $type;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes", cascade = { "persist" })
+     * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="groupes")
      */
     private $promotion;
 
@@ -74,16 +74,16 @@ class Groupes
     private $formateurs;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="groupe", cascade = { "persist" })
-     * @Groups({"groupe:read"})
+     * @ORM\OneToMany(targetEntity=EtatbriefGroupe::class, mappedBy="groupe")
      */
-    private $briefs;
+    private $etatbriefGroupes;
 
     public function __construct()
     {
         $this->apprenants = new ArrayCollection();
         $this->formateurs = new ArrayCollection();
         $this->briefs = new ArrayCollection();
+        $this->etatbriefGroupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -230,6 +230,37 @@ class Groupes
         if ($this->briefs->contains($brief)) {
             $this->briefs->removeElement($brief);
             $brief->removeGroupe($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|EtatbriefGroupe[]
+     */
+    public function getEtatbriefGroupes(): Collection
+    {
+        return $this->etatbriefGroupes;
+    }
+
+    public function addEtatbriefGroupe(EtatbriefGroupe $etatbriefGroupe): self
+    {
+        if (!$this->etatbriefGroupes->contains($etatbriefGroupe)) {
+            $this->etatbriefGroupes[] = $etatbriefGroupe;
+            $etatbriefGroupe->setGroupe($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEtatbriefGroupe(EtatbriefGroupe $etatbriefGroupe): self
+    {
+        if ($this->etatbriefGroupes->contains($etatbriefGroupe)) {
+            $this->etatbriefGroupes->removeElement($etatbriefGroupe);
+            // set the owning side to null (unless already changed)
+            if ($etatbriefGroupe->getGroupe() === $this) {
+                $etatbriefGroupe->setGroupe(null);
+            }
         }
 
         return $this;

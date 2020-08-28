@@ -78,6 +78,7 @@ class Competence
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"competence:read"})
      */
     private $descriptif;
 
@@ -86,10 +87,16 @@ class Competence
      */
     private $niveaux;
 
+    /**
+     * @ORM\OneToMany(targetEntity=CompetencesValide::class, mappedBy="competence")
+     */
+    private $competencesValides;
+
     public function __construct()
     {
         $this->groupeCompetences = new ArrayCollection();
         $this->niveaux = new ArrayCollection();
+        $this->competencesValides = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -186,6 +193,37 @@ class Competence
             // set the owning side to null (unless already changed)
             if ($niveau->getCompetence() === $this) {
                 $niveau->setCompetence(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CompetencesValide[]
+     */
+    public function getCompetencesValides(): Collection
+    {
+        return $this->competencesValides;
+    }
+
+    public function addCompetencesValide(CompetencesValide $competencesValide): self
+    {
+        if (!$this->competencesValides->contains($competencesValide)) {
+            $this->competencesValides[] = $competencesValide;
+            $competencesValide->setCompetence($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCompetencesValide(CompetencesValide $competencesValide): self
+    {
+        if ($this->competencesValides->contains($competencesValide)) {
+            $this->competencesValides->removeElement($competencesValide);
+            // set the owning side to null (unless already changed)
+            if ($competencesValide->getCompetence() === $this) {
+                $competencesValide->setCompetence(null);
             }
         }
 

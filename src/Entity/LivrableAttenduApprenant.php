@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\LivrableAttenduApprenantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=LivrableAttenduApprenantRepository::class)
  */
 class LivrableAttenduApprenant
@@ -33,14 +33,6 @@ class LivrableAttenduApprenant
      * @ORM\ManyToOne(targetEntity=LivrableAttendus::class, inversedBy="livrableAttenduApprenants")
      */
     private $livrableAttendu;
-
-    public function __construct()
-    {
-        $this->apprenant = new ArrayCollection();
-        $this->livrableAttendu = new ArrayCollection();
-        $this->apprenants = new ArrayCollection();
-        $this->livrableAttenduses = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {

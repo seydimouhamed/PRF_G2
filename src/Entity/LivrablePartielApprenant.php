@@ -38,6 +38,12 @@ class LivrablePartielApprenant
     private $etat;
 
     /**
+     * @ORM\OneToOne(targetEntity=FilDiscussion::class, cascade={"persist", "remove"})
+     * @Groups({"livrablePartiel:read","livrable:read"})
+     */
+    private $Fil;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Apprenant::class, inversedBy="livrablePartielApprenants")
      */
     private $apprenant;
@@ -46,12 +52,6 @@ class LivrablePartielApprenant
      * @ORM\ManyToOne(targetEntity=LivrablePartiels::class, inversedBy="livrablePartielApprenants")
      */
     private $livrablePartiel;
-
-    /**
-     * @ORM\OneToOne(targetEntity=FilDiscussion::class, cascade={"persist", "remove"})
-     * @Groups({"livrablePartiel:read","livrable:read"})
-     */
-    private $Fil;
 
     public function __construct()
     {
@@ -90,6 +90,18 @@ class LivrablePartielApprenant
         return $this;
     }
 
+    public function getFil(): ?FilDiscussion
+    {
+        return $this->Fil;
+    }
+
+    public function setFil(?FilDiscussion $Fil): self
+    {
+        $this->Fil = $Fil;
+
+        return $this;
+    }
+
     public function getApprenant(): ?Apprenant
     {
         return $this->apprenant;
@@ -110,18 +122,6 @@ class LivrablePartielApprenant
     public function setLivrablePartiel(?LivrablePartiels $livrablePartiel): self
     {
         $this->livrablePartiel = $livrablePartiel;
-
-        return $this;
-    }
-
-    public function getFil(): ?FilDiscussion
-    {
-        return $this->Fil;
-    }
-
-    public function setFil(?FilDiscussion $Fil): self
-    {
-        $this->Fil = $Fil;
 
         return $this;
     }

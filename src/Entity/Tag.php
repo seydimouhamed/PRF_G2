@@ -42,7 +42,7 @@ class Tag
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="tag", cascade = { "persist" })
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="tag")
      */
     private $briefs;
 

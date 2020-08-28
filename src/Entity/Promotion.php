@@ -63,6 +63,10 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *                                      "route_name"="add_promo_formateur",
  *                                       "defaults"={"id"=null},
  *                                      "add_promo_discontinuation",},
+ *
+ *
+ *
+ *
  *                      },
  *      normalizationContext={"groups"={"promo:read","brief:read"}},
  *      denormalizationContext={"groups"={"promo:write"}}
@@ -137,15 +141,15 @@ class Promotion
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      * @Assert\NotBlank
      */
     private $status;
 
     /**
-     * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion", cascade = { "persist" })
+     * @ORM\OneToMany(targetEntity=Groupes::class, mappedBy="promotion")
      * @ApiSubresource()
-     * @Groups({"promo:read","brief:read"})
+     * @Groups({"promo:read"})
      *
      */
     private $groupes;
@@ -154,13 +158,13 @@ class Promotion
 
     /**
      * @ORM\Column(type="blob", nullable=true)
-     * @Groups({"promo:read","brief:read"})
+     * @Groups({"promo:read"})
      */
     private $avatar;
 
 
     /**
-     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions", cascade = { "persist" })
+     * @ORM\ManyToMany(targetEntity=Formateur::class, inversedBy="promotions")
      * @ApiSubresource()
      * @Groups({"promo:read"})
      */
@@ -174,16 +178,23 @@ class Promotion
     private $referentiel;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="promo", cascade = { "persist" })
+     * @ORM\OneToMany(targetEntity=BriefMaPromo::class, mappedBy="promo")
      * @Groups({"promo:read"})
      */
-    private $briefs;
+    private $briefMaPromos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Chat::class, mappedBy="promo")
+     */
+    private $chats;
 
     public function __construct()
     {
         $this->groupes = new ArrayCollection();
         $this->formateurs = new ArrayCollection();
         $this->briefs = new ArrayCollection();
+        $this->briefMaPromos = new ArrayCollection();
+        $this->chats = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -386,32 +397,68 @@ class Promotion
     }
 
     /**
-     * @return Collection|Brief[]
+     * @return Collection|BriefMaPromo[]
      */
-    public function getBriefs(): Collection
+    public function getBriefMaPromos(): Collection
     {
-        return $this->briefs;
+        return $this->briefMaPromos;
     }
 
-    public function addBrief(Brief $brief): self
+    public function addBriefMaPromo(BriefMaPromo $briefMaPromo): self
     {
-        if (!$this->briefs->contains($brief)) {
-            $this->briefs[] = $brief;
-            $brief->addPromo($this);
+        if (!$this->briefMaPromos->contains($briefMaPromo)) {
+            $this->briefMaPromos[] = $briefMaPromo;
+            $briefMaPromo->setPromo($this);
         }
 
         return $this;
     }
 
-    public function removeBrief(Brief $brief): self
+    public function removeBriefMaPromo(BriefMaPromo $briefMaPromo): self
     {
-        if ($this->briefs->contains($brief)) {
-            $this->briefs->removeElement($brief);
-            $brief->removePromo($this);
+        if ($this->briefMaPromos->contains($briefMaPromo)) {
+            $this->briefMaPromos->removeElement($briefMaPromo);
+            // set the owning side to null (unless already changed)
+            if ($briefMaPromo->getPromo() === $this) {
+                $briefMaPromo->setPromo(null);
+            }
         }
 
         return $this;
     }
+
+    /**
+     * @return Collection|Chat[]
+     */
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): self
+    {
+        if (!$this->chats->contains($chat)) {
+            $this->chats[] = $chat;
+            $chat->setPromo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): self
+    {
+        if ($this->chats->contains($chat)) {
+            $this->chats->removeElement($chat);
+            // set the owning side to null (unless already changed)
+            if ($chat->getPromo() === $this) {
+                $chat->setPromo(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 
 
 

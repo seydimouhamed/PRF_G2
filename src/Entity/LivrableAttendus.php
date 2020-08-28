@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\LivrableAttendusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -34,8 +33,7 @@ class LivrableAttendus
     private $libelle;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="LivrableAttendus", cascade = { "persist" })
-     * @ApiSubresource
+     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="LivrableAttendus")
      */
     private $briefs;
 
@@ -47,8 +45,6 @@ class LivrableAttendus
     public function __construct()
     {
         $this->briefs = new ArrayCollection();
-        $this->apprenants = new ArrayCollection();
-        $this->livrables = new ArrayCollection();
         $this->livrableAttenduApprenants = new ArrayCollection();
     }
 
@@ -82,6 +78,16 @@ class LivrableAttendus
         if (!$this->briefs->contains($brief)) {
             $this->briefs[] = $brief;
             $brief->addLivrableAttendu($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBrief(Brief $brief): self
+    {
+        if ($this->briefs->contains($brief)) {
+            $this->briefs->removeElement($brief);
+            $brief->removeLivrableAttendu($this);
         }
 
         return $this;

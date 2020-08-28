@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Apprenant;
 use App\Entity\Brief;
+use App\Entity\BriefApprenant;
+use App\Entity\BriefMaPromo;
 use App\Entity\Competence;
+use App\Entity\EtatbriefGroupe;
 use App\Entity\Formateur;
 use App\Entity\Groupes;
 use App\Entity\Livrable;
@@ -56,25 +59,29 @@ class BriefController extends AbstractController
      *     }
      *  )
      */
-    public function get_all_brief($id,$id1,$id2)
+    public function get_One_brief($id,$id1,$id2)
     {
         $for = $this->em->getRepository(Formateur::class)->find($id);
         $promo = $this->em->getRepository(Promotion::class)->find($id1);
         $b = $this->em->getRepository(Brief::class)->find($id2);
         if (isset($for)){
+            $brief=[];
             $pro=$for->getPromotions();
             foreach ($pro as $val){
                 if ($promo==$val) {
-                    $brief=$promo->getBriefs();
-                    foreach ($brief as $value) {
-                        if ($b == $value) {
-                            return $this->json($b, 200);
+                    $briefm=$promo->getBriefMaPromos();
+                    foreach ($briefm as $value) {
+                        $brief[]=$value->getBrief();
+                        for ($i=0;$i<count($brief);$i++){
+                            if ($b==$brief[$i]){
+                                return $this->json($b, 200);
+                            }
                         }
                     }
-                    return $this->json("Cet brief n'existe pas dans cette promo", 401);
+                    return $this->json("Ce brief n'est pas assigné à cette promo",401);
                 }
-                return $this->json("Cette promo n'est pas créé par ce formateur",401);
             }
+            return $this->json("Cette promo n'est pas créé par ce formateur",401);
         }
         return $this->json("Cet formateur n'existe pas",401);
     }
@@ -139,28 +146,30 @@ class BriefController extends AbstractController
         $b = $this->em->getRepository(Brief::class)->find($id2);
         $a = $this->em->getRepository(Apprenant::class)->find($id);
         if (isset($promo)) {
-            $t=[];
+            $brief=[];
             $groupe=$promo->getGroupes();
-            $brief=$promo->getBriefs();
-            foreach ($groupe as $valu){
-                $apprenants=$valu->getApprenants();
-                foreach ($brief as $va){
-                    if ($va==$b) {
-                        foreach ($apprenants as $v){
-                            if ($v==$a){
-                                $tab = $a->getLivrablePartielApprenants();
-                                foreach ($tab as $key => $ta)
-                                {
-                                    $t[]=$ta->getLivrablePartiel();
-                                    return $this->json($t, 200);
+            $briefm=$promo->getBriefMaPromos();
+            foreach ($briefm as $br){
+                $brief[]=$br->getBrief();
+                foreach ($brief as $item) {
+                    if ($item==$b){
+                        foreach ($groupe as $g){
+                            $apprenants=$g->getApprenants();
+                            foreach ($apprenants as $ap){
+                                if ($a==$ap){
+                                    $livAp=$a->getLivrablePartielApprenants();
+                                    foreach ($livAp as $liv){
+                                        return $this->json($liv->getLivrablePartiel(),401);
+                                    }
                                 }
                             }
+                            return $this->json("cet apprenant n'est pas dans les groupe de cette promo ",401);
                         }
                     }
-                    //return $this->json("Cet apprenant n'existe pas dans les groupes de cette promo", 401);
                 }
+                return $this->json("Cet brief n'est pas assigné à cette promo",401);
             }
-            return $this->json("Ce brief n'est pas assigné à cette promo", 401);
+
         }
         return $this->json("Cette promo n'existe pas",401);
     }
@@ -182,68 +191,60 @@ class BriefController extends AbstractController
         $promo = $em->getRepository(Promotion::class)->find($id);
         $b = $this->em->getRepository(Brief::class)->find($id1);
         $livrables = $this->em->getRepository(LivrableAttendus::class)->findAll();
-        $tag = $this->em->getRepository(Tag::class)->findAll();
-        $groupe = $this->em->getRepository(Groupes::class)->findAll();
+        $n = $this->em->getRepository(Niveau::class)->findAll();
+        $bmp=$b->getBriefMaPromos();
+        $niveau = $b->getNiveau();
+        $ressource = $b->getRessources();
+        $tag=$b->getTag();
+        $etat=$b->getEtatbriefGroupes();
         $reponse=json_decode($request->getContent(),true);
 
         $action=$reponse['action'];
 
         if(isset($promo)){
-            $brief = $promo->getBriefs();
-            foreach ($brief as $value) {
-                if ($b == $value) {
-                    $niveau = $value->getNiveau();
-                    $ressource = $value->getRessources();
-                    $liv = $value->getLivrablePartiels();
-                    if($action=="archiver"){
-                        $value->setArchivage(true);
-                        for($k=0;$k<count($niveau);$k++){
-                            $value->removeNiveau($niveau[$k]);
-                        }
-                        for($re=0;$re<=count($ressource);$re++){
-                            $value->removeRessource($ressource[$re]);
-                        }
-                        for($s=0;$s<count($livrables);$s++){
-                            $livrables[$s]->removeBrief($value);
-                            $value->removeLivrableAttendu($livrables[$s]);
-                            $em->persist($livrables[$s]);
-                        }
-                        for($a=0;$a<count($tag);$a++){
-                            $tag[$a]->removeBrief($value);
-                            $value->removeTag($tag[$a]);
-                            $em->persist($tag[$a]);
-                        }
-                        for($m=0;$m<count($liv);$m++){
-                            $value->removeLivrablePartiel($liv[$m]);
-                        }
-                        for($o=0;$o<count($groupe);$o++){
-                            $groupe[$o]->removeBrief($value);
-                            $value->removeGroupe($groupe[$o]);
-                            $em->persist($groupe[$o]);
-                        }
-                        $promo->removeBrief($value);
-                        $value->removePromo($promo);
-                        $em->persist($promo);
+            $briefM = $promo->getBriefMaPromos();
+            foreach ($briefM as $o)
+            {
+                if ($o->getBrief()==$b){
+                    if($action=="archiver") {
+                        $b->setArchivage(true);
+                        foreach ($etat as $e){
+                                $groupes=$e->getGroupe();
+                                $b->removeEtatbriefGroupe($e);
+                                $groupes->removeEtatbriefGroupe($e);
+                                $em->persist($groupes);
+                                $em->persist($b);
+                                $em->remove($e);
+                            }
+                        $em->persist($b);
+                        $em->flush();
+                        return $this->json("success",200);
                     }
                     if($action=="cloturer"){
-                        $value->setEtat('cloturé');
+                        $b->setEtat('cloturé');
+                        foreach ($etat as $e){
+                            $groupes=$e->getGroupe();
+                            $b->removeEtatbriefGroupe($e);
+                            $groupes->removeEtatbriefGroupe($e);
+                            $em->persist($groupes);
+                            $em->persist($b);
+                            $em->remove($e);
+                        }
+                        $em->persist($b);
+                        $em->flush();
+                        return $this->json("success",200);
                     }
                     if ($action=="ajouter_niveau"){
-                        $competence = $this->em->getRepository(Competence::class)->findAll();
-                        for($j=1;$j<=3;$j++)
+                        for ($ni=0;$ni<2;$ni++)
                         {
-                            $niveau=new Niveau();
-                            $niveau->setLibelle('niveau '.$j);
-                            $niveau->setCritereEvaluation('competentence '.$j.'critere_evaluation '.$j);
-                            $niveau->setGroupeAction('competentence '.$j.'groupe action '.$j);
-                            $niveau->setCompetence($competence[$j]);
-                            $niveau->setBrief($value);
-                            $em->persist($niveau);
+                            $n[$ni]->addBriefs($b);
+                            $b->addNiveau($n[$ni]);
+                            $em->persist($b);
                         }
                     }
                     if ($action=="supprimer_niveau"){
                         for($k=0;$k<count($niveau);$k++){
-                            $value->removeNiveau($niveau[$k]);
+                            $b->removeNiveau($niveau[$k]);
                         }
                     }
                     if ($action=="ajouter_ressource"){
@@ -251,47 +252,71 @@ class BriefController extends AbstractController
                             $ressource=new Ressource();
                             $ressource->setTitre('titre'.$y)
                                 ->setUrl('url'.$y)
-                                ->setBrief($value);
+                                ->setBrief($b);
                             $em->persist($ressource);
                         }
                     }
                     if ($action=="supprimer_ressource"){
-                        for($r=0;$r<count($ressource);$r++){
-                            $value->removeRessource($ressource[$r]);
+                        foreach($ressource as $res){
+                            $b->removeRessource($res);
+                            $em->remove($res);
                         }
                     }
                     if ($action=="ajouter_livrable_attendus"){
                         for ($l=1;$l<=3;$l++) {
-                            $livrables[$l]->addBrief($value);
-                            $value->addLivrableAttendu($livrables[$l]);
+                            $livrables[$l]->addBrief($b);
+                            $b->addLivrableAttendu($livrables[$l]);
                             $em->persist($livrables[$l]);
                         }
                     }
                     if ($action=="supprimer_livrable_attendus"){
                         for($s=0;$s<count($livrables);$s++){
-                            $livrables[$s]->removeBrief($value);
-                            $value->removeLivrableAttendu($livrables[$s]);
+                            $livrables[$s]->removeBrief($b);
+                            $b->removeLivrableAttendu($livrables[$s]);
                             $em->persist($livrables[$s]);
                         }
                     }
                     if ($action=="ajouter_tag"){
-                        for ($t=1;$t<=3;$t++) {
-                            $tag[$t]->addBrief($value);
-                            $value->addTag($tag[$t]);
+                        for ($t=0;$t<2;$t++) {
+                            $tag[$t]->addBrief($b);
+                            $b->addTag($tag[$t]);
                             $em->persist($livrables[$t]);
+                            $em->persist($b);
                         }
                     }
                     if ($action=="supprimer_tag"){
-                        for($a=0;$a<count($tag);$a++){
-                            $tag[$a]->removeBrief($value);
-                            $value->removeTag($tag[$a]);
-                            $em->persist($tag[$a]);
+                        for($t=0;$t<count($tag);$t++){
+                            $b->removeTag($tag[$t]);
                         }
                     }
                     if ($action=="deassigner"){
-                        $promo->removeBrief($value);
-                        $value->removePromo($promo);
-                        $em->persist($promo);
+                        foreach ($bmp as $value){
+                            $bA=$value->getBriefApprenants();
+                            $liv=$value->getLivrablePartiels();
+                            $groupe=$promo->getGroupes();
+                            foreach ($groupe as $v){
+                                $app=$v->getApprenants();
+                                foreach ($app as $ap){
+                                    foreach ($bA as $val){
+                                        $ap->removeBriefApprenant($val);
+                                        $value->removeBriefApprenant($val);
+                                        $em->remove($val);
+                                        $em->persist($ap,$value);
+                                    }
+                                }
+                            }
+                            foreach ($bmp as $l){
+                                foreach ($liv as $al){
+                                    $l->removeLivrablePartiel($al);
+                                    $em->remove($al);
+                                    $em->persist($l);
+                                }
+                            }
+                            $b->removeBriefMaPromo($value);
+                            $promo->removeBriefMaPromo($value);
+                            $em->remove($value);
+                            $em->persist($b,$promo);
+                        }
                     }
 
                     $em->persist($b);
@@ -299,7 +324,7 @@ class BriefController extends AbstractController
                     return $this->json("success",200);
                 }
             }
-            return $this->json("Cet brief n'existe pas dans cette promo", 401);
+            return $this->json("Ce brief n'est pas assigné à cette promo",401);
         }
         return $this->json("Cette promo n'existe pas",401);
     }
@@ -320,46 +345,77 @@ class BriefController extends AbstractController
     {
         $promo = $em->getRepository(Promotion::class)->find($id);
         $b = $em->getRepository(Brief::class)->find($id1);
-        $groupe = $this->em->getRepository(Groupes::class)->findAll();
         $fake = Factory::create('fr-FR');
         $reponse=json_decode($request->getContent(),true);
 
         $action=$reponse['action'];
         if(isset($promo)) {
+            $groupe=$promo->getGroupes();
             if (isset($b)) {
-                if ($action == "assigner_promo") {
-                    $promo->addBrief($b);
-                    $b->addPromo($promo);
-                    $em->persist($promo);
-                    $em->persist($b);
+                if($action=="desassigner_apprenant"){
+                    $bmp=$b->getBriefMaPromos();
+                    foreach ($groupe as $as){
+                        $app=$as->getApprenants();
+                        foreach ($app as $ve) {
+                            foreach ($bmp as $v){
+                                $bA=$v->getBriefApprenants();
+                                foreach ($bA as $val){
+                                    $ve->removeBriefApprenant($val);
+                                    $v->removeBriefApprenant($val);
+                                    $em->remove($val);
+                                    $em->persist($v);
+                                    $em->persist($ve);
+                                    $em->flush();
+                                    return $this->json("success", 200);
+                                }
+                            }
+                        }
+                    }
+
+                }
+                if ($action == "assigner_apprenant") {
+                    foreach ($groupe as $as){
+                        $ap=$as->getApprenants();
+                    }
+                    $briefPromo=new BriefMaPromo();
+                    $briefPromo->setBrief($b);
+                    $briefPromo->setPromo($promo);
+                    $briefAp=new BriefApprenant();
+                    $briefAp->setStatut($fake->randomElement(['valide','invalidé']))
+                        ->setApprenant($fake->randomElement($ap))
+                        ->setBriefPromo($briefPromo);
+                    $em->persist($briefAp);
+                    $em->persist($briefPromo);
+                    $em->flush();
+                    return $this->json("success",200);
                 }
                 if ($action == "assigner_un_groupe") {
-                        $b->addGroupe($fake->unique()->randomElement($groupe));
-                }
-                if ($action == "assigner_des_groupe") {
-                    for ($i=0; $i<3;$i++){
-                        $b->addGroupe($fake->unique()->randomElement($groupe));
+                    $etat=new EtatbriefGroupe();
+                    $etat->setStatut($fake->randomElement(['valide','invalidé']))
+                        ->setBriefs($b)
+                        ->setGroupe($fake->unique()->randomElement($groupe));
+                    $em->persist($etat);
+                    foreach ($groupe as $g){
+                        $promos=$g->getPromotion();
                     }
+                    if ($promo==$promos){
+                        $briefPromo=new BriefMaPromo();
+                        $briefPromo->setBrief($b);
+                        $briefPromo->setPromo($promos);
+                        $em->persist($briefPromo);
+                    }
+                    $em->flush();
+                    return $this->json("success",200);
                 }
-                $em->persist($b);
-                $em->flush();
-
-                $brief = $promo->getBriefs();
-                foreach ($brief as $value) {
-                    if ($b == $value) {
-                        if($action=="desassigner_un_groupe"){
-                            foreach ($groupe as $g){
-                                $g->removeBrief($value);
-                                $value->removeGroupe($g);
-                            }
-                            $em->persist($g);
-                        }
-                        if($action=="desassigner_promo"){
-                            $promo->removeBrief($value);
-                            $value->removePromo($promo);
-                            $em->persist($promo);
-                        }
-                        $em->persist($value);
+                if($action=="desassigner_un_groupe"){
+                    $etat=$b->getEtatbriefGroupes();
+                    foreach ($etat as $v){
+                        $groupes=$v->getGroupe();
+                        $b->removeEtatbriefGroupe($v);
+                        $groupes->removeEtatbriefGroupe($v);
+                        $em->persist($groupes);
+                        $em->persist($b);
+                        $em->remove($v);
                         $em->flush();
                         return $this->json("success",200);
                     }
@@ -414,6 +470,7 @@ class BriefController extends AbstractController
         $tag = $this->em->getRepository(Tag::class)->findAll();
         $livrables = $this->em->getRepository(LivrableAttendus::class)->findAll();
         $niveau = $this->em->getRepository(Niveau::class)->findAll();
+        $fake = Factory::create('fr-FR');
         //recupéré tout les données de la requete
         $brief = $request->request->all();
         $brief = $this->serializer->denormalize($brief,"App\Entity\Brief",true);
@@ -430,7 +487,7 @@ class BriefController extends AbstractController
         $brief->setImageExemplaire($photoBlob);
 
         $competence = $this->em->getRepository(Competence::class)->findAll();
-        for($j=1;$j<=3;$j++)
+        for($j=0;$j<=3;$j++)
         {
             $niveau[$j]->addBrief($brief);
             $brief->addNiveau($niveau[$j]);
@@ -440,33 +497,30 @@ class BriefController extends AbstractController
             $ressource=new Ressource();
             $ressource->setTitre('titre'.$y)
                 ->setUrl('url'.$y)
+                ->setPieceJointe("PieceJointe.$y")
+                ->setType("type".$y)
                 ->setBrief($brief);
             $em->persist($ressource);
         }
-        for ($g=1;$g<=3;$g++)
-        {
-            $group[$g]->addBrief($brief);
-            $brief->addGroupe($group[$g]);
-            $em->persist($group[$g]);
-        }
-        for ($l=1;$l<=3;$l++)
-        {
-            $livrables[$l]->addBrief($brief);
-            $brief->addLivrableAttendu($livrables[$l]);
-            $em->persist($livrables[$l]);
-        }
-        for ($t=1;$t<=3;$t++)
+
+        $etat=new EtatbriefGroupe();
+        $etat->setStatut($fake->randomElement(['valide','invalidé']))
+            ->setBriefs($brief)
+            ->setGroupe($fake->unique()->randomElement($group));
+        $em->persist($etat);
+
+
+        for ($t=0;$t<=3;$t++)
         {
             $tag[$t]->addBrief($brief);
             $brief->addTag($tag[$t]);
             $em->persist($tag[$t]);
         }
-        for ($p=1;$p<=2;$p++)
-        {
-            $promo[$p]->addBrief($brief);
-            $brief->addPromo($promo[$p]);
-            $em->persist($promo[$p]);
-        }
+        $briefPromo=new BriefMaPromo();
+        $briefPromo->setBrief($brief);
+        $briefPromo->setPromo($fake->unique()->randomElement($promo));
+        $em->persist($briefPromo);
+
         $em->persist($brief);
         $em->flush();
 

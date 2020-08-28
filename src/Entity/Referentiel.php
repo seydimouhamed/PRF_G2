@@ -75,8 +75,8 @@ class Referentiel
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"referentiel:read", "referentiel:write","brief:read"})
-     * @Groups({"promo:read", "promo:write"})
+     * @Groups({"referentiel:read", "referentiel:write"})
+     * @Groups({"promo:read", "promo:write","brief:read"})
      */
     private $libelle;
 
