@@ -91,6 +91,7 @@ class AppFixtures extends Fixture
                     $user=new CommunityManager();
 
                 }
+                  $photo = fopen($fake->imageUrl($width = 100, $height = 100),'rb');
                 $user ->setProfil ($profil);
                 $user ->setUsername(strtolower ($abbr ).$i);
                 $user ->setFisrtName($fake->firstName);
@@ -100,7 +101,8 @@ class AppFixtures extends Fixture
                   // fin 
                 $user ->setLastName($fake->lastName);
                 $user ->setEmail($fake->email);
-                $user->setArchivage(false);
+                $user->setArchivage(false)
+                    ->setPhoto($photo);
 
              //Génération des Users
                 $password = $this->encoder->encodePassword ($user, 'passe123' );

@@ -23,36 +23,46 @@ class Niveau
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"niveau:read","competence:read"})
+     * @Groups({"getAllBrief"})
+     * @Groups({"livrablePartiel:read"})
+     *@Groups({"promo:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
-     * @Groups({"niveau:read","competence:read"})
+     * @Groups({"niveau:read","competence:read","brief:read"})
+     * @Groups({"getAllBrief"})
+     * @Groups({"livrablePartiel:read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"livrablePartiel:read"})
+     * @Groups({"getAllBrief"})
      */
     private $critereEvaluation;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"niveau:read", "competence:read"})
+     * @Groups({"getAllBrief"})
+     * @Groups({"livrablePartiel:read"})
      */
     private $groupeAction;
 
     /**
      * @ORM\ManyToOne(targetEntity=Competence::class, inversedBy="niveaux")
+     * @Groups({"getAllBrief"})
      */
     private $competence;
 
     /**
      * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="niveau")
      */
-    private $brief;
+    private $briefs;
 
     /**
      * @ORM\ManyToMany(targetEntity=LivrablePartiels::class, mappedBy="niveau")
@@ -123,18 +133,7 @@ class Niveau
         return $this;
     }
 
-
-    public function getBrief(): ?Brief
-    {
-        return $this->brief;
-    }
-
-    public function setBrief(?Brief $brief): self
-    {
-        $this->brief = $brief;
-
-        return $this;
-    }    /**
+   /**
      * @return Collection|Brief[]
      */
     public function getBriefs(): Collection

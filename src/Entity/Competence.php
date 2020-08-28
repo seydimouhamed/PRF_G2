@@ -55,12 +55,14 @@ class Competence
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"competence:read"})
+     * @Groups({"getAllBrief"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups({"competence:read", "competence:write"})
+     * @Groups({"getAllBrief"})
      */
     private $libelle;
 
@@ -78,6 +80,7 @@ class Competence
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"competence:read"})
      */
     private $descriptif;
 

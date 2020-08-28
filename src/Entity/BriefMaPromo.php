@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BriefMaPromoRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=BriefMaPromoRepository::class)
+ *  * @ApiResource(
+ *     normalizationContext={"groups"={"promo:read","BriefMaPromo:read"}},
+ *     denormalizationContext={"groups"={"brief:write"}}
+ * )
  */
 class BriefMaPromo
 {
@@ -16,16 +22,20 @@ class BriefMaPromo
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"promo:read","BriefMaPromo:read"})
      */
     private $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=Brief::class, inversedBy="briefMaPromos")
+     * @Groups({"getBriefByOneGroupe"})
+     * @Groups({"promo:read","BriefMaPromo:read"})
      */
     private $brief;
 
     /**
      * @ORM\ManyToOne(targetEntity=Promotion::class, inversedBy="briefMaPromos")
+     * @Groups({"getBriefByOneGroupePr"})
      */
     private $promo;
 

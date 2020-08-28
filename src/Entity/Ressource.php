@@ -4,9 +4,16 @@ namespace App\Entity;
 
 use App\Repository\RessourceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ORM\Entity(repositoryClass=RessourceRepository::class)
+ * @ApiResource(
+ *      normalizationContext={"groups"={"brief:read","ressource:read"}},
+ *     denormalizationContext={"groups"={"brief:write","ressource:write"}}
+ * )
  */
 class Ressource
 {
@@ -14,21 +21,31 @@ class Ressource
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"getAllBrief"})
+     * @Groups({"ressource:read","brief:read"})
+     *
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Groups({"getAllBrief"})
+     * @Groups({"ressource:read","brief:read"})
+     *
      */
     private $Titre;
 
     /**
      * @ORM\Column(type="string", length=255,nullable=true)
+     * @Groups({"getAllBrief"})
+     * @Groups({"ressource:read","brief:read"})
      */
     private $url;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
+     * @Groups({"getAllBrief"})
+     * @Groups({"ressource:read","brief:read"})
      */
     private $PieceJointe;
 
@@ -37,11 +54,6 @@ class Ressource
      * @ORM\JoinColumn(nullable=false)
      */
     private $brief;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $type;
 
     public function getId(): ?int
     {
@@ -92,18 +104,6 @@ class Ressource
     public function setBrief(?Brief $brief): self
     {
         $this->brief = $brief;
-
-        return $this;
-    }
-
-    public function getType(): ?string
-    {
-        return $this->type;
-    }
-
-    public function setType(string $type): self
-    {
-        $this->type = $type;
 
         return $this;
     }

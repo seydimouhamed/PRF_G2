@@ -52,6 +52,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      },
  *       normalizationContext={"groups"={"apprenant:read","user:read"}},
  *       denormalizationContext={"groups"={"apprenant:write","user:write"}}
+ *
  * )
  * @ORM\Entity(repositoryClass=ApprenantRepository::class)
  */
@@ -64,6 +65,8 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     *
      */
     private $genre;
 
@@ -73,6 +76,7 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write","promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
      */
     private $adresse;
 
@@ -82,11 +86,13 @@ class Apprenant extends User
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
      * @Groups({"apprenant:read", "apprenant:write", "promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
      */
     private $telephone;
 
     /**
      * @ORM\ManyToOne(targetEntity=ProfilSortie::class, inversedBy="apprenants")
+     * @Groups({"getBriefByOneGroupeApp"})
      *  @ApiSubresource()
      */
     private $profilSortie;

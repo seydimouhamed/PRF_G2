@@ -2,6 +2,11 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\EtatBriefGroupe;
+use App\Entity\Groupes;
+use App\Entity\LivrableAttenduApprenant;
+use App\Entity\LivrableAttendus;
+use App\Entity\Ressource;
 use Faker\Factory;
 use App\Entity\Tag;
 use App\Entity\Brief;
@@ -24,16 +29,13 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 class BriefFixtures extends Fixture implements DependentFixtureInterface
 {
 
-    public function __construct()
-    {
 
-     }
-    
     
      public function getDependencies()
      {
          return array(
              LivrableFixtures::class,
+
          );
      }
 
@@ -47,11 +49,16 @@ class BriefFixtures extends Fixture implements DependentFixtureInterface
         {
             $tab_formateurs[]=$ref;
         }
-
+        $groupe=$manager->getRepository(Groupes::class)->findAll();
+        foreach ($groupe as $onGroupe){
+            $tabGroupe[]=$onGroupe;
+        }
         //recuperations de apprenants
         $apprenants=$manager->getRepository(Apprenant::class)->findAll();
         
-         
+         foreach ($apprenants as $apvalue){
+             $tabApprenant[]=$apvalue;
+         }
 
         $referentiels=$manager->getRepository(Referentiel::class)->findAll();
         $tab_referentiels=[];
@@ -74,7 +81,7 @@ class BriefFixtures extends Fixture implements DependentFixtureInterface
         {
             $tab_niveaux[]=$niv;
         }
-
+        $photo = fopen($fake->imageUrl($width = 640, $height = 480),'rb');
         $tab_briefs=[];
         for($i=1;$i<=10;$i++)
         {
@@ -89,6 +96,7 @@ class BriefFixtures extends Fixture implements DependentFixtureInterface
                   ->setFormateur($fake->randomElement($tab_formateurs))
                   ->setEtat('etat '.$i)
                   ->setLangue('francais')
+                  ->setImageExemplaire($photo)
                   ->setListeLivrable('liste livrables '.$i)
                   ->setModaliteDevaluation('Modalité d evaluation '.$i)
                   ->setModalitePedagogique('Modalité pédagoique '.$i)
@@ -100,9 +108,39 @@ class BriefFixtures extends Fixture implements DependentFixtureInterface
                         $brief->addTag($fake->unique()->randomElement($tab_tags));
                               
                    }
+            for($y=0;$y<2;$y++){
+                $ressource=new Ressource();
+                $ressource->setTitre('titre'.$y)
+                    ->setUrl('url'.$y)
+                    ->setBrief($brief);
+                $manager->persist($ressource);
+            }
+
+            for($x=0;$x<2;$x++){
+                $livrable_attendu=new LivrableAttendus();
+                $livrable_attendu->setLibelle('libelle'.$x)
+                    ->addBrief($brief);
+
+                $manager->persist($livrable_attendu);
+
+
+            }
+            $brief->addLivrableAttendu($livrable_attendu);
                    $tab_briefs[]=$brief;
                   $fake->unique($reset = true );
                   $manager->persist($brief);
+
+                  for($m=0, $mMax = count($tabGroupe); $m< $mMax; $m++){
+                      $livrATTApp=new LivrableAttenduApprenant();
+                      for ($ap=0, $apMax = count($tabGroupe[$m]->getApprenants()); $ap< $apMax; $ap++){
+
+                          $livrATTApp->setApprenant($fake->randomElement($tabGroupe[$m]->getApprenants()))
+                              ->setUrl("url".$m)
+                              ->setLivrableAttendu($livrable_attendu);
+                          $manager->persist($livrATTApp);
+                      }
+
+                  }
         }
       $manager->flush();
 
@@ -139,7 +177,30 @@ class BriefFixtures extends Fixture implements DependentFixtureInterface
             $manager->flush();
           
       }
+        //-------------------//
+        //     Etat brief //
+        //-------------------//
+        $tab[]=['valider','assigner','rendu','non valider'];
+      $groupe=$manager->getRepository(Groupes::class)->findAll();
 
+    for ($k=0, $kMax = 4; $k< $kMax; $k++){
+
+            $etatbrief=new EtatBriefGroupe();
+            $etatbrief->setStatut($fake->unique()->randomElement(['valider','assigner','rendu','non valider']));
+
+
+                $etatbrief->setGroupe($fake->randomElement($tabGroupe));
+                $etatbrief->setBrief($fake->randomElement($tab_briefs));
+
+
+
+
+        $manager->persist($etatbrief);
+        $manager->flush();
+
+
+
+        }
       $tab_livrablePartiel=[];
       foreach($tab_briefPromo as $k => $tbp)
       {
@@ -150,12 +211,20 @@ class BriefFixtures extends Fixture implements DependentFixtureInterface
                     ->setType($fake->randomElement(['ISAS','Code','modelisation']))
                     ->setDateCreation($fake->datetime)
                     ->setDescription($fake->text)
-                    ->setEtat($fake->randomElement(['rendu','valide','invalide','assigne']))
+                    ->setEtat($fake->randomElement(['rendu','valider','invalide','assigner']))
                     ->setLibelle('libelle promo'.$k. '_'.$i)
                     ->setNbreCorriger($fake->numberBetween($min = 10, $max = 20))
                     ->setNbreRendu($fake->numberBetween($min = 20, $max = 30))
                     ->setBriefMaPromo($tbp);
+        for ($o=0;$o<3;$o++){
+            $appLivrablePartiel=new AprenantLivrablePartiel();
+            $appLivrablePartiel->setDelai(new \DateTime())
+                                ->setEtat($fake->randomElement(['rendu','valider','invalide','assigner']))
+                                ->setApprenant($fake->randomElement($tabApprenant))
+                                ->setLivrablePartiel($lp);
+            $manager->persist($appLivrablePartiel);
 
+            }
                     $tab_livrablePartiel[]=$lp;
 
                 $manager->persist($lp);

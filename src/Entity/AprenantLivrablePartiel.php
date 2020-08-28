@@ -7,9 +7,12 @@ use App\Repository\AprenantLivrablePartielRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(routePrefix="/admin",
+ *       normalizationContext={"groups"={"livrablePartiel:read","livrable:read"}},
+ *       denormalizationContext={"groups"={"livrable:write"}})
  * @ORM\Entity(repositoryClass=AprenantLivrablePartielRepository::class)
  */
 class AprenantLivrablePartiel
@@ -18,31 +21,37 @@ class AprenantLivrablePartiel
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"livrablePartiel:read","livrable:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"livrablePartiel:read","livrable:read"})
      */
     private $etat;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Groups({"livrablePartiel:read","livrable:read"})
      */
     private $delai;
 
     /**
      * @ORM\ManyToOne(targetEntity=Apprenant::class, inversedBy="aprenantLivrablePartiels")
+     * @Groups({"livrablePartiel:read","livrable:read"})
      */
     private $apprenant;
 
     /**
      * @ORM\ManyToOne(targetEntity=LivrablePartiels::class, inversedBy="aprenantLivrablePartiels")
+     * @Groups({"livrablePartiel:read","livrable:read"})
      */
     private $livrablePartiel;
 
     /**
      * @ORM\OneToOne(targetEntity=FilDiscution::class, mappedBy="appLivPartiel", cascade={"persist", "remove"})
+     * @Groups({"livrablePartiel:read","livrable:read"})
      */
     private $filDiscution;
 

@@ -60,6 +60,9 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"user:read","profil:read","promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     * @Groups({"getBriefBrouillonFormateur","getOnBriefOnePromo"})
+     * @Groups({"brief:read"})
      * 
      */
     private $id;
@@ -70,6 +73,9 @@ class User implements UserInterface
      * @Groups({"user:read", "user:write","profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     * @Groups({"getBriefBrouillonFormateur","getOnBriefOnePromo"})
+     * @Groups({"brief:read"})
      * @Assert\NotBlank
      */
     private $username;
@@ -96,6 +102,10 @@ class User implements UserInterface
      * @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     * @Groups({"getBriefBrouillonFormateur","getOnBriefOnePromo"})
+     * @Groups({"brief:read"})
+     *
      * @Assert\NotBlank
      */
     private $fisrtName;
@@ -106,6 +116,8 @@ class User implements UserInterface
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     * @Groups({"brief:read"})
      * @Assert\NotBlank
      */
     private $lastName;
@@ -115,6 +127,9 @@ class User implements UserInterface
      * 
      *  @Groups({"user:read", "user:write", "profil:read"})
      * @Groups({"groupe:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     * @Groups({"getBriefBrouillonFormateur","getOnBriefOnePromo"})
+     * @Groups({"brief:read"})
      * @Assert\Email
      * @Assert\Unique
      */
@@ -126,13 +141,16 @@ class User implements UserInterface
      *  @Groups({"user:read", "user:write", "profil:read"})
      *  @Groups({"groupe:read"})
      *  @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     * @Groups({"getBriefBrouillonFormateur","getOnBriefOnePromo"})
+     * @Groups({"brief:read"})
      */
     private $photo;
 
     /**
      * @ORM\ManyToOne(targetEntity=Profil::class, inversedBy="users")
      * @ApiSubresource
-     * Groups({"user:read", "user:write"})
+     * @Groups({"user:read", "user:write"})
      * @Groups({"promo:read"})
      */
     private $profil;
@@ -270,7 +288,10 @@ class User implements UserInterface
         if($this->photo)
         {
             $data = stream_get_contents($this->photo);
-            fclose($this->photo);
+            if(!$this->photo){
+                fclose($this->photo);
+            }
+
 
             return base64_encode($data);
         }else 
@@ -359,5 +380,10 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+    public function getInfoUser()
+    {
+        return ["id"=>$this->getId(),"prenom"=>$this->getFisrtName(),"nom"=>$this->getLastName(),"email"=>$this->getEmail()];
     }
 }

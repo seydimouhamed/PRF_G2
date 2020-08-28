@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\EtatBriefGroupe;
 use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Niveau;
@@ -126,20 +127,25 @@ public function getDependencies()
 
         //insertion de grpupes!
         $tab_group=[];
+        $etat=$manager->getRepository(EtatBriefGroupe::class)->findAll();
+
         for($i=1; $i<=5 ; $i++)
         {
             $group=new Groupes();
             $group->setNom("group ".$i);
             $group->setStatut($fake->randomElement(['encours','ferme']));
             $group->setType($fake->randomElement(['binome','filerouge']));
+
+
+
             // $group->setPromotion($fake->randomElement($tab_promo));
             
-            for($j=1;$j<=10;$j++)
+            for($j=1, $jMax = 25; $j<= $jMax; $j++)
             {
                 $group->addApprenant($fake->unique()->randomElement($tab_apprenant));
             }
 
-            for($j=1;$j<=2;$j++)
+            for($j=1, $jMax = 2; $j<= $jMax; $j++)
             {
                $group->addFormateur($fake->unique()->randomElement($tab_formateur));
             }
@@ -147,10 +153,12 @@ public function getDependencies()
             $tab_group[] = $group;
 
             $manager->persist($group);
+            $manager->flush();
   
         }
 
       $tab_promo=[];
+        $photo = fopen($fake->imageUrl($width = 640, $height = 480),'rb');
       for($i=1 ; $i<=3 ; $i++)
       {
           $promo=new Promotion();
@@ -158,6 +166,7 @@ public function getDependencies()
           ->setFabrique($fake->randomElement(['Sonatel Académie','Simplon']))
           ->setLangue($fake->randomElement(['anglais','france']))
           ->setLieu('lieu1')
+          ->setAvatar($photo)
           ->setStatus($fake->randomElement(['encours','ferme','attente']))
           ->setReferentiel($fake->randomElement($tab_referentiel))
           ->setTitre('promo '.$i);
@@ -169,17 +178,17 @@ public function getDependencies()
                             ->setType('groupe principale');
                             $manager->persist($group_princ);
             
-                for($j=1;$j<=10;$j++)
+                for($j=1, $jMax = count($tab_apprenant); $j<= $jMax; $j++)
                 {
                     $group_princ->addApprenant($fake->unique()->randomElement($tab_apprenant));
                 }
     
-                for($j=1;$j<=2;$j++)
+                for($j=1, $jMax = count($tab_formateur); $j<= $jMax; $j++)
                 {
                     $group_princ->addFormateur($fake->unique()->randomElement($tab_formateur));
                 }
             $promo->addGroupe($group_princ);
-            for($k=1;$k<=2;$k++)
+            for($k=1, $kMax = count($tab_group); $k<= $kMax; $k++)
             {
                 $promo->addGroupe($fake->randomElement($tab_group));
                 $promo->addFormateur($fake->unique()->randomElement($tab_formateur));

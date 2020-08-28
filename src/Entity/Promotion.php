@@ -81,12 +81,14 @@ class Promotion
      * @ORM\Column(type="integer")
      * @Groups({"promo:read"})
      * @Groups({"groupe:read"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      */
     protected $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $langue;
@@ -94,6 +96,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $titre;
@@ -101,6 +104,7 @@ class Promotion
     /**
      * @ORM\Column(type="text")
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $description;
@@ -108,12 +112,14 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      */
     private $lieu;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $dateDebut;
@@ -121,6 +127,7 @@ class Promotion
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $dateFinPrvisoire;
@@ -128,6 +135,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $fabrique;
@@ -135,6 +143,7 @@ class Promotion
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $dateFinReelle;
@@ -142,6 +151,7 @@ class Promotion
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"promo:read", "promo:write"})
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Assert\NotBlank
      */
     private $status;
@@ -158,6 +168,7 @@ class Promotion
 
     /**
      * @ORM\Column(type="blob", nullable=true)
+     * @Groups({"getOnBriefOnePromo","getBriefByOneGroupePr"})
      * @Groups({"promo:read"})
      */
     private $avatar;
@@ -177,10 +188,6 @@ class Promotion
      */
     private $referentiel;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="promo")
-     */
-    private $briefs;
 
     /**
      * @ORM\OneToMany(targetEntity=BriefMaPromo::class, mappedBy="promo")
@@ -348,10 +355,13 @@ class Promotion
 
     public function getAvatar()
     {
-        //  $data = stream_get_contents($this->avatar);
-        //  fclose($this->avatar);
-       return $this->avatar;
-      //return base64_encode($data);
+        $data = stream_get_contents($this->avatar);
+        if(!$this->avatar){
+            fclose($this->avatar);
+        }
+
+        // return $this->avatar;
+        return base64_encode($data);
     }
 
     public function setAvatar($avatar): self
@@ -400,33 +410,7 @@ class Promotion
         return $this;
     }
 
-    /**
-     * @return Collection|Brief[]
-     */
-    public function getBriefs(): Collection
-    {
-        return $this->briefs;
-    }
 
-    public function addBrief(Brief $brief): self
-    {
-        if (!$this->briefs->contains($brief)) {
-            $this->briefs[] = $brief;
-            $brief->addPromo($this);
-        }
-
-        return $this;
-    }
-
-    public function removeBrief(Brief $brief): self
-    {
-        if ($this->briefs->contains($brief)) {
-            $this->briefs->removeElement($brief);
-            $brief->removePromo($this);
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|BriefMaPromo[]

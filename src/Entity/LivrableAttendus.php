@@ -2,13 +2,19 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\LivrableAttendusRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=LivrableAttendusRepository::class)
+ *   @ApiResource(
+ *     normalizationContext={"groups"={"brief:read","livrableAttendus:read"}},
+ *     denormalizationContext={"groups"={"brief:write","livrableAttendus:write"}}
+ * )
  */
 class LivrableAttendus
 {
@@ -16,11 +22,15 @@ class LivrableAttendus
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"getAllBrief"})
+     * @Groups({"livrableAttendus:read","brief:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"getAllBrief"})
+     * @Groups({"livrableAttendus:read","brief:read"})
      */
     private $libelle;
 

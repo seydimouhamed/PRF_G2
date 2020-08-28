@@ -39,6 +39,7 @@ class BriefApprenant
 
     /**
      * @ORM\ManyToOne(targetEntity=BriefMaPromo::class, inversedBy="briefApprenants")
+     * @Groups({"getBriefByOneGroupe"})
      */
     private $briefPromo;
 

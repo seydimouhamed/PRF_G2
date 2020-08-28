@@ -65,7 +65,7 @@ class PromoFormController extends AbstractController
         $IdApprenants=$this->em->getRepository(Promotion::class)->findAllIdAppPromo($idPromo);
         $apprenantCompetences=[];
         $apprenantCompetences['promoId']=$idPromo;
-        $apprenantCompetences['competences apprenants']=[];
+        $apprenantCompetences['competences_apprenants']=[];
         foreach($IdApprenants as $id)
         {
             $apprenant = $this->em->getRepository(Apprenant::class)->find($id);
@@ -73,7 +73,7 @@ class PromoFormController extends AbstractController
             
              if($competenceApprenant)
              {
-                 $apprenantCompetences['competences apprenants'][]=$competenceApprenant;
+                 $apprenantCompetences['competences_apprenants'][]=$competenceApprenant;
              }
 
         }
@@ -140,13 +140,102 @@ class PromoFormController extends AbstractController
      */
     public function getCompetenceStatistique($idPromo,$idRef)
     {
-        $IdApprenants=$this->em->getRepository(Promotion::class)->findAllIdAppPromo($idPromo);
-        $collectionStats=[];
-        foreach($IdApprenants as $id)
+        //-----------------------------------------------------------------//
+        // Récupération de l'ensemble des compétence validé des apprenant  //
+        //-----------------------------------------------------------------//
+        $idApprenants = $this->em->getRepository(Promotion::class)->findAllIdAppPromo($idPromo);
+
+        //$ref=$promo->getReferentiel();
+        //$gc=$ref->getGrpCompetences();
+        $competenceApprenant= [];
+
+        foreach($idApprenants as $idApprenant)
         {
-            $collectionStats[]=$this->getStatApprenant($id);
+                $apprenant = $this->em->getRepository(Apprenant::class)->find($idApprenant);
+                $appCompaValid=$this->em->getRepository(Competencesvalide::class)->findBy(["apprenant"=>$apprenant]);
+                
+                // $stats[]['Apprenant']=["id"=>$idApprenant,"nom"=>$apprenant->getFisrtName(),"nom"=>$apprenant->getLastName()];
+                 if($appCompaValid){
+                     foreach($appCompaValid as $appcomp)
+                     {
+                        $competenceApprenant[]=$appcomp;
+                     }
+                 }
+                // $competenceApprenant=$stats;
         }
-        return $this->json($collectionStats,200);
+
+
+        //----------------------------------------------------------------------//
+        // Récupération de l'ensemble des compétence des référentiel de la promotion  //
+        //-----------------------------------------------------------------------//
+
+        $promo=$this->em->getRepository(Promotion::class)->find($idPromo);
+        $ref=$promo->getReferentiel();
+        $gc=$ref->getGrpCompetences();
+        $allCompetences= [];
+        foreach($gc as $groupComp)
+        {
+            foreach($groupComp->getCompetences() as $comp)
+            {
+                $allCompetences[]=$comp;
+               // $competenceApprenant[]['niveaux']=$comp->getCompetencesValides();
+                // $nivo1=0;
+                // $nivo2=0;
+                // $nivo3=0;
+                // foreach($comp->getCompetencesValides() as $competence)
+                // {
+                //     if($competence->getNiveau1()=="oui")
+                //     {
+                //         $nivo1++;
+                //     }
+                //     if($competence->getNiveau2()=="oui")
+                //     {
+                //         $nivo2++;
+                //     }
+                //     if($competence->getNiveau2()=="oui")
+                //     {
+                //         $nivo3++;
+                //     }
+                // }
+               // $competenceApprenant[]['niveaux']=['niveau1'=>$nivo1,'niveau2'=>$nivo2,'niveau3'=>$nivo3];
+                
+            }
+        }
+      //  return $this->json($competenceApprenant,200);
+     
+      //------------------------------------------------------------------------------------------//
+      //comparaison et comptage des compétences validés par rapport aux compétence du référentiel //
+      //------------------------------------------------------------------------------------------//
+        foreach($allCompetences as $comp)
+        {
+            $return_tab[]["competence"]=$comp;
+            $nivo1=0;
+            $nivo2=0;
+            $nivo3=0;
+            foreach($competenceApprenant as $compapp)
+            {
+                if($comp==$compapp->getCompetence())
+                {
+                        if($compapp->getNiveau1()=="oui")
+                        {
+                            $nivo1++;
+                        }
+                        if($compapp->getNiveau2()=="oui")
+                        {
+                            $nivo2++;
+                        }
+                        if($compapp->getNiveau2()=="oui")
+                        {
+                            $nivo3++;
+                        }
+
+                }
+            }
+             $return_tab[]['niveaux']=['niveau1'=>$nivo1,'niveau2'=>$nivo2,'niveau3'=>$nivo3];
+             
+        }
+
+        return $this->json($return_tab,200);
     }
 
 
@@ -440,6 +529,159 @@ class PromoFormController extends AbstractController
 
 
         return $stats;
+    }
+
+
+    /**
+     * @Route(
+     *     name="get_test_stats",
+     *     path="/api/tests/promo/{idPromo}/referentiel/{idRef}/statistiques/competences",
+     *     methods={"GET"}
+     * )
+     */
+    public function test($idPromo,$idRef)
+    {
+        $promo=$this->em->getRepository(Promotion::class)->find($idPromo);
+        $ref=$promo->getReferentiel();
+        $gc=$ref->getGrpCompetences();
+        $competenceApprenant= [];
+        foreach($gc as $groupComp)
+        {
+            foreach($groupComp->getCompetences() as $comp)
+            {
+                $competenceApprenant[][]=$comp;
+               // $competenceApprenant[]['niveaux']=$comp->getCompetencesValides();
+                $nivo1=0;
+                $nivo2=0;
+                $nivo3=0;
+                foreach($comp->getCompetencesValides() as $competence)
+                {
+                    if($competence->getNiveau1()=="oui")
+                    {
+                        $nivo1++;
+                    }
+                    if($competence->getNiveau2()=="oui")
+                    {
+                        $nivo2++;
+                    }
+                    if($competence->getNiveau2()=="oui")
+                    {
+                        $nivo3++;
+                    }
+                }
+                $competenceApprenant[]['niveaux']=['niveau1'=>$nivo1,'niveau2'=>$nivo2,'niveau3'=>$nivo3];
+                
+            }
+        }
+        return $this->json($competenceApprenant,200);
+    }
+
+
+    /**
+     * @Route(
+     *     name="get_test1_stats",
+     *     path="/api/test2/promo/{idPromo}/referentiel/{idRef}/statistiques/competences",
+     *     methods={"GET"}
+     * )
+     */
+    public function test2($idPromo,$idRef)
+    {
+        //-----------------------------------------------------------------//
+        // Récupération de l'ensemble des compétence validé des apprenant  //
+        //-----------------------------------------------------------------//
+        $idApprenants = $this->em->getRepository(Promotion::class)->findAllIdAppPromo($idPromo);
+
+        //$ref=$promo->getReferentiel();
+        //$gc=$ref->getGrpCompetences();
+        $competenceApprenant= [];
+
+        foreach($idApprenants as $idApprenant)
+        {
+                $apprenant = $this->em->getRepository(Apprenant::class)->find($idApprenant);
+                $appCompaValid=$this->em->getRepository(Competencesvalide::class)->findBy(["apprenant"=>$apprenant]);
+                
+                // $stats[]['Apprenant']=["id"=>$idApprenant,"nom"=>$apprenant->getFisrtName(),"nom"=>$apprenant->getLastName()];
+                 if($appCompaValid){
+                     foreach($appCompaValid as $appcomp)
+                     {
+                        $competenceApprenant[]=$appcomp;
+                     }
+                 }
+                // $competenceApprenant=$stats;
+        }
+
+
+        //----------------------------------------------------------------------//
+        // Récupération de l'ensemble des compétence des référentiel de la promotion  //
+        //-----------------------------------------------------------------------//
+
+        $promo=$this->em->getRepository(Promotion::class)->find($idPromo);
+        $ref=$promo->getReferentiel();
+        $gc=$ref->getGrpCompetences();
+        $allCompetences= [];
+        foreach($gc as $groupComp)
+        {
+            foreach($groupComp->getCompetences() as $comp)
+            {
+                $allCompetences[]=$comp;
+               // $competenceApprenant[]['niveaux']=$comp->getCompetencesValides();
+                // $nivo1=0;
+                // $nivo2=0;
+                // $nivo3=0;
+                // foreach($comp->getCompetencesValides() as $competence)
+                // {
+                //     if($competence->getNiveau1()=="oui")
+                //     {
+                //         $nivo1++;
+                //     }
+                //     if($competence->getNiveau2()=="oui")
+                //     {
+                //         $nivo2++;
+                //     }
+                //     if($competence->getNiveau2()=="oui")
+                //     {
+                //         $nivo3++;
+                //     }
+                // }
+               // $competenceApprenant[]['niveaux']=['niveau1'=>$nivo1,'niveau2'=>$nivo2,'niveau3'=>$nivo3];
+                
+            }
+        }
+      //  return $this->json($competenceApprenant,200);
+     
+      //------------------------------------------------------------------------------------------//
+      //comparaison et comptage des compétences validés par rapport aux compétence du référentiel //
+      //------------------------------------------------------------------------------------------//
+        foreach($allCompetences as $comp)
+        {
+            $return_tab[]["competence"]=$comp;
+            $nivo1=0;
+            $nivo2=0;
+            $nivo3=0;
+            foreach($competenceApprenant as $compapp)
+            {
+                if($comp==$compapp->getCompetence())
+                {
+                        if($compapp->getNiveau1()=="oui")
+                        {
+                            $nivo1++;
+                        }
+                        if($compapp->getNiveau2()=="oui")
+                        {
+                            $nivo2++;
+                        }
+                        if($compapp->getNiveau2()=="oui")
+                        {
+                            $nivo3++;
+                        }
+
+                }
+            }
+             $return_tab[]['niveaux']=['niveau1'=>$nivo1,'niveau2'=>$nivo2,'niveau3'=>$nivo3];
+             
+        }
+
+        return $this->json($return_tab,200);
     }
 }
 

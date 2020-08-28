@@ -24,6 +24,9 @@ class Groupes
      * @ORM\Column(type="integer")
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupe"})
+     * @Groups({"getBriefByOneGroupeApp"})
+     *
      */
     private $id;
 
@@ -31,12 +34,15 @@ class Groupes
      * @ORM\Column(type="string", length=100)
      * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupe"})
+     * @Groups({"getBriefByOneGroupeApp"})
      */
     private $nom;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Groups({"groupe:read", "groupe:write","promo:read"})
+     * @Groups({"getBriefByOneGroupe"})
      */
     private $dateCreation;
 
@@ -44,12 +50,15 @@ class Groupes
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"groupe:read", "groupe:write"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupe"})
+     * @Groups({"getBriefByOneGroupeApp"})
      */
     private $statut;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      * @Groups({"groupe:read", "groupe:write","promo:read"})
+     * @Groups({"getBriefByOneGroupe"})
      */
     private $type;
 
@@ -63,6 +72,7 @@ class Groupes
      * @ApiSubresource()
      * @Groups({"groupe:read"})
      * @Groups({"promo:read"})
+     * @Groups({"getBriefByOneGroupeApp"})
      */
     private $apprenants;
 
@@ -74,15 +84,19 @@ class Groupes
     private $formateurs;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Brief::class, mappedBy="groupe")
+     * @ORM\OneToMany(targetEntity=EtatBriefGroupe::class, mappedBy="groupe")
+     *
      */
-    private $briefs;
+    private $etatBriefGroupes;
+
+
 
     public function __construct()
     {
         $this->apprenants = new ArrayCollection();
         $this->formateurs = new ArrayCollection();
         $this->briefs = new ArrayCollection();
+        $this->etatBriefGroupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -207,30 +221,36 @@ class Groupes
     }
 
     /**
-     * @return Collection|Brief[]
+     * @return Collection|EtatBriefGroupe[]
      */
-    public function getBriefs(): Collection
+    public function getEtatBriefGroupes(): Collection
     {
-        return $this->briefs;
+        return $this->etatBriefGroupes;
     }
 
-    public function addBrief(Brief $brief): self
+    public function addEtatBriefGroupe(EtatBriefGroupe $etatBriefGroupe): self
     {
-        if (!$this->briefs->contains($brief)) {
-            $this->briefs[] = $brief;
-            $brief->addGroupe($this);
+        if (!$this->etatBriefGroupes->contains($etatBriefGroupe)) {
+            $this->etatBriefGroupes[] = $etatBriefGroupe;
+            $etatBriefGroupe->setGroupe($this);
         }
 
         return $this;
     }
 
-    public function removeBrief(Brief $brief): self
+    public function removeEtatBriefGroupe(EtatBriefGroupe $etatBriefGroupe): self
     {
-        if ($this->briefs->contains($brief)) {
-            $this->briefs->removeElement($brief);
-            $brief->removeGroupe($this);
+        if ($this->etatBriefGroupes->contains($etatBriefGroupe)) {
+            $this->etatBriefGroupes->removeElement($etatBriefGroupe);
+            // set the owning side to null (unless already changed)
+            if ($etatBriefGroupe->getGroupe() === $this) {
+                $etatBriefGroupe->setGroupe(null);
+            }
         }
 
         return $this;
     }
+
+  
+
 }

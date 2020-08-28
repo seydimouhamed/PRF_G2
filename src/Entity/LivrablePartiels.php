@@ -7,10 +7,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\LivrablePartielsRepository;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**  
- * 
- * @ApiResource()
+ *
+ * @ApiResource(
+ *     normalizationContext={"groups"={"apprenant:read","livrablePartiel:read"}},
+ *     denormalizationContext={"groups"={"livrablePartiel:write"}}
+ * )
  * @ORM\Entity(repositoryClass=LivrablePartielsRepository::class)
  */
 class LivrablePartiels
@@ -19,32 +23,38 @@ class LivrablePartiels
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="date")
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $delai;
 
     /**
      * @ORM\Column(type="date")
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $dateCreation;
 
 
     /**
      * @ORM\Column(type="string", length=50)
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $etat;
 
@@ -55,11 +65,13 @@ class LivrablePartiels
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $nbreRendu;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     *  @Groups({"livrablePartiel:read","apprenant:read"})
      */
     private $nbreCorriger;
 
@@ -70,11 +82,13 @@ class LivrablePartiels
 
     /**
      * @ORM\OneToMany(targetEntity=AprenantLivrablePartiel::class, mappedBy="livrablePartiel")
+     * * @Groups({"livrablePartiel:read"})
      */
     private $aprenantLivrablePartiels;
 
     /**
      * @ORM\ManyToMany(targetEntity=Niveau::class, inversedBy="livrablePartiels")
+     * @Groups({"livrablePartiel:read"})
      */
     private $niveau;
 

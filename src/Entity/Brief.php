@@ -7,9 +7,61 @@ use App\Repository\BriefRepository;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      routePrefix="/formateurs",
+ *     collectionOperations={
+ *                      "get_bief"={
+ *                                         "method"="GET",
+ *                                        "path"="/briefs",
+ *                                         "route_name"="get_brief_all",
+ *                                         "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *
+ *                                   },
+ *                      "get_brief_one_groupe"={
+ *                                                  "method"="GET",
+ *                                                  "path"="/promo/{id}/groupe/{id1}/briefs",
+ *                                                  "route_name"="get_brief_by_one_groupe",
+ *                                                   "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *
+ *
+ *                                          },
+ *                      "get_brief_one_promo"={
+ *                                               "methode"="GET",
+ *                                               "path"="/promos/{id}/briefs",
+ *                                               "route_name"="get_brief_by_one_promo",
+ *                                                "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN') or is_granted('ROLE_CM'))",
+ *                                           },
+ *                      "get_brief_one_formateur"={
+ *                                                   "method"="GET",
+ *                                                  "path"="/{id}/briefs/broullons",
+ *                                                  "route_name"="get_brief_by_one_formateur",
+ *                                                  "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *
+ *                                              },
+ *                      "get_one_brief_one_promo"={
+ *                                                       "method"="GET",
+ *                                                      "path"="/promo/{id}/briefs/{id1}",
+ *                                                      "route_name"="get_on_brief_on_promo",
+ *                                                       "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *
+ *
+ *                                                  },
+ *                      "get_brief_valide_assigner_one_formateur"={
+ *                                                                  "method"="GET",
+ *                                                                  "path"="/{id}/briefs/valide",
+ *                                                                  "route_name"="get_brief_valide_assigner_on_formateur",
+ *                                                                   "security"="(is_granted('ROLE_FORMATEUR') or is_granted('ROLE_ADMIN'))",
+ *
+ *                                                              },
+ *     },
+ *              normalizationContext={"groups"={"brief:read","BriefMaPromo:read"}},
+ *           denormalizationContext={"groups"={"brief:write"}}
+ * )
+ *
+ * )
  * @ORM\Entity(repositoryClass=BriefRepository::class)
  */
 class Brief
@@ -18,109 +70,139 @@ class Brief
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     * @Groups({"getAllBrief"})
+     * @Groups({"brief:read"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
+     *
      */
     private $Titre;
 
     /**
      * @ORM\Column(type="text")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $contexte;
 
     /**
      * @ORM\Column(type="date")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $DatePoste;
 
     /**
      * @ORM\Column(type="date")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $DateLimite;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $ListeLivrable;
 
     /**
      * @ORM\Column(type="text")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $DescriptionRapide;
 
     /**
      * @ORM\Column(type="text")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $ModalitePedagogique;
 
     /**
      * @ORM\Column(type="text")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $CricterePerformance;
 
     /**
      * @ORM\Column(type="text")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $ModaliteDevaluation;
 
     /**
      * @ORM\Column(type="blob",nullable=true)
+     *@Groups({"getAllBrief"})
+     *@Groups({"brief:read","brief:write"})
      */
     private $ImageExemplaire;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $langue;
 
     /**
      * @ORM\OneToMany(targetEntity=Ressource::class, mappedBy="brief")
+     *@Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $ressources;
 
     /**
      * @ORM\ManyToMany(targetEntity=Niveau::class, inversedBy="brief")
+     * @Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $niveau;
 
     /**
      * @ORM\ManyToOne(targetEntity=Referentiel::class, inversedBy="briefs")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"getBriefByOneGroupe","getOnBriefOnePromo"})
+     * @Groups({"brief:read","brief:write"})
+     *
      */
     private $referentiel;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Promotion::class, inversedBy="briefs")
-     */
-    private $promo;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Groupes::class, inversedBy="briefs")
-     */
-    private $groupe;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Formateur::class, inversedBy="briefs")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"getOnBriefOnePromo"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $formateur;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="briefs")
+     * @Groups({"getAllBrief"})
+     * @Groups({"brief:read"})
      */
     private $tag;
 
     /**
      * @ORM\ManyToMany(targetEntity=LivrableAttendus::class, inversedBy="briefs")
+     * @Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $LivrableAttendus;
 
 
     /**
      * @ORM\Column(type="string", length=50)
+     * @Groups({"getAllBrief"})
+     * @Groups({"brief:read","brief:write"})
      */
     private $statut;
 
@@ -136,8 +218,17 @@ class Brief
 
     /**
      * @ORM\OneToMany(targetEntity=BriefMaPromo::class, mappedBy="brief")
+     * @Groups({"getBriefByOneGroupePr"})
+     * @Groups({"brief:read"})
      */
     private $briefMaPromos;
+
+    /**
+     * @ORM\OneToMany(targetEntity=EtatBriefGroupe::class, mappedBy="brief")
+     * @Groups({"getBriefByOneGroupeApp"})
+     */
+    private $etatBriefGroupes;
+
 
     public function __construct()
     {
@@ -150,6 +241,7 @@ class Brief
         $this->LivrableAttendus = new ArrayCollection();
 
         $this->briefMaPromos = new ArrayCollection();
+        $this->etatBriefGroupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -267,7 +359,15 @@ class Brief
 
     public function getImageExemplaire()
     {
-        return $this->ImageExemplaire;
+        $data = stream_get_contents($this->ImageExemplaire);
+        if(!$this->ImageExemplaire){
+
+            fclose($this->ImageExemplaire);
+        }
+
+
+        return base64_encode($data);
+       // return $this->ImageExemplaire;
     }
 
     public function setImageExemplaire($ImageExemplaire): self
@@ -364,57 +464,8 @@ class Brief
         return $this;
     }
 
-    /**
-     * @return Collection|Promotion[]
-     */
-    public function getPromo(): Collection
-    {
-        return $this->promo;
-    }
 
-    public function addPromo(Promotion $promo): self
-    {
-        if (!$this->promo->contains($promo)) {
-            $this->promo[] = $promo;
-        }
 
-        return $this;
-    }
-
-    public function removePromo(Promotion $promo): self
-    {
-        if ($this->promo->contains($promo)) {
-            $this->promo->removeElement($promo);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Groupes[]
-     */
-    public function getGroupe(): Collection
-    {
-        return $this->groupe;
-    }
-
-    public function addGroupe(Groupes $groupe): self
-    {
-        if (!$this->groupe->contains($groupe)) {
-            $this->groupe[] = $groupe;
-        }
-
-        return $this;
-    }
-
-    public function removeGroupe(Groupes $groupe): self
-    {
-        if ($this->groupe->contains($groupe)) {
-            $this->groupe->removeElement($groupe);
-        }
-
-        return $this;
-    }
 
     public function getFormateur(): ?Formateur
     {
@@ -548,4 +599,37 @@ class Brief
 
         return $this;
     }
+
+    /**
+     * @return Collection|EtatBriefGroupe[]
+     */
+    public function getEtatBriefGroupes(): Collection
+    {
+        return $this->etatBriefGroupes;
+    }
+
+    public function addEtatBriefGroupe(EtatBriefGroupe $etatBriefGroupe): self
+    {
+        if (!$this->etatBriefGroupes->contains($etatBriefGroupe)) {
+            $this->etatBriefGroupes[] = $etatBriefGroupe;
+            $etatBriefGroupe->setBrief($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEtatBriefGroupe(EtatBriefGroupe $etatBriefGroupe): self
+    {
+        if ($this->etatBriefGroupes->contains($etatBriefGroupe)) {
+            $this->etatBriefGroupes->removeElement($etatBriefGroupe);
+            // set the owning side to null (unless already changed)
+            if ($etatBriefGroupe->getBrief() === $this) {
+                $etatBriefGroupe->setBrief(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 }
