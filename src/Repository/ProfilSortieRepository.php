@@ -19,6 +19,36 @@ class ProfilSortieRepository extends ServiceEntityRepository
         parent::__construct($registry, ProfilSortie::class);
     }
 
+
+    public function findByApprenant($idApprenants)
+    {
+       return $this->createQueryBuilder('p')
+             ->select('p, a')
+            ->leftjoin('p.apprenants', 'a')
+            ->andWhere('a.id in(:idApprenants)')
+            ->setParameter('idApprenants', $idApprenants)
+            ->getQuery()
+            ->getResult()
+        ;
+        
+    }
+
+    public function findByOneProfilApprenant($idApprenants,$idProfil)
+    {
+       return $this->createQueryBuilder('p')
+             ->select('p, a')
+             ->andWhere('p.id =:idProfil')
+             ->setParameter('idProfil', $idProfil)
+            ->leftjoin('p.apprenants', 'a')
+            ->andWhere('a.id in(:idApprenants)')
+            ->setParameter('idApprenants', $idApprenants)
+            ->getQuery()
+            ->getResult()
+        ;
+        
+    }
+
+
     /**
      * @return ProfilSortie[] Returns an array of ProfilSortie objects
      */

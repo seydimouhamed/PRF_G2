@@ -6,6 +6,8 @@ use App\Entity\User;
 use App\Entity\ProfilSortie;
 use Doctrine\ORM\EntityManager;
 use App\Repository\UserRepository;
+use App\Repository\GroupesRepository;
+use App\Repository\PromotionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\ProfilSortieRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -147,5 +149,96 @@ class ProfilSortieController extends AbstractController
             return $this->json($profil,200);     
         }
         return $this->json("ce profil de sortie n'existe pas! \n ou a été archivé!",Response::HTTP_BAD_REQUEST);  
+    }
+
+
+
+        /**
+         * @Route(
+         *     name="ajout_profilSortie",
+         *     path="/api/admin/profilSorties",
+         *     methods={"POST"},
+         *     defaults={
+         *          "__controller"="App\Controller\ProfilSortieController::AjoutProfilSortie",
+         *          "__api_resource_class"=ProfilSortie::class,
+         *          "__api_collection_operation_name"="AjouterProfilSortie"
+         *     }
+         * )
+         */
+
+
+        public function AddProfilSortie(Request $request, SerializerInterface $serializer, EntityManagerInterface $em,ValidatorInterface $validator)
+        {
+            $post=json_decode($request->getContent(),true);
+            $profil= $serializer->denormalize($post, "App\Entity\ProfilSortie", true);
+            
+            $errors = $this->validator->validate($profil);
+            if (count($errors)){
+                $errors = $this->serializer->serialize($errors,"json");
+                return new JsonResponse($errors,Response::HTTP_BAD_REQUEST,[],true);
+            }
+            $em->persist($profil);
+            $em->flush();
+
+            return $this->json($profil, 201, [], ['groups'=>'profilSortie:read']);  
+ 
+        }
+
+        /**
+         * @Route(
+         *     name="list_apprenant_promo_profilSortie",
+         *     path="/api/admin/promo/{id}/profilSorties",
+         *     methods={"GET"},
+         *     defaults={
+         *          "__controller"="App\Controller\ProfilSortieController::listerProfilSortie_promo",
+         *          "__api_resource_class"=ProfilSortie::class,
+         *          "__api_collection_operation_name"="Lister_promo_ProfilSortie"
+         *     }
+         * )
+         */
+
+       public function list_Promo_ProfilSortie(PromotionRepository $repoPromo, $id, GroupesRepository $repoGroupe, ProfilSortieRepository $repo){
+
+            $promo= $repoPromo->findAllIdAppPromo($id);
+            if(!empty($promo))
+            {
+                $profilSortie=$repo->findByApprenant($promo);
+   
+               return $this->json($profilSortie, 200); 
+            }
+
+            return $this->json(["message"=>["type"=>"alert","contenu"=>"ce promo n\' existe pas!"]], 200);
+
+        }
+
+
+        /**
+         * @Route(
+         *     name="list_apprenant_profilSortie_promo",
+         *     path="/api/admin/promo/{id}/profilSorties/{id2}",
+         *     methods={"GET"},
+         *     defaults={
+         *          "__controller"="App\Controller\ProfilSortieController::listeLesProfilSortie_promo",
+         *          "__api_resource_class"=ProfilSortie::class,
+         *          "__api_item_operation_name"="Lister_ProfilSortie_promo"
+         *     }
+         * )
+         */
+
+       public function liste_apprenant_promo_profilSortie(PromotionRepository $repoPromo, int $id, int $id2, ProfilSortieRepository $repo){
+
+            $idApprenants= $repoPromo->findAllIdAppPromo($id);
+            if(empty($idApprenants))
+            { 
+                return $this->json(["message"=>["type"=>"alert","contenu"=>"ce promo n\' existe pas!"]], 200);
+            }
+            $prof= $repo->find($id);
+            if(empty($prof))
+            {
+                return $this->json(["message"=>["type"=>"alert","contenu"=>"ce profil de sortie n\' existe pas!"]], 200);
+            }
+            $profilSortie= $repo->findByOneProfilApprenant($idApprenants,$id2);
+
+            return $this->json($profilSortie, 200);  
     }
 }

@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Apprenant;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Promotion;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Apprenant|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,11 +16,43 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ApprenantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $em;
+    public function __construct(ManagerRegistry $registry,EntityManagerInterface $em)
     {
+        $this->em = $em;
         parent::__construct($registry, Apprenant::class);
     }
 
+
+      
+    public function getCollectionCompetenceApprenant($idPromo)
+    {
+        $idApprenants=$this->em->getRepository(Promotion::class)->findAllIdAppPromo($idPromo);
+        return $this->createQueryBuilder('a')
+            ->select('a')
+            ->andWhere('a.id IN (:idApprenants)')
+            ->setParameter('idApprenants', $idApprenants)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+       
+    public function getCompetencesPromo($idPromo)
+    {
+        $grp_comp= $this->getCollectionCompetenceApprenant($idPromo);
+        $tab=[];
+        foreach($grp_comp as $comp)
+        {
+            foreach($comp->getCompetencesValides() as $cv)
+            {
+                $tab[]=$cv;
+            };
+        }
+
+        return $tab;
+
+    }
     // /**
     //  * @return Apprenant[] Returns an array of Apprenant objects
     //  */

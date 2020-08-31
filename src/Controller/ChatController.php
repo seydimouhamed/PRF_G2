@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Chat;
+use App\Entity\User;
 use App\Entity\Apprenant;
 use App\Entity\Promotion;
 use App\Controller\ChatController;
@@ -20,29 +21,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ChatController extends AbstractController
 {
 
-   /* private $request;
-
-
-    public function __construct(
-        Request $request
-    ){
-        $this->request= $request;
-    }*/
-
+   
     /**
     * @Route(
     *     name="getcomment",
-    *     path="/api/users/promo/{id}/apprenant/{id2}/chats",
+    *     path="/api/users/promo/{id}/user/{id2}/chats",
     *     methods={"GET"},
     *     defaults={
     *          "__controller"="App\Controller\ChatController::voirCommentaire",
     *          "__api_resource_class"=Chat::class,
-    *          "__api_collection_operation_name"="getcommentaire"
+    *          "__api_collection_operation_name"="get_chats"
     *     }
     * )
     */
 
-    public function getChat(ChatRepository $chaRepo, PromotionRepository $promoRepo, int $id, int $id2, EntityManagerInterface $em)
+    public function getChat(SerializerInterface $serializer,ChatRepository $chaRepo, PromotionRepository $promoRepo, int $id, int $id2, EntityManagerInterface $em)
     {
         
         $promo= $promoRepo->find($id);
@@ -51,28 +44,32 @@ class ChatController extends AbstractController
         $groupe =$promo->getGroupes();
         $tabChat=[];
                 
-        if(isset($promo)){
-            foreach ($groupe as $valu){
-                $apprenants=$valu->getApprenants();
-    
-                foreach ($apprenants as $value) {
-                    if($value==$apprenant){
-                        $tabChat[]=$value->getChats();
-    
-                        return $this->json($tabChat, 200);
-                    }
-                }
-                return $this->json("cet apprenant n'appartient pas a ce promo" ,400);
+        if($promo){
+
+            $result=$promoRepo->isApprenantInPromo($id,$id2);
+            $user=$em->getRepository(User::class)->find($id2);
+            $profilUser=$user->getProfil()->getLibelle();
+             $tab_profil=["Administrateur","CM","Formateur"];
+            if($result || in_array($profilUser,$tab_profil))
+            {
+                //$chats=$promo->getChats();
+                $tabChat=$em->getRepository(Chat::class)->findBy(['promo'=>$promo]);
+                return $this->json($tabChat, 200);
+               // dd($tabChat);
             }
+
+            return $this->json(["message"=>["type"=>"alert","contenu"=>"Acces au chat non autorisé" ]],400);
+    
+            
         }
-       return $this->json("cette promotion n'existe pas !!",400);
-       
+        return $this->json(["message"=>["type"=>"alert","contenu"=>"cette promotion n'existe pas !!" ]],400);
+
     }
 
     /**
     * @Route(
     *     name="envoyerUncommentaire",
-    *     path="/api/users/promo/{id}/apprenant/{id2}/chats",
+    *     path="/api/users/promo/{id}/user/{id2}/chats",
     *     methods={"POST"},
     *     defaults={
     *          "__controller"="App\Controller\ChatController::envoieCommentaire",
@@ -83,42 +80,40 @@ class ChatController extends AbstractController
     */
     public function addChat(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, $id, $id2)
     {
-        $content= $request->request->all();
-        $chat= $serializer->denormalize($content,"App\Entity\Chat",true);
-        $promo= $em->getRepository(Promotion::class)->find($id);
-        $groupe =$promo->getGroupes();
-        $apprenant=$em->getRepository(Apprenant::class)->find($id2);
-
-        $pj = $request->files->get("pieceJointes");
-        if(!$pj)
+         
+        
+        $promoRepo= $em->getRepository(Promotion::class);
+        $promo=$promoRepo->find($id);
+        if($promo)
         {
-            return new JsonResponse("veuillez mettre une images",Response::HTTP_BAD_REQUEST,[],true);
+           // $groupe =$promo->getGroupes();
+            $result=$promoRepo->isApprenantInPromo($id,$id2);
+            $user=$em->getRepository(User::class)->find($id2);
+            $profilUser=$user->getProfil()->getLibelle();
+             $tab_profil=["Administrateur","CM","Formateur"];
+            if($result || in_array($profilUser,$tab_profil))
+            {
+                $chat= new Chat();
+                $pj = $request->files->get("piecesJoint");
+                if($pj)
+                {
+                    $photoBlob = fopen($pj->getRealPath(),"rb");
+                    $chat->setPiecesJointe($photoBlob);
+                }
+                $chat->setMessage($request->request->get('message'));
+                $chat->setUser($user);
+                $chat->setPromo($promo);
+                $chat->setDate(new \DateTime());
+
+                $em->persist($chat);
+                $em->flush();
+                return $this->json("succes", 200);
+            }
+                 
+                return $this->json(["message"=>["type"=>"alert","contenu"=>"cet apprenant n'appartient pas a ce promo" ]],400);
+ 
         }
-            $photoBlob = fopen($pj->getRealPath(),"rb");
-            
-             $chat->setPieceJointes($photoBlob);
-                                  
-             if(isset($promo)){
-                 foreach ($groupe as $valu){
-                     $apprenants=$valu->getApprenants();
-         
-                     foreach ($apprenants as $value) {
-                         if($value==$apprenant){
-                             $chat->setApprenant($value);
-     
-                             $em->persist($chat);
-                             $em->flush();
-                     
-     
-         
-                             return $this->json("succes", 200);
-                         }
-                     }
-                     
-                 }
-                 return $this->json("cet apprenant n'appartient pas a ce promo" ,400);
-             }
-            return $this->json("cette promotion n'existe pas !!",400);
+            return $this->json(["message"=>["type"=>"alert","contenu"=>"cette promotion n'existe pas !!" ]],400);
 
     }
 }
