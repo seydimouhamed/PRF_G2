@@ -355,13 +355,16 @@ class Promotion
 
     public function getAvatar()
     {
-        $data = stream_get_contents($this->avatar);
-        if(!$this->avatar){
+        if($this->avatar){
+            $data = stream_get_contents($this->avatar);
             fclose($this->avatar);
+            return base64_encode($data);
+        }else
+        {
+            return null;
         }
 
         // return $this->avatar;
-        return base64_encode($data);
     }
 
     public function setAvatar($avatar): self
