@@ -359,14 +359,17 @@ class Brief
 
     public function getImageExemplaire()
     {
-        $data = stream_get_contents($this->ImageExemplaire);
-        if(!$this->ImageExemplaire){
+        if($this->ImageExemplaire){
 
+            $data = stream_get_contents($this->ImageExemplaire);
             fclose($this->ImageExemplaire);
+            return base64_encode($data);
+        }
+        else
+        {
+            return null;
         }
 
-
-        return base64_encode($data);
        // return $this->ImageExemplaire;
     }
 
