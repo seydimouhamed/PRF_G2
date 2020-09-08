@@ -31,7 +31,11 @@ class PromoTest extends WebTestCase
          "password"=>"passer",
         "plainPassword"=>"passer",
         "profil"=>"/api/admin/profils/1"];
-        $client->request('POST','/api/admin/promos',$data);
+        $client->request('POST','/api/admin/promos'
+        [],
+        [],
+        ['CONTENT_TYPE' => 'application/json'],
+        json_encode($data));
 
         $this->assertResponseIsSuccessful();
         //$this->assertSame(201,$client->getResponse()->getStatusCode());
