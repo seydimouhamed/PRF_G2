@@ -4,14 +4,18 @@ namespace App\Controller;
 
 use DateTime;
 use App\Entity\User;
+use ReflectionClass;
 use App\Entity\Groupes;
 use App\Entity\Apprenant;
 use App\Entity\Formateur;
 use App\Entity\Promotion;
+use App\Entity\Referentiel;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Entity;
 use Symfony\Component\Mime\Email;
 use App\Repository\UserRepository;
 use App\Repository\GroupesRepository;
+use App\Repository\ApprenantRepository;
 use App\Repository\PromotionRepository;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Doctrine\ORM\EntityManagerInterface;
@@ -20,6 +24,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use ContainerTqjcrpd\getUserRepositoryService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -104,39 +109,40 @@ class PromotionController extends AbstractController
         //----------------------------------------------------
         //DEBUT RECUPERATION DES DONNEES DU FICHIERS EXCELS
         //-----------------------------------------------------
-        
-        $doc = $request->files->get("document");
-
-        $file= IOFactory::identify($doc);
-        
-        $reader= IOFactory::createReader($file);
-
-        $spreadsheet=$reader->load($doc);
-        
-        $tab_apprenants= $spreadsheet->getActivesheet()->toArray();
-
-        $attr=$tab_apprenants[0];
-$tabrjz=[];
-        for($i=1;$i<count($tab_apprenants);$i++)
-        {
-            $apprenant=new Apprenant();
-            for($k=0;$k<count($tab_apprenants[$i]);$k++)
+                
+                $doc = $request->files->get("document");
+            if($doc)
             {
-                $data=$tab_apprenants[$i][$k];
-                if($attr[$k]=="Password")
+                $file= IOFactory::identify($doc);
+                
+                $reader= IOFactory::createReader($file);
+
+                $spreadsheet=$reader->load($doc);
+                
+                $tab_apprenants= $spreadsheet->getActivesheet()->toArray();
+
+                $attr=$tab_apprenants[0];
+        $tabrjz=[];
+                for($i=1;$i<count($tab_apprenants);$i++)
                 {
-                     $apprenant->setPassword($this->encoder->encodePassword($apprenant,$data));
-                }else
-                {
-                $apprenant->{"set".$attr[$k]}($data);
+                    $apprenant=new Apprenant();
+                    for($k=0;$k<count($tab_apprenants[$i]);$k++)
+                    {
+                        $data=$tab_apprenants[$i][$k];
+                        if($attr[$k]=="Password")
+                        {
+                            $apprenant->setPassword($this->encoder->encodePassword($apprenant,$data));
+                        }else
+                        {
+                        $apprenant->{"set".$attr[$k]}($data);
+                        }
+                    }
+                    $apprenant->setArchivage(0);
+                    $apprenant->setStatut("attente");
+                    $em->persist($apprenant);
+                    $group->addApprenant($apprenant);
                 }
             }
-            $apprenant->setArchivage(0);
-            $apprenant->setStatut("attente");
-            $em->persist($apprenant);
-            $group->addApprenant($apprenant);
-        }
-
         //------------------------------------------------------
         //FIN RECUPERATION DES DONNEES DU FICHIERS EXCELS
         //-----------------------------------------------------
@@ -232,7 +238,7 @@ $tabrjz=[];
     /**
      * @Route(
      *     name="get_promotion_id_apprenant_attente",
-     *     path="/api/admin/promo/{id}/apprenant/attente",
+     *     path="/api/admin/promos/{id}/apprenants/attente",
      *     methods={"GET"},
      *     defaults={
      *          "__controller"="App\Controller\PromotionController::getPromoApprenantAttente",
@@ -439,29 +445,31 @@ $tabrjz=[];
      */
     public function modifiStatutGroupe(Request $request,EntityManagerInterface $entityManager,int $id2,int $id)
     {
-        $groupe = $entityManager->getRepository(groupes::class)->find($id2);
-        $promo = $entityManager->getRepository(promotion::class)->find($id);
-
-        $modif = json_decode($request->getContent(), true);
-        $idPromoGroupe = $groupe->getPromotion()->getId();
-        $idPromo = $promo->getId();
-
-
-        if ($idPromo == $idPromoGroupe) {
-            foreach ($modif as $value) {
-
-                foreach ($value[0] as $recu) {
-
-                    $persi = $groupe->setStatut($recu);
-                    $entityManager->persist($persi);
-                    $entityManager->flush();
-                    return $this->json($recu, 200);
-                }
+            $groupe = $entityManager->getRepository(groupes::class)->find($id2);
+            $promo = $entityManager->getRepository(promotion::class)->find($id);
+           // $idPromoSearch=$groupe->getPromotion()->getId();
+           // dd($idPromoSearch);
+            if(!$promo)
+            {
+                return $this->json("Cet promo n'existe pas", 400);
             }
-        } else {
-            return $this->json("Ce groupe n'existe pas", 200);
-        }
 
+            if(!$groupe)
+            {
+                return $this->json("Ce groupe n'existe pas!", 400);
+            }
+            if($id !== $groupe->getPromotion()->getId())
+            {
+                return $this->json("Ce groupe n'appartient pas cette promo!", 400);
+            }
+
+            $modif = json_decode($request->getContent(),true);
+            
+            $groupe->setStatut($modif['statut']);
+
+            $entityManager->persist($groupe);
+            $entityManager->flush();
+            return $this->json("success", 200);
     }
 
 
@@ -516,208 +524,263 @@ $tabrjz=[];
     /**
      * @Route(
      *     name="delete_promo_apprenant",
-     *     path="/api/admin/promo/{id}/apprenants",
-     *     methods={"DELETE"},
-     *     defaults={
-     *          "__controller"="App\Controller\PromotionController::DeleteApprenant",
-     *          "__api_resource_class"=User::class,
-     *          "__api_item_operation_name"="delete_Apprenant"
-     *     }
-     *     ),
-     *       @Route(
-     *     name="delete_promo_formateur",
-     *     path="/api/admin/promo/{id}/formateur",
-     *     methods={"DELETE"},
-     *     defaults={
-     *          "__controller"="App\Controller\PromotionController::DeleteApprenant",
-     *          "__api_resource_class"=User::class,
-     *          "__api_item_operation_name"="delete_Formateur"
-     *     }
-     *
-     * )
+     *     path="/api/admin/promos/{id}/apprenants",
+     *     methods={"PUT"}
+     *     )
      */
-    public function DeleteApprenant(Request $request,EntityManagerInterface $entityManager,UserRepository $userRepository){
+    public function putApprenantDeleteAdd(MailerInterface $mailer,Request $request,int $id){
         $reponse=json_decode($request->getContent(),true);
+        $promo=$this->em->getRepository(Promotion::class)->find($id);
 
-        $username=$reponse['username'];
-        $userId=$userRepository->findOneBy(["username"=>$username])
-           ->setArchivage(false);
-       $this->em->persist($userId);
-        $this->em->flush();
-        return $this->json(true,200);
+         if(!$promo)
+         {
+             return $this->json("Cette promotion n'existe pas!", 400);
+         }
+         $groupes=$promo->getGroupes();
+         $groupePrincipale=$promo=$this->em->getRepository(Promotion::class)->findGroupePrincipalPromo($id);
+       // dd($groupes);
+        if($groupePrincipale)
+        {
+            foreach($reponse['add'] as $idApp)
+            {
+                $apprenant=$this->em->getRepository(Apprenant::class)->find($idApp);
+                $groupePrincipale->addApprenant($apprenant);
+                $email = (new Email())
+                ->from("seydinabasse@gmail.com")
+                //->to($apprenant->getEmail())
+                ->to($apprenant->getEmail())
+                ->subject('Message teste!')
+                ->text("Bonjour {$apprenant->getFisrtName()}! ❤️ce message est un teste")
+                 ->html("<h1>Félicitations {$apprenant->getFisrtName()} !! vous avez ete selectionné(e) suite
+                a votre test d'entré a la Sonatel Academy! ❤.<br>Veuillez utiliser ces informations pour vous connecter a votre Promo,Username:
+                {$apprenant->getUsername()}, Password:Pass123️</h1>");
+
+
+                 $mailer->send($email);
+            } 
+            $this->em->persist($groupePrincipale);
+        }
+            foreach($reponse['remove'] as $idApp)
+            {
+                $apprenant=$this->em->getRepository(Apprenant::class)->find($idApp);
+                foreach($groupes as $grp)
+                {
+                    $grp->removeApprenant($apprenant);
+                    $this->em->persist($grp);
+                }
+            }    
+
+            $this->em->flush();
+            return $this->json(true,200);
+        return $this->json(" pas de groupe dans cette promotion",400);
 
 
     }
+
+
+    /**
+     * @Route(
+     *     name="remove_promo_formateur",
+     *     path="/api/admin/promos/{id}/formateurs",
+     *     methods={"PUT"}
+     *     )
+     */
+    public function putFormateurDeleteAdd(Request $request,int $id){
+        $data=json_decode($request->getContent(),true);
+        $promo=$this->em->getRepository(Promotion::class)->find($id);
+
+            if(!$promo)
+            {
+                return $this->json("Cette promotion n'existe pas!", 400);
+            }
+            
+            foreach($data as $act => $idforms)
+            {
+                foreach($idforms as $idform)
+                {
+                    $formateur=$this->em->getRepository(Formateur::class)->find($idform);
+                    $promo->{$act."Formateur"}($formateur);
+                
+                }
+
+                
+            } 
+
+            $this->em->persist($promo);
+        
+            $this->em->flush();
+            return $this->json(true,200);
+
+    }
+
+
+
     /**
      * @Route(
      *     name="modifier_promo_id",
      *     path="/api/admin/promos/{id}",
-     *     methods={"PUT"},
-     *     defaults={
-     *          "__controller"="App\Controller\PromotionController::ModifierPromo",
-     *          "__api_resource_class"=Promotion::class,
-     *          "__api_item_operation_name"="modifier_Promo"
-     *     }
+     *     methods={"PUT"}
      *     ),
     */
-    public function ModifierPromo(Request $request,EntityManagerInterface $entityManager,int $id){
+    public function putPromo(Request $request,EntityManagerInterface $entityManager,int $id){
        $reponse=json_decode($request->getContent(),true);
+
         $libele=['langue','titre','description','lieu','fabrique','status','referentiel'];
         $dateLib=['dateFinPrvisoire','dateFinReelle','dateDebut'];
         $refern="referentiel";
         $referentiel=['libelle','presentation','programme','critereAdmission','critereEvaluation'];
         $promo = $entityManager->getRepository(promotion::class)->find($id);
-             for($i=0;$i<count($reponse);$i++){
+        $docReader = new AnnotationReader();
+        $entity = new Entity();
+        $reflect = new ReflectionClass($promo);
+            foreach($reponse as $k => $attr)
+            {
+                //dd("set".ucfirst($k));
 
-                if(isset($reponse[$libele[$i]])){
-
-                  $promo->{"set".ucfirst($libele[$i])}($reponse[$libele[$i]]);
-            for($a=0;$a<count($dateLib);$a++){
-
-                if(isset($reponse[$dateLib[$a]])){
-
-                    $promo->{"set".ucfirst($dateLib[$a])}(\DateTime::createFromFormat('Y-m-d',$reponse[$dateLib[$a]]));
+            $docInfos = $docReader->getPropertyAnnotations($reflect->getProperty($k));
+           @$type= $docInfos[0]->type ;
+            //$docReader->getPropertyAnnotations($promo->{"get".ucfirst($k)}());
+                //dd($type);
+                $param=$attr;
+                if($type==="date")
+                {
+                    $param=\DateTime::createFromFormat('Y-m-d',$attr);
                 }
-
-            }
-
-                for($b=0;$b<count($referentiel);$b++){
-
-                    if(isset($reponse['referentiel'])){
-
-                        $promo->getReferentiel()->{"set".ucfirst($referentiel[$b])}($reponse[$referentiel[$b]]);
-
-
+                elseif($k==="referentiel")
+                {
+                    $referentiel=$entityManager->getRepository(Referentiel::class)->find((int)$attr);
+                    $oldReferentiel=$promo->getReferentiel();
+                    
+                    if($referentiel && $referentiel!==$oldReferentiel)
+                    {
+                        $param=$referentiel;
                     }
-
+                    else
+                    {
+                        $param=$oldReferentiel;
+                    }
                 }
 
-
-    }
-
+                $promo->{"set".ucfirst($k)}($param);
 
                    $entityManager->persist($promo);
                    $entityManager->flush();
-}
-
-     
-
+            }
 
         return $this->json(true,200);
 
-
     }
-    /**
-     * @Route(
-     *     name="add_promo_apprenant",
-     *     path="/api/admin/promo/{id}/apprenants",
-     *     methods={"PUT"},
-     *     defaults={
-     *          "__controller"="App\Controller\PromotionController::addApprenant",
-     *          "__api_resource_class"=User::class,
-     *          "__api_item_operation_name"="addANDremoveUser"
-     *     }
-     * ),
-     *  @Route(
-     *     name="add_promo_formateur",
-     *     path="/api/admin/promo/{id}/formateur",
-     *     methods={"PUT"},
-     *     defaults={
-     *          "__controller"="App\Controller\PromotionController::addFormateur",
-     *          "__api_resource_class"=User::class,
-     *          "__api_item_operation_name"="addANDremoveUser"
-     *     }
-     * )
-     */
-    public function addANDremoveUser(MailerInterface $mailer,UserRepository $userRepository,Request $request,EntityManagerInterface $entityManager,int $id){
-        $promo = $entityManager->getRepository(promotion::class)->find($id);
+//     /**
+//      * @Route(
+//      *     name="add_promo_apprenant",
+//      *     path="/api/admin/promo/{id}/apprenants",
+//      *     methods={"PUT"},
+//      *     defaults={
+//      *          "__controller"="App\Controller\PromotionController::addApprenant",
+//      *          "__api_resource_class"=User::class,
+//      *          "__api_item_operation_name"="addANDremoveUser"
+//      *     }
+//      * ),
+//      *  @Route(
+//      *     name="add_promo_formateur",
+//      *     path="/api/admin/promo/{id}/formateur",
+//      *     methods={"PUT"},
+//      *     defaults={
+//      *          "__controller"="App\Controller\PromotionController::addFormateur",
+//      *          "__api_resource_class"=User::class,
+//      *          "__api_item_operation_name"="addANDremoveUser"
+//      *     }
+//      * )
+//      */
+//     public function addANDremoveUser(MailerInterface $mailer,UserRepository $userRepository,Request $request,EntityManagerInterface $entityManager,int $id){
+//         $promo = $entityManager->getRepository(promotion::class)->find($id);
 
-        $reponse=json_decode($request->getContent(),true);
-        $action=$reponse['action'];
-        $tableau=['username','email'];
+//         $reponse=json_decode($request->getContent(),true);
+//         $action=$reponse['action'];
+//         $tableau=['username','email'];
 
-        if($action=="ajouter"){
-            for ($i=0;$i<count($tableau);$i++){
+//         if($action=="ajouter"){
+//             for ($i=0;$i<count($tableau);$i++){
 
-                if(isset($reponse[$tableau[$i]])){
-                    $user=$reponse[$tableau[$i]];
-                    $userId=$userRepository->findOneBy([$tableau[$i]=>$user]);
-                    $idProfil=$userId->getProfil()->getId();
-                    $libelle=$userId->getProfil()->getLibelle();
+//                 if(isset($reponse[$tableau[$i]])){
+//                     $user=$reponse[$tableau[$i]];
+//                     $userId=$userRepository->findOneBy([$tableau[$i]=>$user]);
+//                     $idProfil=$userId->getProfil()->getId();
+//                     $libelle=$userId->getProfil()->getLibelle();
 
-                    if($libelle=="Formateur"){
+//                     if($libelle=="Formateur"){
 
-                        $promo->addFormateur($userId);
+//                         $promo->addFormateur($userId);
 
-                    }
-                    if($libelle=="Aprenant"){
+//                     }
+//                     if($libelle=="Aprenant"){
 
-                        for($z=0;$z<count($promo->getGroupes());$z++) {
+//                         for($z=0;$z<count($promo->getGroupes());$z++) {
 
-                            if ($promo->getGroupes()[$z]->getType() == "groupe principale") {
+//                             if ($promo->getGroupes()[$z]->getType() == "groupe principale") {
 
-                                $promo->getGroupes()[$z]->addApprenant($userId);
-                                $email = (new Email())
-                                    ->from("abdoukarimsidibe1@gmail.com")
-                                    ->to($promo->getGroupes()[0]->getApprenants()[0]->getEmail())
-                                    ->subject('Message teste!')
-                                    ->text("Bonjour {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()}! ❤️ce message est un teste")
-                                    ->html("<h1>Felicitation {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()} !! vous avez ete selectionné(e) suite
-                                    a votre test d'entré a la Sonatel Academy! ❤.<br>Veuillez utiliser ces informations pour vous connecter a votre Promo,Username:
-                                    {$promo->getGroupes()[0]->getApprenants()[0]->getUsername()}, Password:Pass123️</h1>");
-
-
-                                $mailer->send($email);
-                            }
-                        }
-
-                    }
+//                                 $promo->getGroupes()[$z]->addApprenant($userId);
+//                                 $email = (new Email())
+//                                     ->from("abdoukarimsidibe1@gmail.com")
+//                                     ->to($promo->getGroupes()[0]->getApprenants()[0]->getEmail())
+//                                     ->subject('Message teste!')
+//                                     ->text("Bonjour {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()}! ❤️ce message est un teste")
+//                                     ->html("<h1>Felicitation {$promo->getGroupes()[0]->getApprenants()[0]->getFisrtName()} !! vous avez ete selectionné(e) suite
+//                                     a votre test d'entré a la Sonatel Academy! ❤.<br>Veuillez utiliser ces informations pour vous connecter a votre Promo,Username:
+//                                     {$promo->getGroupes()[0]->getApprenants()[0]->getUsername()}, Password:Pass123️</h1>");
 
 
+//                                 $mailer->send($email);
+//                             }
+//                         }
 
-                }
-            }
-        }
-        if($action=="supprimer"){
-
-            for ($i=0;$i<count($tableau);$i++){
-
-                if(isset($reponse[$tableau[$i]])){
-                    $user=$reponse[$tableau[$i]];
-                    $userId=$userRepository->findOneBy([$tableau[$i]=>$user]);
-                    $idProfil=$userId->getProfil()->getId();
-                    $libelle=$userId->getProfil()->getLibelle();
-                    if($libelle=="Formateur"){
-
-                        $promo->removeFormateur($userId);
-                    }
-                    if($libelle=="Aprenant"){
-
-                        for($z=0;$z<count($promo->getGroupes());$z++){
-
-                            if($promo->getGroupes()[$z]->getType()=="groupe principale"){
-
-                                $promo->getGroupes()[$z]->removeApprenant($userId);
-                            }
-                            if($promo->getGroupes()[$z]->getType()=="binome" || $promo->getGroupes()[$z]->getType()=="filerouge"){
-
-                                $promo->getGroupes()[$z]->removeApprenant($userId);
-                            }
-                        }
+//                     }
 
 
 
-                        $promo->getGroupes()[0]->removeApprenant($userId);
-                    }
-                }
-            }
-        }
+//                 }
+//             }
+//         }
+//         if($action=="supprimer"){
 
-        $entityManager->persist($promo);
-        $entityManager->flush();
-        return $this->json(true,200);
-//return dd($promo->getGroupes()[0]->getApprenants()[0]->getEmail());
-        // return $this->json($promo->getGroupes()[1]->getType(),200);
-    }
+//             for ($i=0;$i<count($tableau);$i++){
+
+//                 if(isset($reponse[$tableau[$i]])){
+//                     $user=$reponse[$tableau[$i]];
+//                     $userId=$userRepository->findOneBy([$tableau[$i]=>$user]);
+//                     $idProfil=$userId->getProfil()->getId();
+//                     $libelle=$userId->getProfil()->getLibelle();
+//                     if($libelle=="Formateur"){
+
+//                         $promo->removeFormateur($userId);
+//                     }
+//                     if($libelle=="Aprenant"){
+
+//                         for($z=0;$z<count($promo->getGroupes());$z++){
+
+//                             if($promo->getGroupes()[$z]->getType()=="groupe principale"){
+
+//                                 $promo->getGroupes()[$z]->removeApprenant($userId);
+//                             }
+//                             if($promo->getGroupes()[$z]->getType()=="binome" || $promo->getGroupes()[$z]->getType()=="filerouge"){
+
+//                                 $promo->getGroupes()[$z]->removeApprenant($userId);
+//                             }
+//                         }
+
+
+
+//                         $promo->getGroupes()[0]->removeApprenant($userId);
+//                     }
+//                 }
+//             }
+//         }
+
+//         $entityManager->persist($promo);
+//         $entityManager->flush();
+//         return $this->json(true,200);
+// //return dd($promo->getGroupes()[0]->getApprenants()[0]->getEmail());
+//         // return $this->json($promo->getGroupes()[1]->getType(),200);
+//     }
 }
 

@@ -29,49 +29,50 @@ class LivrablePartiels
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Groups({"livrablePartiel:read","apprenant:read"})
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $libelle;
 
     /**
      * @ORM\Column(type="text")
-     *  @Groups({"livrablePartiel:read","apprenant:read"})
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="date")
-     *  @Groups({"livrablePartiel:read","apprenant:read"})
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $delai;
 
     /**
      * @ORM\Column(type="date")
-     *  @Groups({"livrablePartiel:read","apprenant:read"})
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $dateCreation;
 
 
     /**
      * @ORM\Column(type="string", length=50)
-     *  @Groups({"livrablePartiel:read","apprenant:read"})
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $etat;
 
     /**
      * @ORM\Column(type="string", length=50)
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     *  @Groups({"livrablePartiel:read","apprenant:read"})
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $nbreRendu;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     *  @Groups({"livrablePartiel:read","apprenant:read"})
+     *  @Groups({"livrablePartiel:read","apprenant:read","livrablePartiel:write"})
      */
     private $nbreCorriger;
 

@@ -252,8 +252,10 @@ class LivrablePartielController extends AbstractController
                             if($formateur)
                             {
                                 $commentaire->setFormateur($formateur);
+                            }else
+                            {
+                                return $this->json("le formateur n\'existe pas!",400);
                             }
-                            return $this->json("le formateur n\'existe pas!",200);
          
                        }
 
@@ -287,6 +289,7 @@ class LivrablePartielController extends AbstractController
     public function addLivPartiel(Request $request,$idPromo,$idBrief)
     {
         $data=json_decode($request->getContent(),true);
+       // dd($data);
         $apprenants=$data['apprenants'];
         $briefPromo=$this->em->getRepository(BriefMaPromo::class)->findBy(["brief"=>$idBrief,"promo"=>$idPromo])[0];
           if(!$briefPromo)
@@ -300,10 +303,15 @@ class LivrablePartielController extends AbstractController
                 $briefPromo->setBrief($brief);
                 $this->em->persist($briefPromo);
             }
-            return $this->json("success",200);
+            else
+            {
+                return $this->json("Vérifier le promo ou le brief!" , 400);
+            }
           }  
 
            $livPartiel=$this->serializer->denormalize($data,"App\Entity\LivrablePartiels",true);
+
+          //  dd($livPartiel);
         
           // $livPartiel=new LivrablePartiels();
             $livPartiel->setDateCreation(new \DateTime());

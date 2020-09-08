@@ -39,6 +39,21 @@ class PromotionRepository extends ServiceEntityRepository
             ->getGroupes()[0]
             ->getApprenants()
         ;
+    } 
+    public function findGroupePrincipalPromo($idPromo)
+    {
+        return $this->createQueryBuilder('p')
+             ->select('p, g, a')
+            ->andWhere('p.id = :idPromo')
+            ->setParameter('idPromo', $idPromo)
+            ->leftjoin('p.groupes', 'g')
+            ->andWhere('g.type = :type')
+            ->setParameter('type', 'groupe principale')
+            ->leftjoin('g.apprenants','a')
+            ->getQuery()
+            ->getResult()[0]
+            ->getGroupes()[0]
+        ;
     }  
     public function isApprenantInPromo($idPromo,$idApp)
     {

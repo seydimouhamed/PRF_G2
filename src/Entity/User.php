@@ -130,8 +130,6 @@ class User implements UserInterface
      * @Groups({"getBriefByOneGroupeApp"})
      * @Groups({"getBriefBrouillonFormateur","getOnBriefOnePromo"})
      * @Groups({"brief:read"})
-     * @Assert\Email
-     * @Assert\Unique
      */
     private $email;
 

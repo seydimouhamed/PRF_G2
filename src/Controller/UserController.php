@@ -54,11 +54,11 @@ class UserController extends AbstractController
         $photo = $request->files->get("photo");
         
         $user = $this->serializer->denormalize($user,"App\Entity\User",true);
-        if(!$photo)
+        if($photo)
         {
             
-            return new JsonResponse("veuillez mettre une images",Response::HTTP_BAD_REQUEST,[],true);
-        }
+           // return new JsonResponse("veuillez mettre une images",Response::HTTP_BAD_REQUEST,[],true);
+        
             //$base64 = base64_decode($imagedata);
             $photoBlob = fopen($photo->getRealPath(),"rb");
             
@@ -71,13 +71,17 @@ class UserController extends AbstractController
                 //     // fclose($file);
                 //     echo "<img src='data:$type;base64,$avatar' />";
                 // // PREVISUALISATION DE L'IMAGE
-        
+        }
         $errors = $this->validator->validate($user);
         if (count($errors)){
             $errors = $this->serializer->serialize($errors,"json");
             return new JsonResponse($errors,Response::HTTP_BAD_REQUEST,[],true);
         }
         $password = $user->getPassword();
+        if(!$password)
+        {
+            $password="passer";
+        }
        $user->setPassword($this->encoder->encodePassword($user,$password));
        $user->setArchivage(false);
 
